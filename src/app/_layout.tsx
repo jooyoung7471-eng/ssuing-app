@@ -1,8 +1,11 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Stack, useRouter, useSegments } from 'expo-router';
 import { StyleSheet, View, Platform, ActivityIndicator } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { colors } from '../constants/colors';
 import { useAuthStore } from '../stores/authStore';
+
+const ONBOARDING_KEY = 'onboarding_completed';
 
 const isWeb = Platform.OS === 'web';
 
@@ -17,35 +20,50 @@ if (!isWeb) {
   }
 }
 
-function useProtectedRoute() {
+function useProtectedRoute(onboardingDone: boolean | null) {
   const { token, isGuest, isReady } = useAuthStore();
   const segments = useSegments();
   const router = useRouter();
 
   useEffect(() => {
-    if (!isReady) return;
+    // Wait until both onboarding check and auth are ready
+    if (onboardingDone === null || !isReady) return;
 
+    const inOnboarding = segments[0] === 'onboarding';
     const inAuthScreen = segments[0] === 'auth';
     const isAuthenticated = !!token || isGuest;
 
-    if (!isAuthenticated && !inAuthScreen) {
-      router.replace('/auth');
-    } else if (isAuthenticated && inAuthScreen) {
-      router.replace('/(tabs)');
+    // Step 1: onboarding not done yet → go to onboarding
+    if (!onboardingDone && !inOnboarding) {
+      router.replace('/onboarding');
+      return;
     }
-  }, [token, isGuest, isReady, segments]);
+
+    // Step 2: onboarding done → normal auth flow
+    if (onboardingDone) {
+      if (!isAuthenticated && !inAuthScreen && !inOnboarding) {
+        router.replace('/auth');
+      } else if (isAuthenticated && (inAuthScreen || inOnboarding)) {
+        router.replace('/(tabs)');
+      }
+    }
+  }, [token, isGuest, isReady, segments, onboardingDone]);
 }
 
 export default function RootLayout() {
   const { loadToken, isReady } = useAuthStore();
+  const [onboardingDone, setOnboardingDone] = useState<boolean | null>(null);
 
   useEffect(() => {
     loadToken();
+    AsyncStorage.getItem(ONBOARDING_KEY).then((value) => {
+      setOnboardingDone(value === 'true');
+    });
   }, []);
 
-  useProtectedRoute();
+  useProtectedRoute(onboardingDone);
 
-  if (!isReady) {
+  if (!isReady || onboardingDone === null) {
     const loading = (
       <View style={[styles.root, styles.loading]}>
         <ActivityIndicator size="large" color={colors.primary} />
@@ -70,6 +88,7 @@ export default function RootLayout() {
           contentStyle: { backgroundColor: colors.background },
         }}
       >
+        <Stack.Screen name="onboarding" options={{ headerShown: false, animation: 'none' }} />
         <Stack.Screen name="auth" options={{ headerShown: false }} />
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         <Stack.Screen
