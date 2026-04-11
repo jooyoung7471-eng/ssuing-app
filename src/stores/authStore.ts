@@ -2,9 +2,13 @@ import { create } from 'zustand';
 import { Platform } from 'react-native';
 import api from '../services/api';
 
+export type SocialProvider = 'apple' | 'google' | 'kakao';
+
 interface User {
   id: string;
   email: string;
+  name?: string;
+  provider?: string;
 }
 
 interface AuthState {
@@ -14,11 +18,12 @@ interface AuthState {
   isLoading: boolean;
   isReady: boolean;
 
-  login: (email: string, password: string) => Promise<void>;
-  register: (email: string, password: string) => Promise<void>;
+  socialLogin: (provider: SocialProvider, token: string, email?: string | null, name?: string | null) => Promise<void>;
   loginAsGuest: () => void;
   logout: () => Promise<void>;
   loadToken: () => Promise<void>;
+  deleteAccount: () => Promise<void>;
+  linkSocialAccount: (provider: SocialProvider, token: string, email?: string | null, name?: string | null) => Promise<void>;
 }
 
 const tokenStorage = {
@@ -97,33 +102,28 @@ const tokenStorage = {
   },
 };
 
-export const useAuthStore = create<AuthState>((set) => ({
+export const useAuthStore = create<AuthState>((set, get) => ({
   token: null,
   user: null,
   isGuest: false,
   isLoading: false,
   isReady: false,
 
-  login: async (email: string, password: string) => {
+  socialLogin: async (provider: SocialProvider, socialToken: string, email?: string | null, name?: string | null) => {
     set({ isLoading: true });
     try {
-      const { data } = await api.post('/auth/login', { email, password });
-      const user: User = { id: data.id, email: data.email };
-      await tokenStorage.set(data.token);
-      await tokenStorage.setUser(user);
-      await tokenStorage.removeIsGuest();
-      set({ token: data.token, user, isGuest: false, isLoading: false });
-    } catch (error) {
-      set({ isLoading: false });
-      throw error;
-    }
-  },
-
-  register: async (email: string, password: string) => {
-    set({ isLoading: true });
-    try {
-      const { data } = await api.post('/auth/register', { email, password });
-      const user: User = { id: data.id, email: data.email };
+      const { data } = await api.post('/auth/social', {
+        provider,
+        token: socialToken,
+        email: email || undefined,
+        name: name || undefined,
+      });
+      const user: User = {
+        id: data.id,
+        email: data.email,
+        name: data.name,
+        provider: data.provider,
+      };
       await tokenStorage.set(data.token);
       await tokenStorage.setUser(user);
       await tokenStorage.removeIsGuest();
@@ -157,5 +157,25 @@ export const useAuthStore = create<AuthState>((set) => ({
     } catch {
       set({ isReady: true });
     }
+  },
+
+  deleteAccount: async () => {
+    set({ isLoading: true });
+    try {
+      await api.delete('/auth/account');
+      await tokenStorage.remove();
+      await tokenStorage.removeUser();
+      await tokenStorage.removeIsGuest();
+      set({ token: null, user: null, isGuest: false, isLoading: false });
+    } catch (error) {
+      set({ isLoading: false });
+      throw error;
+    }
+  },
+
+  linkSocialAccount: async (provider: SocialProvider, socialToken: string, email?: string | null, name?: string | null) => {
+    // Same as socialLogin — the server will link the social account to the existing user by email
+    const { socialLogin } = get();
+    await socialLogin(provider, socialToken, email, name);
   },
 }));

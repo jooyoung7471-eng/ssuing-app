@@ -11,12 +11,17 @@ model User {
   id              String          @id @default(uuid())
   email           String          @unique
   password        String
+  provider        String?         // "apple" | "google" | "kakao" | null (email)
+  social_id       String?         // provider-specific user ID
+  name            String?
   created_at      DateTime        @default(now())
   daily_sentences DailySentence[]
   corrections     Correction[]
   stats           UserStats?
   achievements    Achievement[]
   review_sessions ReviewSession[]
+
+  @@unique([provider, social_id])
 }
 
 model Sentence {
@@ -41,7 +46,7 @@ model DailySentence {
   difficulty  String   @default("beginner") // "beginner" | "intermediate"
   date        String   // YYYY-MM-DD
   order       Int      // 1, 2, 3
-  user        User     @relation(fields: [user_id], references: [id])
+  user        User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
   sentence    Sentence @relation(fields: [sentence_id], references: [id])
 
   @@unique([user_id, date, theme, difficulty, order])
@@ -57,7 +62,7 @@ model Correction {
   score              Int      // 1-10
   highlights         String   // JSON string
   created_at         DateTime @default(now())
-  user               User     @relation(fields: [user_id], references: [id])
+  user               User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
   sentence           Sentence @relation(fields: [sentence_id], references: [id])
 }
 
@@ -72,7 +77,7 @@ model UserStats {
   last_practice_date  String? // YYYY-MM-DD
   total_sentences     Int     @default(0)
   total_perfect       Int     @default(0) // score 10
-  user                User    @relation(fields: [user_id], references: [id])
+  user                User    @relation(fields: [user_id], references: [id], onDelete: Cascade)
 }
 
 model Achievement {
@@ -80,7 +85,7 @@ model Achievement {
   user_id     String
   type        String
   unlocked_at DateTime @default(now())
-  user        User     @relation(fields: [user_id], references: [id])
+  user        User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
 
   @@unique([user_id, type])
 }
@@ -92,7 +97,7 @@ model ReviewSession {
   difficulty  String?
   total_count Int
   created_at  DateTime       @default(now())
-  user        User           @relation(fields: [user_id], references: [id])
+  user        User           @relation(fields: [user_id], references: [id], onDelete: Cascade)
   answers     ReviewAnswer[]
 }
 
@@ -104,6 +109,6 @@ model ReviewAnswer {
   score        Int?
   correction   String?       // JSON
   answered_at  DateTime      @default(now())
-  session      ReviewSession @relation(fields: [session_id], references: [id])
+  session      ReviewSession @relation(fields: [session_id], references: [id], onDelete: Cascade)
   sentence     Sentence      @relation(fields: [sentence_id], references: [id])
 }

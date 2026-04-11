@@ -13,6 +13,15 @@ export const loginSchema = z.object({
   password: z.string().min(1),
 });
 
+export const socialLoginSchema = z.object({
+  provider: z.enum(["apple", "google", "kakao"], {
+    errorMap: () => ({ message: "provider는 apple, google, kakao 중 하나여야 합니다" }),
+  }),
+  token: z.string().min(1, "소셜 로그인 토큰이 필요합니다"),
+  email: z.string().email().optional().nullable(),
+  name: z.string().optional().nullable(),
+});
+
 export const correctionSchema = z.object({
   sentenceId: z.string().uuid("유효한 문장 ID를 입력해주세요"),
   userWriting: z.string().min(1, "영어 작문을 입력해주세요").max(1000),
