@@ -3,3 +3,5 @@ node_modules/
 *.log
 server/node_modules/
 server/prisma/dev.db
+.env
+server/.env
