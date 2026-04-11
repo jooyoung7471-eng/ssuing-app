@@ -193,7 +193,7 @@ export async function getAchievements(userId: string) {
   });
   return achievements.map((a) => ({
     type: a.type,
-    label: ACHIEVEMENT_LABELS[a.type] || a.type,
+    label: ACHIEVEMENT_META[a.type]?.title || a.type,
     unlockedAt: a.unlocked_at.toISOString(),
   }));
 }
