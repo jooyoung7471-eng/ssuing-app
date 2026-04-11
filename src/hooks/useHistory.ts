@@ -24,9 +24,9 @@ export function useHistory(): UseHistoryReturn {
       const params: Record<string, string | number> = { page, limit: 20 };
       if (theme) params.theme = theme;
       const res = await api.get('/history', { params });
-      const newRecords = res.data.data;
+      const newRecords = res.data.data ?? [];
       setRecords((prev) => (page === 1 ? newRecords : [...prev, ...newRecords]));
-      setPagination(res.data.pagination);
+      setPagination(res.data.pagination ?? null);
     } catch (e) {
       setError(e instanceof Error ? e.message : '기록을 불러오지 못했습니다.');
     } finally {

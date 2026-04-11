@@ -64,10 +64,10 @@ export default function CorrectionResult({
       </View>
 
       {/* Highlights */}
-      {result.highlights.length > 0 && (
+      {(result.highlights || []).length > 0 && (
         <View style={styles.highlightsSection}>
           <Text style={styles.highlightsTitle}>수정 포인트</Text>
-          {result.highlights.map((h, i) => (
+          {(result.highlights || []).map((h, i) => (
             <View key={i} style={styles.highlightItem}>
               <View style={styles.highlightRow}>
                 <Text style={styles.originalWord}>{h.original}</Text>
@@ -87,10 +87,10 @@ export default function CorrectionResult({
       </View>
 
       {/* Native Expressions */}
-      {result.nativeExpressions && result.nativeExpressions.length > 0 && (
+      {(result.nativeExpressions || []).length > 0 && (
         <View style={styles.nativeExpressionsCard}>
           <Text style={styles.nativeExpressionsTitle}>이렇게도 말할 수 있어요</Text>
-          {result.nativeExpressions.map((expr, i) => (
+          {(result.nativeExpressions || []).map((expr, i) => (
             <Text key={i} style={styles.nativeExpressionItem}>
               {'\u2022'} {expr}
             </Text>

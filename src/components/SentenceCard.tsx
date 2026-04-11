@@ -43,7 +43,7 @@ export default function SentenceCard({ sentence, index, total }: SentenceCardPro
       </TouchableOpacity>
       {vocabOpen && (
         <View style={styles.vocabBody}>
-          <HintWords hints={sentence.hintWords} />
+          <HintWords hints={sentence.hintWords || []} />
         </View>
       )}
     </View>

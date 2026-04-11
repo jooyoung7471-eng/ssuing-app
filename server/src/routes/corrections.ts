@@ -6,11 +6,12 @@ import { correctWriting } from "../services/llm";
 import { processCorrection } from "../services/gamification";
 import { AppError } from "../middleware/errorHandler";
 import { CorrectionHighlight } from "../types";
+import { llmRateLimit } from "../middleware/rateLimit";
 
 const router = Router();
 const prisma = new PrismaClient();
 
-router.post("/", optionalAuthMiddleware, async (req: Request, res: Response, next: NextFunction) => {
+router.post("/", llmRateLimit, optionalAuthMiddleware, async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { sentenceId, userWriting, difficulty } = correctionSchema.parse(req.body);
     const userId = req.user!.userId;

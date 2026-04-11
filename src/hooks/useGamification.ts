@@ -70,7 +70,7 @@ export function useGamification() {
       }
 
       if (achievementsRes?.data?.data) {
-        const serverAchievements: any[] = achievementsRes.data.data;
+        const serverAchievements: any[] = achievementsRes.data.data || [];
         const merged = ACHIEVEMENT_DEFS.map((def) => {
           const server = serverAchievements.find((a: any) => a.type === def.type);
           return {

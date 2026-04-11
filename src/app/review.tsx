@@ -64,8 +64,8 @@ export default function ReviewScreen() {
       ? quizResults.reduce((worst, r) => (r.correction.score < worst.correction.score ? r : worst), quizResults[0])
       : null;
 
-  const keyExpressions = quizResults
-    .filter((r) => r.correction.keyExpression)
+  const keyExpressions = (quizResults || [])
+    .filter((r) => r.correction?.keyExpression)
     .map((r) => r.correction.keyExpression!);
 
   // Combo calculation: longest streak of score >= 7
@@ -84,12 +84,12 @@ export default function ReviewScreen() {
   };
 
   // Improved sentences count (score improved from previous attempt)
-  const improvedCount = quizResults.filter(
+  const improvedCount = (quizResults || []).filter(
     (r) => r.previousScore !== undefined && r.correction.score > r.previousScore
   ).length;
 
   // Bonus XP: 5 XP per review sentence
-  const bonusXp = quizResults.length * 5;
+  const bonusXp = (quizResults || []).length * 5;
 
   // Step 1 handlers
   const handleStartReview = async () => {
@@ -99,7 +99,7 @@ export default function ReviewScreen() {
       const params: Record<string, string | number> = { limit: sentenceCount };
       if (themeFilter !== 'all') params.theme = themeFilter;
       const res = await api.get('/review/weak', { params });
-      const data: ReviewItem[] = res.data?.data || [];
+      const data: ReviewItem[] = Array.isArray(res.data?.data) ? res.data.data : [];
       if (data.length === 0) {
         setSettingsError('복습할 문장이 없습니다. 먼저 학습을 진행해 주세요.');
         setSettingsLoading(false);
@@ -117,7 +117,7 @@ export default function ReviewScreen() {
       const mapped: Sentence[] = data.map((item: ReviewItem, idx: number) => ({
         id: item.sentenceId || item.id,
         koreanText: item.koreanText,
-        theme: 'daily' as Theme,
+        theme: (themeFilter !== 'all' ? themeFilter : 'daily') as Theme,
         difficulty: 0,
         hintWords: [],
         order: idx,
@@ -166,7 +166,7 @@ export default function ReviewScreen() {
   };
 
   const handleNext = () => {
-    if (currentIndex < sentences.length - 1) {
+    if (currentIndex < (sentences || []).length - 1) {
       setCurrentIndex(currentIndex + 1);
       setDraft('');
       setCurrentCorrection(null);
@@ -181,8 +181,8 @@ export default function ReviewScreen() {
     if (currentIndex > 0) {
       setCurrentIndex(currentIndex - 1);
       // Show previous result if available
-      const prevResult = quizResults.find(
-        (r) => r.sentence.id === sentences[currentIndex - 1]?.id
+      const prevResult = (quizResults || []).find(
+        (r) => r.sentence.id === (sentences || [])[currentIndex - 1]?.id
       );
       if (prevResult) {
         setCurrentCorrection(prevResult.correction);
@@ -195,7 +195,7 @@ export default function ReviewScreen() {
     }
   };
 
-  const progressPercent = sentences.length > 0 ? ((currentIndex + (isCurrentSubmitted ? 1 : 0)) / sentences.length) * 100 : 0;
+  const progressPercent = (sentences || []).length > 0 ? ((currentIndex + (isCurrentSubmitted ? 1 : 0)) / sentences.length) * 100 : 0;
 
   // Render Step 1: Settings
   const renderStep1 = () => {
@@ -302,16 +302,16 @@ export default function ReviewScreen() {
             />
           </View>
           <Text style={styles.progressText}>
-            {currentIndex + 1}/{sentences.length}
+            {currentIndex + 1}/{(sentences || []).length}
           </Text>
         </View>
 
         {/* Sentence card */}
         <View style={styles.quizCard}>
           <Text style={styles.quizKorean}>{currentSentence.koreanText}</Text>
-          {currentSentence.hintWords && currentSentence.hintWords.length > 0 && (
+          {(currentSentence.hintWords || []).length > 0 && (
             <View style={styles.hintRow}>
-              {currentSentence.hintWords.map((hw, i) => (
+              {(currentSentence.hintWords || []).map((hw, i) => (
                 <View key={i} style={styles.hintChip}>
                   <Text style={styles.hintText}>
                     {hw.english} ({hw.korean})
@@ -397,7 +397,7 @@ export default function ReviewScreen() {
               activeOpacity={0.8}
             >
               <Text style={styles.nextButtonText}>
-                {currentIndex < sentences.length - 1 ? '다음' : '결과 보기'}
+                {currentIndex < (sentences || []).length - 1 ? '다음' : '결과 보기'}
               </Text>
               <Ionicons name="chevron-forward" size={18} color="#FFFFFF" />
             </TouchableOpacity>
@@ -514,12 +514,12 @@ export default function ReviewScreen() {
         </View>
 
         {/* Key expressions */}
-        {keyExpressions.length > 0 && (
+        {(keyExpressions || []).length > 0 && (
           <View style={styles.keyExpressionsSection}>
             <Text style={styles.keyExpressionsTitle}>
               {'\uD83D\uDCA1'} 핵심 표현 복습
             </Text>
-            {keyExpressions.map((expr, i) => (
+            {(keyExpressions || []).map((expr, i) => (
               <View key={i} style={styles.keyExprItem}>
                 <Text style={styles.keyExprBullet}>{'\u2022'}</Text>
                 <View style={styles.keyExprContent}>
@@ -535,7 +535,7 @@ export default function ReviewScreen() {
         {/* Details */}
         <View style={styles.detailsSection}>
           <Text style={styles.detailsTitle}>상세 결과</Text>
-          {quizResults.map((r, i) => {
+          {(quizResults || []).map((r, i) => {
             const sc = getScoreColor(r.correction.score);
             const improved = r.previousScore !== undefined && r.correction.score > r.previousScore;
             return (

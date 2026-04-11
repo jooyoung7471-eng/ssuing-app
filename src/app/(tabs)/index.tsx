@@ -58,10 +58,10 @@ export default function HomeScreen() {
     router.push(`/practice/${theme}`);
   };
 
-  const dailyCompleted = dailySentences.filter((s) => s.isCompleted).length;
-  const bizCompleted = bizSentences.filter((s) => s.isCompleted).length;
+  const dailyCompleted = (dailySentences || []).filter((s) => s.isCompleted).length;
+  const bizCompleted = (bizSentences || []).filter((s) => s.isCompleted).length;
 
-  const recentAchievements = achievements
+  const recentAchievements = (achievements || [])
     .filter((a) => a.unlockedAt)
     .sort((a, b) => new Date(b.unlockedAt!).getTime() - new Date(a.unlockedAt!).getTime())
     .slice(0, 3);
@@ -74,7 +74,7 @@ export default function HomeScreen() {
       >
         {/* Header */}
         <View style={styles.header}>
-          <Text style={styles.logo}>EngWrite</Text>
+          <Text style={styles.logo}>쓰잉</Text>
           {gamification.streakDays > 0 && (
             <View style={styles.streakBadge}>
               <Text style={styles.streakText}>
@@ -177,14 +177,14 @@ export default function HomeScreen() {
           <ThemeCard
             theme="daily"
             completedCount={dailyCompleted}
-            totalCount={dailySentences.length || 3}
+            totalCount={(dailySentences || []).length || 3}
             onPress={() => handleThemePress('daily')}
             difficulty={difficulty}
           />
           <ThemeCard
             theme="business"
             completedCount={bizCompleted}
-            totalCount={bizSentences.length || 3}
+            totalCount={(bizSentences || []).length || 3}
             onPress={() => handleThemePress('business')}
             difficulty={difficulty}
           />

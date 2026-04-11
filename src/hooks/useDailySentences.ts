@@ -21,7 +21,7 @@ export function useDailySentences(): UseDailySentencesReturn {
       const params: any = { theme };
       if (difficulty) params.difficulty = difficulty;
       const res = await api.get('/sentences/daily', { params });
-      setSentences(res.data.data);
+      setSentences(res.data.data ?? []);
     } catch (e) {
       setError(e instanceof Error ? e.message : '문장을 불러오지 못했습니다.');
     } finally {

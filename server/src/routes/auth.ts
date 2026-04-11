@@ -3,11 +3,12 @@ import { PrismaClient } from "@prisma/client";
 import { registerSchema, loginSchema } from "../validators/schemas";
 import { hashPassword, comparePassword, generateToken } from "../services/auth";
 import { AppError } from "../middleware/errorHandler";
+import { authRateLimit } from "../middleware/rateLimit";
 
 const router = Router();
 const prisma = new PrismaClient();
 
-router.post("/register", async (req: Request, res: Response, next: NextFunction) => {
+router.post("/register", authRateLimit, async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { email, password } = registerSchema.parse(req.body);
 
@@ -36,7 +37,7 @@ router.post("/register", async (req: Request, res: Response, next: NextFunction)
   }
 });
 
-router.post("/login", async (req: Request, res: Response, next: NextFunction) => {
+router.post("/login", authRateLimit, async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { email, password } = loginSchema.parse(req.body);
 

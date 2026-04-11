@@ -9,9 +9,10 @@ interface HintWordsProps {
 
 export default function HintWords({ hints }: HintWordsProps) {
   // 2-column grid layout like the reference
+  const safeHints = hints || [];
   const rows: HintWord[][] = [];
-  for (let i = 0; i < hints.length; i += 2) {
-    rows.push(hints.slice(i, i + 2));
+  for (let i = 0; i < safeHints.length; i += 2) {
+    rows.push(safeHints.slice(i, i + 2));
   }
 
   return (

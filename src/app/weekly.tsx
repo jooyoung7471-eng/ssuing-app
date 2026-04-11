@@ -20,7 +20,8 @@ function ChangeIndicator({ value, suffix = '' }: { value: number; suffix?: strin
 export default function WeeklyScreen() {
   const { report, loading, error, refetch } = useWeeklyReport();
 
-  const maxCount = Math.max(...report.dailyBreakdown.map((d) => d.count), 1);
+  const breakdown = report?.dailyBreakdown ?? [];
+  const maxCount = breakdown.length > 0 ? Math.max(...breakdown.map((d) => d.count), 1) : 1;
 
   return (
     <SafeAreaView style={styles.container} edges={['bottom']}>
@@ -34,17 +35,17 @@ export default function WeeklyScreen() {
         <Text style={styles.sectionTitle}>이번 주 요약</Text>
         <View style={styles.summaryRow}>
           <View style={styles.summaryCard}>
-            <Text style={styles.summaryValue}>{report.totalSentences}</Text>
+            <Text style={styles.summaryValue}>{report?.totalSentences ?? 0}</Text>
             <Text style={styles.summaryLabel}>완료 문장</Text>
-            <ChangeIndicator value={report.comparedToLastWeek.sentences} suffix="문장" />
+            <ChangeIndicator value={report?.comparedToLastWeek?.sentences ?? 0} suffix="문장" />
           </View>
           <View style={styles.summaryCard}>
-            <Text style={styles.summaryValue}>{report.averageScore.toFixed(1)}</Text>
+            <Text style={styles.summaryValue}>{(report?.averageScore ?? 0).toFixed(1)}</Text>
             <Text style={styles.summaryLabel}>평균 점수</Text>
-            <ChangeIndicator value={report.comparedToLastWeek.score} suffix="점" />
+            <ChangeIndicator value={report?.comparedToLastWeek?.score ?? 0} suffix="점" />
           </View>
           <View style={styles.summaryCard}>
-            <Text style={styles.summaryValue}>{report.totalXp}</Text>
+            <Text style={styles.summaryValue}>{report?.totalXp ?? 0}</Text>
             <Text style={styles.summaryLabel}>획득 XP</Text>
           </View>
         </View>
@@ -52,9 +53,9 @@ export default function WeeklyScreen() {
         {/* Daily Chart */}
         <Text style={[styles.sectionTitle, { marginTop: 28 }]}>일별 학습량</Text>
         <View style={styles.chartContainer}>
-          {report.dailyBreakdown.length > 0 ? (
+          {breakdown.length > 0 ? (
             <View style={styles.chart}>
-              {report.dailyBreakdown.map((day, i) => {
+              {breakdown.map((day, i) => {
                 const heightPercent = maxCount > 0 ? (day.count / maxCount) * 100 : 0;
                 return (
                   <View key={day.date} style={styles.barCol}>

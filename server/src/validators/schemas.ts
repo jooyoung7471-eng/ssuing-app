@@ -2,7 +2,10 @@ import { z } from "zod";
 
 export const registerSchema = z.object({
   email: z.string().email("유효한 이메일을 입력해주세요"),
-  password: z.string().min(6, "비밀번호는 최소 6자 이상이어야 합니다"),
+  password: z
+    .string()
+    .min(8, "비밀번호는 최소 8자 이상이어야 합니다")
+    .max(128, "비밀번호는 128자 이하여야 합니다"),
 });
 
 export const loginSchema = z.object({

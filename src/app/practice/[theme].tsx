@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { StyleSheet, View, ScrollView, Text, TouchableOpacity } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useLocalSearchParams, useNavigation, useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -58,25 +59,29 @@ export default function PracticeScreen() {
     navigation.setOptions({ headerShown: false });
     if (theme) {
       resetForTheme(theme);
-      fetchSentences(theme);
+      AsyncStorage.getItem('engwrite_difficulty').then((saved) => {
+        const diff = saved === 'intermediate' ? 'intermediate' : 'beginner';
+        fetchSentences(theme, diff as any);
+      });
     }
   }, [theme]);
 
   useEffect(() => {
-    if (sentences.length > 0) {
+    if ((sentences || []).length > 0) {
       storeSentences(sentences);
     }
   }, [sentences]);
 
-  const currentSentence = sentences[currentIndex];
+  const safeSentences = sentences || [];
+  const currentSentence = safeSentences[currentIndex];
   const currentCorrection = currentSentence ? corrections[currentSentence.id] : null;
   const isCompleted = !!currentCorrection;
 
-  const completedCount = Object.keys(corrections).length;
-  const allCompleted = sentences.length > 0 && completedCount >= sentences.length;
+  const completedCount = Object.keys(corrections || {}).length;
+  const allCompleted = safeSentences.length > 0 && completedCount >= safeSentences.length;
 
   const canGoPrev = currentIndex > 0;
-  const canGoNext = currentIndex < sentences.length - 1;
+  const canGoNext = currentIndex < safeSentences.length - 1;
 
   // [Fix 2] When switching sentence: show submitted text if completed, otherwise show draft
   useEffect(() => {
@@ -133,25 +138,44 @@ export default function PracticeScreen() {
         setXpLevelUp(!!correctionResult.levelUp);
         setXpNewLevel(correctionResult.newLevel);
       }
-      if (correctionResult.newAchievements?.length) {
-        setPendingAchievements(correctionResult.newAchievements);
+      if ((correctionResult.newAchievements || []).length > 0) {
+        setPendingAchievements(correctionResult.newAchievements || []);
         setShowAchievement(true);
       }
 
       // [Fix 4] Check completion with fresh count
-      const newCount = Object.keys(usePracticeStore.getState().corrections).length;
-      if (newCount >= sentences.length && !completionShown) {
+      const newCount = Object.keys(usePracticeStore.getState().corrections || {}).length;
+      if (newCount >= safeSentences.length && !completionShown) {
         setTimeout(() => setShowModal(true), 1000);
       }
     }
   };
 
-  const handleRetry = () => {
-    if (currentSentence && !submittingRef.current) {
-      submittingRef.current = true;
-      submit(currentSentence.id, draftRef.current).finally(() => {
-        submittingRef.current = false;
-      });
+  const handleRetry = async () => {
+    if (!currentSentence || submittingRef.current) return;
+    submittingRef.current = true;
+    try {
+      const correctionResult = await submit(currentSentence.id, draftRef.current);
+      if (correctionResult) {
+        setCorrection(currentSentence.id, correctionResult);
+
+        if (correctionResult.xpEarned) {
+          setXpEarned(correctionResult.xpEarned);
+          setXpLevelUp(!!correctionResult.levelUp);
+          setXpNewLevel(correctionResult.newLevel);
+        }
+        if ((correctionResult.newAchievements || []).length > 0) {
+          setPendingAchievements(correctionResult.newAchievements || []);
+          setShowAchievement(true);
+        }
+
+        const newCount = Object.keys(usePracticeStore.getState().corrections || {}).length;
+        if (newCount >= safeSentences.length && !completionShown) {
+          setTimeout(() => setShowModal(true), 1000);
+        }
+      }
+    } finally {
+      submittingRef.current = false;
     }
   };
 
@@ -170,7 +194,7 @@ export default function PracticeScreen() {
 
   const handleAchievementClose = () => {
     setShowAchievement(false);
-    setPendingAchievements((prev) => prev.slice(1));
+    setPendingAchievements((prev) => (prev || []).slice(1));
   };
 
   // 다음 업적이 남아 있으면 다시 표시
@@ -180,14 +204,15 @@ export default function PracticeScreen() {
     }
   }, [showAchievement, pendingAchievements.length]);
 
-  const averageScore = allCompleted
-    ? Object.values(corrections).reduce((sum, c) => sum + c.score, 0) / Object.values(corrections).length
+  const correctionValues = Object.values(corrections || {});
+  const averageScore = allCompleted && correctionValues.length > 0
+    ? correctionValues.reduce((sum, c) => sum + c.score, 0) / correctionValues.length
     : 0;
 
-  const totalXpEarned = Object.values(corrections).reduce((sum, c) => sum + (c.xpEarned || 0), 0);
+  const totalXpEarned = correctionValues.reduce((sum, c) => sum + (c.xpEarned || 0), 0);
 
   // 최신 레벨 정보: 가장 마지막 교정 결과에서 추출
-  const latestCorrection = Object.values(corrections).find((c) => c.newLevel != null);
+  const latestCorrection = correctionValues.find((c) => c.newLevel != null);
   const currentLevel = latestCorrection?.newLevel;
 
   if (sentencesLoading) {
@@ -221,7 +246,7 @@ export default function PracticeScreen() {
 
         <SafeAreaView edges={['top']} style={styles.topBar}>
           <Text style={styles.backButton} onPress={() => router.back()}>{'\u2190'}</Text>
-          <Text style={styles.pageCounter}>{currentIndex + 1} / {sentences.length}</Text>
+          <Text style={styles.pageCounter}>{currentIndex + 1} / {safeSentences.length}</Text>
           <View style={{ width: 30 }} />
         </SafeAreaView>
 
@@ -246,7 +271,7 @@ export default function PracticeScreen() {
               <SentenceCard
                 sentence={currentSentence}
                 index={currentIndex}
-                total={sentences.length}
+                total={safeSentences.length}
               />
 
               <View style={styles.inputSection}>
@@ -282,8 +307,8 @@ export default function PracticeScreen() {
 
           {/* Dots */}
           <View style={styles.dotsContainer}>
-            {sentences.map((_, i) => {
-              const sentenceId = sentences[i]?.id;
+            {safeSentences.map((_, i) => {
+              const sentenceId = safeSentences[i]?.id;
               const isDone = sentenceId && corrections[sentenceId];
               return (
                 <View

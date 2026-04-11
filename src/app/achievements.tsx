@@ -40,8 +40,8 @@ function AchievementBadge({ achievement }: { achievement: Achievement }) {
 export default function AchievementsScreen() {
   const { achievements, loading, refetch } = useGamification();
 
-  const unlocked = achievements.filter((a) => a.unlockedAt);
-  const locked = achievements.filter((a) => !a.unlockedAt);
+  const unlocked = (achievements || []).filter((a) => a.unlockedAt);
+  const locked = (achievements || []).filter((a) => !a.unlockedAt);
 
   return (
     <SafeAreaView style={styles.container} edges={['bottom']}>
@@ -50,7 +50,7 @@ export default function AchievementsScreen() {
         refreshControl={<RefreshControl refreshing={loading} onRefresh={refetch} />}
       >
         <Text style={styles.sectionTitle}>
-          달성한 업적 ({unlocked.length}/{achievements.length})
+          달성한 업적 ({unlocked.length}/{(achievements || []).length})
         </Text>
 
         {unlocked.length === 0 && (

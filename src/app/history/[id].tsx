@@ -69,10 +69,10 @@ export default function HistoryDetailScreen() {
           </View>
         </View>
 
-        {detail.highlights.length > 0 && (
+        {(detail.highlights || []).length > 0 && (
           <View style={styles.section}>
             <Text style={styles.label}>수정 포인트</Text>
-            {detail.highlights.map((h, i) => (
+            {(detail.highlights || []).map((h, i) => (
               <View key={i} style={styles.highlightItem}>
                 <View style={styles.highlightRow}>
                   <Text style={styles.originalWord}>{h.original}</Text>

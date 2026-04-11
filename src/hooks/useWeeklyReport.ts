@@ -24,7 +24,7 @@ export function useWeeklyReport() {
       if (raw) {
         // Map API response to frontend type
         const summary = raw.summary || raw;
-        const daily = raw.daily || raw.dailyBreakdown || [];
+        const daily = raw.daily || raw.dailyBreakdown || [] as any[];
 
         setReport({
           totalSentences: summary.totalSentences ?? 0,

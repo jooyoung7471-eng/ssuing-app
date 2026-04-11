@@ -23,7 +23,12 @@ export function useCorrection(): UseCorrectionReturn {
         const body: Record<string, string> = { sentenceId, userWriting };
         if (difficulty) body.difficulty = difficulty;
         const res = await api.post('/corrections', body);
-        const data = res.data.data as CorrectionResult;
+        const raw = res.data?.data;
+        if (!raw) {
+          setError('교정 결과를 받지 못했습니다.');
+          return null;
+        }
+        const data = raw as CorrectionResult;
         setResult(data);
         return data;
       } catch (e) {

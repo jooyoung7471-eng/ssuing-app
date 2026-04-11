@@ -5,7 +5,7 @@ import { colors } from '../constants/colors';
 const isWeb = Platform.OS === 'web';
 
 // Web doesn't need GestureHandlerRootView — it causes crashes
-let Wrapper: React.ComponentType<{ style?: any; children: React.ReactNode }> = View;
+let Wrapper: React.ComponentType<{ style?: any; children?: React.ReactNode }> = View;
 if (!isWeb) {
   try {
     const { GestureHandlerRootView } = require('react-native-gesture-handler');

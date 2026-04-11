@@ -12,9 +12,7 @@ export function useReview() {
     setError(null);
     try {
       const res = await api.get('/review/weak');
-      if (res.data?.data) {
-        setItems(res.data.data);
-      }
+      setItems(res.data?.data ?? []);
     } catch (e: any) {
       setError(e.message || '오답 목록을 불러올 수 없습니다.');
     } finally {

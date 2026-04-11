@@ -1,16 +1,20 @@
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
+import bcrypt from "bcryptjs";
 import { PrismaClient } from "@prisma/client";
 import { JwtPayload } from "../types";
 import { AppError } from "./errorHandler";
 
-const JWT_SECRET = process.env.JWT_SECRET || "dev-secret";
-const GUEST_USER_ID = "guest-user-00000000";
-const prisma = new PrismaClient();
-
 if (!process.env.JWT_SECRET) {
+  if (process.env.NODE_ENV === "production") {
+    throw new Error("FATAL: JWT_SECRET must be set in production environment!");
+  }
   console.warn("WARNING: JWT_SECRET is not set. Using default dev secret. Set JWT_SECRET in production!");
 }
+
+const JWT_SECRET = process.env.JWT_SECRET || "dev-secret-DO-NOT-USE-IN-PRODUCTION";
+const GUEST_USER_ID = "guest-user-00000000";
+const prisma = new PrismaClient();
 
 let guestUserEnsured = false;
 async function ensureGuestUser() {
@@ -18,8 +22,9 @@ async function ensureGuestUser() {
   try {
     const existing = await prisma.user.findUnique({ where: { id: GUEST_USER_ID } });
     if (!existing) {
+      const hashedGuestPassword = await bcrypt.hash("guest-no-login-allowed", 10);
       await prisma.user.create({
-        data: { id: GUEST_USER_ID, email: "guest@engwrite.local", password: "guest" },
+        data: { id: GUEST_USER_ID, email: "guest@engwrite.local", password: hashedGuestPassword },
       });
     }
     guestUserEnsured = true;
