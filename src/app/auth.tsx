@@ -11,13 +11,25 @@ import {
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { router } from 'expo-router';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { colors } from '../constants/colors';
 import { typography } from '../constants/typography';
 import { useAuthStore, SocialProvider } from '../stores/authStore';
 
+const TERMS_AGREED_KEY = 'terms_agreed';
+
 export default function AuthScreen() {
   const [error, setError] = useState('');
   const { socialLogin, loginAsGuest, isLoading } = useAuthStore();
+
+  const navigateAfterLogin = async () => {
+    const agreed = await AsyncStorage.getItem(TERMS_AGREED_KEY);
+    if (agreed === 'true') {
+      router.replace('/(tabs)');
+    } else {
+      router.replace('/terms');
+    }
+  };
 
   const handleSocialLogin = async (provider: SocialProvider) => {
     setError('');
@@ -29,7 +41,7 @@ export default function AuthScreen() {
       } else if (provider === 'kakao') {
         await handleKakaoLogin();
       }
-      router.replace('/(tabs)');
+      await navigateAfterLogin();
     } catch (err: any) {
       // User cancellation — don't show error
       if (err?.code === 'ERR_REQUEST_CANCELED' || err?.code === 'ERR_CANCELED') {
@@ -133,12 +145,12 @@ export default function AuthScreen() {
     await socialLogin('kakao', code);
   };
 
-  const handleGuest = () => {
+  const handleGuest = async () => {
     loginAsGuest();
-    router.replace('/(tabs)');
+    await navigateAfterLogin();
   };
 
-  const showApple = Platform.OS === 'ios';
+  const showApple = true; // 모든 플랫폼에서 Apple 로그인 표시
 
   return (
     <ScrollView

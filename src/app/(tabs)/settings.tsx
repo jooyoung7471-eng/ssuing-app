@@ -1,14 +1,53 @@
-import React from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, Alert, Platform } from 'react-native';
+import React, { useState, useEffect, useCallback } from 'react';
+import { StyleSheet, Text, View, TouchableOpacity, Alert, Platform, Switch } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import { colors } from '../../constants/colors';
 import { typography } from '../../constants/typography';
 import { useAuthStore, SocialProvider } from '../../stores/authStore';
+import {
+  isPushEnabled,
+  enablePushNotifications,
+  disablePushNotifications,
+  getReminderTime,
+  scheduleDailyReminder,
+} from '../../services/notifications';
+
+const REMINDER_HOURS = [6, 7, 8, 9, 10, 11, 12, 18, 19, 20, 21];
 
 export default function SettingsScreen() {
   const { user, isGuest, logout, deleteAccount, linkSocialAccount, isLoading } = useAuthStore();
+  const [pushEnabled, setPushEnabled] = useState(false);
+  const [reminderHour, setReminderHour] = useState(9);
+  const [showTimePicker, setShowTimePicker] = useState(false);
+
+  useEffect(() => {
+    isPushEnabled().then(setPushEnabled);
+    getReminderTime().then(({ hour }) => setReminderHour(hour));
+  }, []);
+
+  const handleTogglePush = useCallback(async (value: boolean) => {
+    if (value) {
+      const success = await enablePushNotifications();
+      if (!success && Platform.OS !== 'web') {
+        Alert.alert('알림 권한', '설정에서 알림 권한을 허용해주세요.');
+        return;
+      }
+      setPushEnabled(true);
+    } else {
+      await disablePushNotifications();
+      setPushEnabled(false);
+    }
+  }, []);
+
+  const handleChangeReminderTime = useCallback(async (hour: number) => {
+    setReminderHour(hour);
+    setShowTimePicker(false);
+    if (pushEnabled) {
+      await scheduleDailyReminder(hour, 0);
+    }
+  }, [pushEnabled]);
 
   const handleLogout = () => {
     Alert.alert(
@@ -185,6 +224,79 @@ export default function SettingsScreen() {
           </View>
         )}
 
+        {/* Push notification settings */}
+        <View style={styles.notifSection}>
+          <View style={styles.notifRow}>
+            <View style={styles.notifLeft}>
+              <Ionicons name="notifications-outline" size={20} color={colors.text.primary} />
+              <Text style={styles.label}>푸시 알림</Text>
+            </View>
+            <Switch
+              value={pushEnabled}
+              onValueChange={handleTogglePush}
+              trackColor={{ false: '#D1D5DB', true: '#C7D2FE' }}
+              thumbColor={pushEnabled ? '#4F46E5' : '#F4F3F4'}
+            />
+          </View>
+          {pushEnabled && (
+            <>
+              <View style={styles.notifDivider} />
+              <TouchableOpacity
+                style={styles.notifRow}
+                onPress={() => setShowTimePicker(!showTimePicker)}
+                activeOpacity={0.7}
+              >
+                <View style={styles.notifLeft}>
+                  <Ionicons name="time-outline" size={20} color={colors.text.primary} />
+                  <Text style={styles.label}>학습 리마인더</Text>
+                </View>
+                <View style={styles.timeDisplay}>
+                  <Text style={styles.timeText}>
+                    {reminderHour < 12
+                      ? `오전 ${reminderHour}시`
+                      : reminderHour === 12
+                        ? '오후 12시'
+                        : `오후 ${reminderHour - 12}시`}
+                  </Text>
+                  <Ionicons
+                    name={showTimePicker ? 'chevron-up' : 'chevron-down'}
+                    size={16}
+                    color={colors.text.hint}
+                  />
+                </View>
+              </TouchableOpacity>
+              {showTimePicker && (
+                <View style={styles.timePickerWrap}>
+                  {REMINDER_HOURS.map((h) => (
+                    <TouchableOpacity
+                      key={h}
+                      style={[
+                        styles.timeOption,
+                        h === reminderHour && styles.timeOptionSelected,
+                      ]}
+                      onPress={() => handleChangeReminderTime(h)}
+                      activeOpacity={0.7}
+                    >
+                      <Text
+                        style={[
+                          styles.timeOptionText,
+                          h === reminderHour && styles.timeOptionTextSelected,
+                        ]}
+                      >
+                        {h < 12
+                          ? `오전 ${h}시`
+                          : h === 12
+                            ? '오후 12시'
+                            : `오후 ${h - 12}시`}
+                      </Text>
+                    </TouchableOpacity>
+                  ))}
+                </View>
+              )}
+            </>
+          )}
+        </View>
+
         {/* Version */}
         <View style={styles.item}>
           <Text style={styles.label}>버전</Text>
@@ -300,6 +412,61 @@ const styles = StyleSheet.create({
   linkKakaoText: {
     ...typography.button,
     color: '#191919',
+  },
+  // Notification section
+  notifSection: {
+    backgroundColor: colors.card,
+    borderRadius: 14,
+    padding: 16,
+  },
+  notifRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  notifLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+  },
+  notifDivider: {
+    height: 1,
+    backgroundColor: colors.border,
+    marginVertical: 12,
+  },
+  timeDisplay: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+  },
+  timeText: {
+    ...typography.body,
+    color: '#4F46E5',
+    fontSize: 14,
+    fontWeight: '600',
+  },
+  timePickerWrap: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 8,
+    marginTop: 12,
+  },
+  timeOption: {
+    paddingHorizontal: 14,
+    paddingVertical: 8,
+    borderRadius: 20,
+    backgroundColor: '#F3F4F6',
+  },
+  timeOptionSelected: {
+    backgroundColor: '#4F46E5',
+  },
+  timeOptionText: {
+    ...typography.caption,
+    color: colors.text.secondary,
+    fontWeight: '500',
+  },
+  timeOptionTextSelected: {
+    color: '#FFFFFF',
   },
   item: {
     flexDirection: 'row',

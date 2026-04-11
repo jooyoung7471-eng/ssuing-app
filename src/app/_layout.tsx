@@ -6,6 +6,7 @@ import { colors } from '../constants/colors';
 import { useAuthStore } from '../stores/authStore';
 
 const ONBOARDING_KEY = 'onboarding_completed';
+const TERMS_AGREED_KEY = 'terms_agreed';
 
 const isWeb = Platform.OS === 'web';
 
@@ -20,17 +21,18 @@ if (!isWeb) {
   }
 }
 
-function useProtectedRoute(onboardingDone: boolean | null) {
+function useProtectedRoute(onboardingDone: boolean | null, termsAgreed: boolean | null) {
   const { token, isGuest, isReady } = useAuthStore();
   const segments = useSegments();
   const router = useRouter();
 
   useEffect(() => {
-    // Wait until both onboarding check and auth are ready
-    if (onboardingDone === null || !isReady) return;
+    // Wait until all async checks are ready
+    if (onboardingDone === null || termsAgreed === null || !isReady) return;
 
     const inOnboarding = segments[0] === 'onboarding';
     const inAuthScreen = segments[0] === 'auth';
+    const inTermsScreen = segments[0] === 'terms';
     const isAuthenticated = !!token || isGuest;
 
     // Step 1: onboarding not done yet → go to onboarding
@@ -43,27 +45,34 @@ function useProtectedRoute(onboardingDone: boolean | null) {
     if (onboardingDone) {
       if (!isAuthenticated && !inAuthScreen && !inOnboarding) {
         router.replace('/auth');
-      } else if (isAuthenticated && (inAuthScreen || inOnboarding)) {
+      } else if (isAuthenticated && !termsAgreed && !inTermsScreen && !inAuthScreen && !inOnboarding) {
+        // Authenticated but hasn't agreed to terms yet
+        router.replace('/terms');
+      } else if (isAuthenticated && termsAgreed && (inAuthScreen || inOnboarding || inTermsScreen)) {
         router.replace('/(tabs)');
       }
     }
-  }, [token, isGuest, isReady, segments, onboardingDone]);
+  }, [token, isGuest, isReady, segments, onboardingDone, termsAgreed]);
 }
 
 export default function RootLayout() {
   const { loadToken, isReady } = useAuthStore();
   const [onboardingDone, setOnboardingDone] = useState<boolean | null>(null);
+  const [termsAgreed, setTermsAgreed] = useState<boolean | null>(null);
 
   useEffect(() => {
     loadToken();
     AsyncStorage.getItem(ONBOARDING_KEY).then((value) => {
       setOnboardingDone(value === 'true');
     });
+    AsyncStorage.getItem(TERMS_AGREED_KEY).then((value) => {
+      setTermsAgreed(value === 'true');
+    });
   }, []);
 
-  useProtectedRoute(onboardingDone);
+  useProtectedRoute(onboardingDone, termsAgreed);
 
-  if (!isReady || onboardingDone === null) {
+  if (!isReady || onboardingDone === null || termsAgreed === null) {
     const loading = (
       <View style={[styles.root, styles.loading]}>
         <ActivityIndicator size="large" color={colors.primary} />
@@ -90,6 +99,7 @@ export default function RootLayout() {
       >
         <Stack.Screen name="onboarding" options={{ headerShown: false, animation: 'none' }} />
         <Stack.Screen name="auth" options={{ headerShown: false }} />
+        <Stack.Screen name="terms" options={{ headerShown: false, gestureEnabled: false }} />
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         <Stack.Screen
           name="practice/[theme]"

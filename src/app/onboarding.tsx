@@ -1,20 +1,16 @@
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import {
   StyleSheet,
   Text,
   View,
-  FlatList,
-  Dimensions,
   TouchableOpacity,
-  NativeSyntheticEvent,
-  NativeScrollEvent,
-  ViewToken,
+  Dimensions,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { router } from 'expo-router';
 
-const { width, height } = Dimensions.get('window');
+const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
 interface OnboardingPage {
   id: string;
@@ -57,48 +53,30 @@ async function completeOnboarding() {
 
 export default function OnboardingScreen() {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const flatListRef = useRef<FlatList>(null);
-
-  const onViewableItemsChanged = useRef(
-    ({ viewableItems }: { viewableItems: ViewToken[] }) => {
-      if (viewableItems.length > 0 && viewableItems[0].index != null) {
-        setCurrentIndex(viewableItems[0].index);
-      }
-    }
-  ).current;
-
-  const viewabilityConfig = useRef({ viewAreaCoveragePercentThreshold: 50 }).current;
-
-  const renderPage = ({ item }: { item: OnboardingPage }) => (
-    <View style={[styles.page, { backgroundColor: item.backgroundColor, width }]}>
-      <Ionicons name={item.icon} size={120} color="#FFFFFF" style={styles.icon} />
-      <Text style={styles.title}>{item.title}</Text>
-      <Text style={styles.subtitle}>{item.subtitle}</Text>
-    </View>
-  );
-
+  const page = pages[currentIndex];
   const isLastPage = currentIndex === pages.length - 1;
 
+  const handleNext = () => {
+    if (isLastPage) {
+      completeOnboarding();
+    } else {
+      setCurrentIndex(currentIndex + 1);
+    }
+  };
+
   return (
-    <View style={[styles.container, { backgroundColor: pages[currentIndex].backgroundColor }]}>
+    <View style={[styles.container, { backgroundColor: page.backgroundColor }]}>
       {/* Skip button */}
       <TouchableOpacity style={styles.skipButton} onPress={completeOnboarding}>
         <Text style={styles.skipText}>건너뛰기</Text>
       </TouchableOpacity>
 
-      {/* Pages */}
-      <FlatList
-        ref={flatListRef}
-        data={pages}
-        renderItem={renderPage}
-        keyExtractor={(item) => item.id}
-        horizontal
-        pagingEnabled
-        showsHorizontalScrollIndicator={false}
-        bounces={false}
-        onViewableItemsChanged={onViewableItemsChanged}
-        viewabilityConfig={viewabilityConfig}
-      />
+      {/* Content */}
+      <View style={styles.content}>
+        <Ionicons name={page.icon} size={120} color="#FFFFFF" />
+        <Text style={styles.title}>{page.title}</Text>
+        <Text style={styles.subtitle}>{page.subtitle}</Text>
+      </View>
 
       {/* Bottom area */}
       <View style={styles.bottomContainer}>
@@ -115,16 +93,16 @@ export default function OnboardingScreen() {
           ))}
         </View>
 
-        {/* Start button (only on last page) */}
-        {isLastPage && (
-          <TouchableOpacity
-            style={styles.startButton}
-            onPress={completeOnboarding}
-            activeOpacity={0.8}
-          >
-            <Text style={styles.startButtonText}>시작하기</Text>
-          </TouchableOpacity>
-        )}
+        {/* Next / Start button */}
+        <TouchableOpacity
+          style={styles.startButton}
+          onPress={handleNext}
+          activeOpacity={0.8}
+        >
+          <Text style={styles.startButtonText}>
+            {isLastPage ? '시작하기' : '다음'}
+          </Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -133,6 +111,7 @@ export default function OnboardingScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    minHeight: SCREEN_HEIGHT,
   },
   skipButton: {
     position: 'absolute',
@@ -145,20 +124,18 @@ const styles = StyleSheet.create({
     color: 'rgba(255, 255, 255, 0.7)',
     fontSize: 16,
   },
-  page: {
+  content: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
     paddingHorizontal: 40,
-  },
-  icon: {
-    marginBottom: 40,
   },
   title: {
     fontSize: 32,
     fontWeight: 'bold',
     color: '#FFFFFF',
     textAlign: 'center',
+    marginTop: 40,
     marginBottom: 16,
   },
   subtitle: {
@@ -168,10 +145,7 @@ const styles = StyleSheet.create({
     lineHeight: 26,
   },
   bottomContainer: {
-    position: 'absolute',
-    bottom: 60,
-    left: 0,
-    right: 0,
+    paddingBottom: 60,
     alignItems: 'center',
   },
   dotsContainer: {
