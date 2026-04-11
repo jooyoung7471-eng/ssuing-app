@@ -203,6 +203,7 @@ export default function ReviewScreen() {
       { label: '전체', value: 'all' },
       { label: '일상', value: 'daily' },
       { label: '비즈니스', value: 'business' },
+      { label: '여행', value: 'travel' },
     ];
     const countOptions = [5, 10, 15, 20];
 

@@ -23,16 +23,23 @@ const THEME_INFO: Record<Theme, { title: string; subtitle: string; emoji: string
     subtitle: 'Business English',
     emoji: '\u{1F4BC}',
   },
+  travel: {
+    title: '여행 영어',
+    subtitle: 'Travel English',
+    emoji: '\u{2708}\u{FE0F}',
+  },
 };
 
 const THEME_GRADIENTS: Record<Difficulty, Record<Theme, [string, string]>> = {
   beginner: {
     daily: [colors.primary, colors.primaryLight],       // #4A90D9 → #6BA3E0
     business: [colors.secondary, colors.secondaryLight], // #7C4DFF → #9B7BFF
+    travel: ['#10B981', '#34D399'],                      // 초록 그라데이션
   },
   intermediate: {
     daily: ['#1E3A5F', '#2563EB'],    // 진한 남색
     business: ['#6B1D3A', '#C2185B'], // 진한 와인색
+    travel: ['#065F46', '#10B981'],   // 진한 초록
   },
 };
 

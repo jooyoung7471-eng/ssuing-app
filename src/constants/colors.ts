@@ -30,6 +30,8 @@ export const colors = {
     medium: '#FF9800',
     low: '#F44336',
   },
+  travelPrimary: '#10B981',
+  travelGradient: ['#10B981', '#34D399'] as const,
 } as const;
 
 export function getScoreColor(score: number): string {

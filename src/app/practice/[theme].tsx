@@ -48,8 +48,8 @@ export default function PracticeScreen() {
   const draftRef = useRef('');
   const submittingRef = useRef(false);
 
-  const themeTitle = theme === 'daily' ? '일상 영어' : '비즈니스 영어';
-  const themeEmoji = theme === 'daily' ? '\u2615' : '\u{1F4BC}';
+  const themeTitle = theme === 'daily' ? '일상 영어' : theme === 'travel' ? '여행 영어' : '비즈니스 영어';
+  const themeEmoji = theme === 'daily' ? '\u2615' : theme === 'travel' ? '\u{2708}\u{FE0F}' : '\u{1F4BC}';
 
   const today = new Date();
   const dateStr = `${today.getFullYear()}. ${today.getMonth() + 1}. ${today.getDate()}`;
@@ -235,7 +235,7 @@ export default function PracticeScreen() {
     <View style={styles.container}>
       {/* Header */}
       <LinearGradient
-        colors={theme === 'daily' ? ['#1E3A5F', '#2563EB', '#5B9CF6'] : ['#3B1F6E', '#7C4DFF', '#B388FF']}
+        colors={theme === 'daily' ? ['#1E3A5F', '#2563EB', '#5B9CF6'] : theme === 'travel' ? ['#065F46', '#10B981', '#34D399'] : ['#3B1F6E', '#7C4DFF', '#B388FF']}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
         style={styles.gradientHeader}

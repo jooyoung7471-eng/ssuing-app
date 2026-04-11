@@ -18,6 +18,7 @@ export default function HomeScreen() {
   const router = useRouter();
   const { sentences: dailySentences, fetch: fetchDaily } = useDailySentences();
   const { sentences: bizSentences, fetch: fetchBiz } = useDailySentences();
+  const { sentences: travelSentences, fetch: fetchTravel } = useDailySentences();
   const [refreshing, setRefreshing] = useState(false);
   const [stats, setStats] = useState<LearningStats | null>(null);
   const [difficulty, setDifficulty] = useState<Difficulty>('beginner');
@@ -28,6 +29,7 @@ export default function HomeScreen() {
     await Promise.all([
       fetchDaily('daily', d),
       fetchBiz('business', d),
+      fetchTravel('travel', d),
       api.get('/history/stats').then((r) => setStats(r.data.data)).catch(() => {}),
       refetchGamification(),
     ]);
@@ -60,6 +62,7 @@ export default function HomeScreen() {
 
   const dailyCompleted = (dailySentences || []).filter((s) => s.isCompleted).length;
   const bizCompleted = (bizSentences || []).filter((s) => s.isCompleted).length;
+  const travelCompleted = (travelSentences || []).filter((s) => s.isCompleted).length;
 
   const recentAchievements = (achievements || [])
     .filter((a) => a.unlockedAt)
@@ -186,6 +189,13 @@ export default function HomeScreen() {
             completedCount={bizCompleted}
             totalCount={(bizSentences || []).length || 3}
             onPress={() => handleThemePress('business')}
+            difficulty={difficulty}
+          />
+          <ThemeCard
+            theme="travel"
+            completedCount={travelCompleted}
+            totalCount={(travelSentences || []).length || 3}
+            onPress={() => handleThemePress('travel')}
             difficulty={difficulty}
           />
         </View>

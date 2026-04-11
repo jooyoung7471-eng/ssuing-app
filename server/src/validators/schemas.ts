@@ -29,8 +29,8 @@ export const correctionSchema = z.object({
 });
 
 export const dailySentencesQuerySchema = z.object({
-  theme: z.enum(["daily", "business"], {
-    errorMap: () => ({ message: "테마는 daily 또는 business여야 합니다" }),
+  theme: z.enum(["daily", "business", "travel"], {
+    errorMap: () => ({ message: "테마는 daily, business 또는 travel이어야 합니다" }),
   }),
   difficulty: z.enum(["beginner", "intermediate"]).optional(),
 });
@@ -50,7 +50,7 @@ export const reviewSubmitSchema = z.object({
 export const historyQuerySchema = z.object({
   page: z.coerce.number().int().positive().default(1),
   limit: z.coerce.number().int().positive().max(100).default(20),
-  theme: z.enum(["daily", "business"]).optional(),
+  theme: z.enum(["daily", "business", "travel"]).optional(),
 });
 
 export const idParamSchema = z.object({

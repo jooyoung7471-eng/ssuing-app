@@ -1,0 +1,2309 @@
+[
+  {
+    "koreanText": "체크인 카운터가 어디에 있나요?",
+    "theme": "travel",
+    "difficulty": "beginner",
+    "category": "airport",
+    "hintWords": [
+      {"english": "check-in", "korean": "체크인"},
+      {"english": "counter", "korean": "카운터"},
+      {"english": "where", "korean": "어디"}
+    ],
+    "tags": ["airport", "check-in", "direction"]
+  },
+  {
+    "koreanText": "창가 자리로 주세요.",
+    "theme": "travel",
+    "difficulty": "beginner",
+    "category": "airport",
+    "hintWords": [
+      {"english": "window", "korean": "창가"},
+      {"english": "seat", "korean": "좌석"}
+    ],
+    "tags": ["airport", "seat", "request"]
+  },
+  {
+    "koreanText": "탑승구가 몇 번인가요?",
+    "theme": "travel",
+    "difficulty": "beginner",
+    "category": "airport",
+    "hintWords": [
+      {"english": "gate", "korean": "탑승구"},
+      {"english": "number", "korean": "번호"}
+    ],
+    "tags": ["airport", "gate", "question"]
+  },
+  {
+    "koreanText": "여권 여기 있습니다.",
+    "theme": "travel",
+    "difficulty": "beginner",
+    "category": "airport",
+    "hintWords": [
+      {"english": "passport", "korean": "여권"},
+      {"english": "here", "korean": "여기"}
+    ],
+    "tags": ["airport", "passport", "immigration"]
+  },
+  {
+    "koreanText": "관광 목적으로 왔습니다.",
+    "theme": "travel",
+    "difficulty": "beginner",
+    "category": "airport",
+    "hintWords": [
+      {"english": "sightseeing", "korean": "관광"},
+      {"english": "purpose", "korean": "목적"}
+    ],
+    "tags": ["airport", "immigration", "purpose"]
+  },
+  {
+    "koreanText": "짐이 아직 안 나왔어요.",
+    "theme": "travel",
+    "difficulty": "beginner",
+    "category": "airport",
+    "hintWords": [
+      {"english": "luggage", "korean": "짐"},
+      {"english": "arrived", "korean": "도착한"}
+    ],
+    "tags": ["airport", "baggage", "problem"]
+  },
+  {
+    "koreanText": "5일 동안 머물 예정입니다.",
+    "theme": "travel",
+    "difficulty": "beginner",
+    "category": "airport",
+    "hintWords": [
+      {"english": "stay", "korean": "머물다"},
+      {"english": "days", "korean": "일"}
+    ],
+    "tags": ["airport", "immigration", "duration"]
+  },
+  {
+    "koreanText": "이 가방은 기내 반입 가능한가요?",
+    "theme": "travel",
+    "difficulty": "beginner",
+    "category": "airport",
+    "hintWords": [
+      {"english": "carry-on", "korean": "기내 반입"},
+      {"english": "bag", "korean": "가방"}
+    ],
+    "tags": ["airport", "luggage", "question"]
+  },
+  {
+    "koreanText": "환승은 어디서 하나요?",
+    "theme": "travel",
+    "difficulty": "beginner",
+    "category": "airport",
+    "hintWords": [
+      {"english": "transfer", "korean": "환승"},
+      {"english": "where", "korean": "어디"}
+    ],
+    "tags": ["airport", "transfer", "direction"]
+  },
+  {
+    "koreanText": "비행기가 연착됐나요?",
+    "theme": "travel",
+    "difficulty": "beginner",
+    "category": "airport",
+    "hintWords": [
+      {"english": "flight", "korean": "비행기"},
+      {"english": "delayed", "korean": "연착된"}
+    ],
+    "tags": ["airport", "delay", "question"]
+  },
+  {
+    "koreanText": "신고할 물건은 없습니다.",
+    "theme": "travel",
+    "difficulty": "beginner",
+    "category": "airport",
+    "hintWords": [
+      {"english": "declare", "korean": "신고하다"},
+      {"english": "nothing", "korean": "없는"}
+    ],
+    "tags": ["airport", "customs", "declaration"]
+  },
+  {
+    "koreanText": "보안검색대가 어디인가요?",
+    "theme": "travel",
+    "difficulty": "beginner",
+    "category": "airport",
+    "hintWords": [
+      {"english": "security", "korean": "보안"},
+      {"english": "checkpoint", "korean": "검색대"}
+    ],
+    "tags": ["airport", "security", "direction"]
+  },
+  {
+    "koreanText": "예약한 방이 있습니다.",
+    "theme": "travel",
+    "difficulty": "beginner",
+    "category": "hotel",
+    "hintWords": [
+      {"english": "reservation", "korean": "예약"},
+      {"english": "room", "korean": "방"}
+    ],
+    "tags": ["hotel", "check-in", "reservation"]
+  },
+  {
+    "koreanText": "체크아웃은 몇 시인가요?",
+    "theme": "travel",
+    "difficulty": "beginner",
+    "category": "hotel",
+    "hintWords": [
+      {"english": "checkout", "korean": "체크아웃"},
+      {"english": "time", "korean": "시간"}
+    ],
+    "tags": ["hotel", "checkout", "time"]
+  },
+  {
+    "koreanText": "와이파이 비밀번호가 뭔가요?",
+    "theme": "travel",
+    "difficulty": "beginner",
+    "category": "hotel",
+    "hintWords": [
+      {"english": "Wi-Fi", "korean": "와이파이"},
+      {"english": "password", "korean": "비밀번호"}
+    ],
+    "tags": ["hotel", "wifi", "question"]
+  },
+  {
+    "koreanText": "수건 좀 더 주실 수 있나요?",
+    "theme": "travel",
+    "difficulty": "beginner",
+    "category": "hotel",
+    "hintWords": [
+      {"english": "towel", "korean": "수건"},
+      {"english": "extra", "korean": "추가의"}
+    ],
+    "tags": ["hotel", "request", "towel"]
+  },
+  {
+    "koreanText": "방에 에어컨이 안 돼요.",
+    "theme": "travel",
+    "difficulty": "beginner",
+    "category": "hotel",
+    "hintWords": [
+      {"english": "air conditioning", "korean": "에어컨"},
+      {"english": "work", "korean": "작동하다"}
+    ],
+    "tags": ["hotel", "problem", "AC"]
+  },
+  {
+    "koreanText": "조식은 몇 시부터인가요?",
+    "theme": "travel",
+    "difficulty": "beginner",
+    "category": "hotel",
+    "hintWords": [
+      {"english": "breakfast", "korean": "조식"},
+      {"english": "start", "korean": "시작"}
+    ],
+    "tags": ["hotel", "breakfast", "time"]
+  },
+  {
+    "koreanText": "하룻밤에 얼마인가요?",
+    "theme": "travel",
+    "difficulty": "beginner",
+    "category": "hotel",
+    "hintWords": [
+      {"english": "per night", "korean": "하룻밤에"},
+      {"english": "how much", "korean": "얼마"}
+    ],
+    "tags": ["hotel", "price", "question"]
+  },
+  {
+    "koreanText": "짐을 맡길 수 있나요?",
+    "theme": "travel",
+    "difficulty": "beginner",
+    "category": "hotel",
+    "hintWords": [
+      {"english": "luggage", "korean": "짐"},
+      {"english": "store", "korean": "맡기다"}
+    ],
+    "tags": ["hotel", "luggage", "request"]
+  },
+  {
+    "koreanText": "늦은 체크아웃이 가능한가요?",
+    "theme": "travel",
+    "difficulty": "beginner",
+    "category": "hotel",
+    "hintWords": [
+      {"english": "late", "korean": "늦은"},
+      {"english": "checkout", "korean": "체크아웃"}
+    ],
+    "tags": ["hotel", "checkout", "request"]
+  },
+  {
+    "koreanText": "방 열쇠를 잃어버렸어요.",
+    "theme": "travel",
+    "difficulty": "beginner",
+    "category": "hotel",
+    "hintWords": [
+      {"english": "key", "korean": "열쇠"},
+      {"english": "lost", "korean": "잃어버린"}
+    ],
+    "tags": ["hotel", "key", "problem"]
+  },
+  {
+    "koreanText": "바다가 보이는 방으로 주세요.",
+    "theme": "travel",
+    "difficulty": "beginner",
+    "category": "hotel",
+    "hintWords": [
+      {"english": "ocean view", "korean": "바다 전망"},
+      {"english": "room", "korean": "방"}
+    ],
+    "tags": ["hotel", "room", "view"]
+  },
+  {
+    "koreanText": "메뉴 좀 볼 수 있을까요?",
+    "theme": "travel",
+    "difficulty": "beginner",
+    "category": "restaurant",
+    "hintWords": [
+      {"english": "menu", "korean": "메뉴"},
+      {"english": "see", "korean": "보다"}
+    ],
+    "tags": ["restaurant", "menu", "request"]
+  },
+  {
+    "koreanText": "이거 하나 주세요.",
+    "theme": "travel",
+    "difficulty": "beginner",
+    "category": "restaurant",
+    "hintWords": [
+      {"english": "this", "korean": "이것"},
+      {"english": "please", "korean": "부탁합니다"}
+    ],
+    "tags": ["restaurant", "order", "basic"]
+  },
+  {
+    "koreanText": "계산서 주세요.",
+    "theme": "travel",
+    "difficulty": "beginner",
+    "category": "restaurant",
+    "hintWords": [
+      {"english": "bill", "korean": "계산서"},
+      {"english": "please", "korean": "부탁합니다"}
+    ],
+    "tags": ["restaurant", "bill", "payment"]
+  },
+  {
+    "koreanText": "추천 메뉴가 뭔가요?",
+    "theme": "travel",
+    "difficulty": "beginner",
+    "category": "restaurant",
+    "hintWords": [
+      {"english": "recommend", "korean": "추천하다"},
+      {"english": "dish", "korean": "요리"}
+    ],
+    "tags": ["restaurant", "recommendation", "question"]
+  },
+  {
+    "koreanText": "저는 해산물 알레르기가 있어요.",
+    "theme": "travel",
+    "difficulty": "beginner",
+    "category": "restaurant",
+    "hintWords": [
+      {"english": "seafood", "korean": "해산물"},
+      {"english": "allergic", "korean": "알레르기가 있는"}
+    ],
+    "tags": ["restaurant", "allergy", "health"]
+  },
+  {
+    "koreanText": "물 한 잔 주세요.",
+    "theme": "travel",
+    "difficulty": "beginner",
+    "category": "restaurant",
+    "hintWords": [
+      {"english": "water", "korean": "물"},
+      {"english": "glass", "korean": "잔"}
+    ],
+    "tags": ["restaurant", "drink", "request"]
+  },
+  {
+    "koreanText": "카드로 결제할 수 있나요?",
+    "theme": "travel",
+    "difficulty": "beginner",
+    "category": "restaurant",
+    "hintWords": [
+      {"english": "credit card", "korean": "신용카드"},
+      {"english": "pay", "korean": "결제하다"}
+    ],
+    "tags": ["restaurant", "payment", "card"]
+  },
+  {
+    "koreanText": "포장해 주세요.",
+    "theme": "travel",
+    "difficulty": "beginner",
+    "category": "restaurant",
+    "hintWords": [
+      {"english": "to go", "korean": "포장"},
+      {"english": "wrap", "korean": "싸다"}
+    ],
+    "tags": ["restaurant", "takeout", "request"]
+  },
+  {
+    "koreanText": "두 명이요.",
+    "theme": "travel",
+    "difficulty": "beginner",
+    "category": "restaurant",
+    "hintWords": [
+      {"english": "table", "korean": "테이블"},
+      {"english": "two", "korean": "둘"}
+    ],
+    "tags": ["restaurant", "seating", "basic"]
+  },
+  {
+    "koreanText": "이 음식에 땅콩이 들어가나요?",
+    "theme": "travel",
+    "difficulty": "beginner",
+    "category": "restaurant",
+    "hintWords": [
+      {"english": "peanut", "korean": "땅콩"},
+      {"english": "contain", "korean": "포함하다"}
+    ],
+    "tags": ["restaurant", "allergy", "ingredient"]
+  },
+  {
+    "koreanText": "덜 맵게 해 주세요.",
+    "theme": "travel",
+    "difficulty": "beginner",
+    "category": "restaurant",
+    "hintWords": [
+      {"english": "less", "korean": "덜"},
+      {"english": "spicy", "korean": "매운"}
+    ],
+    "tags": ["restaurant", "request", "spicy"]
+  },
+  {
+    "koreanText": "택시 한 대 불러 주세요.",
+    "theme": "travel",
+    "difficulty": "beginner",
+    "category": "transport",
+    "hintWords": [
+      {"english": "taxi", "korean": "택시"},
+      {"english": "call", "korean": "부르다"}
+    ],
+    "tags": ["transport", "taxi", "request"]
+  },
+  {
+    "koreanText": "이 주소로 가 주세요.",
+    "theme": "travel",
+    "difficulty": "beginner",
+    "category": "transport",
+    "hintWords": [
+      {"english": "address", "korean": "주소"},
+      {"english": "take", "korean": "데려다주다"}
+    ],
+    "tags": ["transport", "taxi", "direction"]
+  },
+  {
+    "koreanText": "지하철역이 어디에 있나요?",
+    "theme": "travel",
+    "difficulty": "beginner",
+    "category": "transport",
+    "hintWords": [
+      {"english": "subway", "korean": "지하철"},
+      {"english": "station", "korean": "역"}
+    ],
+    "tags": ["transport", "subway", "direction"]
+  },
+  {
+    "koreanText": "여기서 내려 주세요.",
+    "theme": "travel",
+    "difficulty": "beginner",
+    "category": "transport",
+    "hintWords": [
+      {"english": "here", "korean": "여기"},
+      {"english": "drop off", "korean": "내려주다"}
+    ],
+    "tags": ["transport", "taxi", "stop"]
+  },
+  {
+    "koreanText": "요금이 얼마인가요?",
+    "theme": "travel",
+    "difficulty": "beginner",
+    "category": "transport",
+    "hintWords": [
+      {"english": "fare", "korean": "요금"},
+      {"english": "how much", "korean": "얼마"}
+    ],
+    "tags": ["transport", "fare", "question"]
+  },
+  {
+    "koreanText": "이 버스가 시내로 가나요?",
+    "theme": "travel",
+    "difficulty": "beginner",
+    "category": "transport",
+    "hintWords": [
+      {"english": "bus", "korean": "버스"},
+      {"english": "downtown", "korean": "시내"}
+    ],
+    "tags": ["transport", "bus", "direction"]
+  },
+  {
+    "koreanText": "한 정거장만 더 가면 되나요?",
+    "theme": "travel",
+    "difficulty": "beginner",
+    "category": "transport",
+    "hintWords": [
+      {"english": "stop", "korean": "정거장"},
+      {"english": "one more", "korean": "한 개 더"}
+    ],
+    "tags": ["transport", "stop", "question"]
+  },
+  {
+    "koreanText": "거기까지 얼마나 걸리나요?",
+    "theme": "travel",
+    "difficulty": "beginner",
+    "category": "transport",
+    "hintWords": [
+      {"english": "how long", "korean": "얼마나"},
+      {"english": "get there", "korean": "도착하다"}
+    ],
+    "tags": ["transport", "time", "question"]
+  },
+  {
+    "koreanText": "편도 티켓 한 장 주세요.",
+    "theme": "travel",
+    "difficulty": "beginner",
+    "category": "transport",
+    "hintWords": [
+      {"english": "one-way", "korean": "편도"},
+      {"english": "ticket", "korean": "티켓"}
+    ],
+    "tags": ["transport", "ticket", "purchase"]
+  },
+  {
+    "koreanText": "렌터카를 빌리고 싶어요.",
+    "theme": "travel",
+    "difficulty": "beginner",
+    "category": "transport",
+    "hintWords": [
+      {"english": "rent", "korean": "빌리다"},
+      {"english": "car", "korean": "자동차"}
+    ],
+    "tags": ["transport", "rental", "car"]
+  },
+  {
+    "koreanText": "이거 얼마예요?",
+    "theme": "travel",
+    "difficulty": "beginner",
+    "category": "shopping",
+    "hintWords": [
+      {"english": "how much", "korean": "얼마"},
+      {"english": "this", "korean": "이것"}
+    ],
+    "tags": ["shopping", "price", "basic"]
+  },
+  {
+    "koreanText": "좀 깎아 주세요.",
+    "theme": "travel",
+    "difficulty": "beginner",
+    "category": "shopping",
+    "hintWords": [
+      {"english": "discount", "korean": "할인"},
+      {"english": "give", "korean": "주다"}
+    ],
+    "tags": ["shopping", "bargain", "discount"]
+  },
+  {
+    "koreanText": "다른 색상 있나요?",
+    "theme": "travel",
+    "difficulty": "beginner",
+    "category": "shopping",
+    "hintWords": [
+      {"english": "different", "korean": "다른"},
+      {"english": "color", "korean": "색상"}
+    ],
+    "tags": ["shopping", "color", "question"]
+  },
+  {
+    "koreanText": "이거 입어 봐도 되나요?",
+    "theme": "travel",
+    "difficulty": "beginner",
+    "category": "shopping",
+    "hintWords": [
+      {"english": "try on", "korean": "입어 보다"},
+      {"english": "this", "korean": "이것"}
+    ],
+    "tags": ["shopping", "fitting", "request"]
+  },
+  {
+    "koreanText": "면세점이 어디에 있나요?",
+    "theme": "travel",
+    "difficulty": "beginner",
+    "category": "shopping",
+    "hintWords": [
+      {"english": "duty-free", "korean": "면세"},
+      {"english": "shop", "korean": "가게"}
+    ],
+    "tags": ["shopping", "duty-free", "direction"]
+  },
+  {
+    "koreanText": "선물용으로 포장해 주세요.",
+    "theme": "travel",
+    "difficulty": "beginner",
+    "category": "shopping",
+    "hintWords": [
+      {"english": "gift wrap", "korean": "선물 포장"},
+      {"english": "please", "korean": "부탁합니다"}
+    ],
+    "tags": ["shopping", "gift", "wrap"]
+  },
+  {
+    "koreanText": "영수증 주세요.",
+    "theme": "travel",
+    "difficulty": "beginner",
+    "category": "shopping",
+    "hintWords": [
+      {"english": "receipt", "korean": "영수증"},
+      {"english": "please", "korean": "부탁합니다"}
+    ],
+    "tags": ["shopping", "receipt", "request"]
+  },
+  {
+    "koreanText": "더 큰 사이즈 있나요?",
+    "theme": "travel",
+    "difficulty": "beginner",
+    "category": "shopping",
+    "hintWords": [
+      {"english": "bigger", "korean": "더 큰"},
+      {"english": "size", "korean": "사이즈"}
+    ],
+    "tags": ["shopping", "size", "question"]
+  },
+  {
+    "koreanText": "세일 중인 물건이 있나요?",
+    "theme": "travel",
+    "difficulty": "beginner",
+    "category": "shopping",
+    "hintWords": [
+      {"english": "sale", "korean": "세일"},
+      {"english": "anything", "korean": "뭐라도"}
+    ],
+    "tags": ["shopping", "sale", "question"]
+  },
+  {
+    "koreanText": "환불할 수 있나요?",
+    "theme": "travel",
+    "difficulty": "beginner",
+    "category": "shopping",
+    "hintWords": [
+      {"english": "refund", "korean": "환불"},
+      {"english": "get", "korean": "받다"}
+    ],
+    "tags": ["shopping", "refund", "question"]
+  },
+  {
+    "koreanText": "여기서 사진 찍어도 되나요?",
+    "theme": "travel",
+    "difficulty": "beginner",
+    "category": "sightseeing",
+    "hintWords": [
+      {"english": "photo", "korean": "사진"},
+      {"english": "take", "korean": "찍다"}
+    ],
+    "tags": ["sightseeing", "photo", "permission"]
+  },
+  {
+    "koreanText": "사진 좀 찍어 주시겠어요?",
+    "theme": "travel",
+    "difficulty": "beginner",
+    "category": "sightseeing",
+    "hintWords": [
+      {"english": "picture", "korean": "사진"},
+      {"english": "take", "korean": "찍다"}
+    ],
+    "tags": ["sightseeing", "photo", "request"]
+  },
+  {
+    "koreanText": "입장료가 얼마인가요?",
+    "theme": "travel",
+    "difficulty": "beginner",
+    "category": "sightseeing",
+    "hintWords": [
+      {"english": "admission", "korean": "입장"},
+      {"english": "fee", "korean": "요금"}
+    ],
+    "tags": ["sightseeing", "admission", "price"]
+  },
+  {
+    "koreanText": "이 근처에 볼거리가 있나요?",
+    "theme": "travel",
+    "difficulty": "beginner",
+    "category": "sightseeing",
+    "hintWords": [
+      {"english": "nearby", "korean": "근처에"},
+      {"english": "attractions", "korean": "볼거리"}
+    ],
+    "tags": ["sightseeing", "attraction", "question"]
+  },
+  {
+    "koreanText": "지도 한 장 주세요.",
+    "theme": "travel",
+    "difficulty": "beginner",
+    "category": "sightseeing",
+    "hintWords": [
+      {"english": "map", "korean": "지도"},
+      {"english": "please", "korean": "부탁합니다"}
+    ],
+    "tags": ["sightseeing", "map", "request"]
+  },
+  {
+    "koreanText": "박물관은 몇 시에 문을 닫나요?",
+    "theme": "travel",
+    "difficulty": "beginner",
+    "category": "sightseeing",
+    "hintWords": [
+      {"english": "museum", "korean": "박물관"},
+      {"english": "close", "korean": "닫다"}
+    ],
+    "tags": ["sightseeing", "museum", "time"]
+  },
+  {
+    "koreanText": "가이드 투어가 있나요?",
+    "theme": "travel",
+    "difficulty": "beginner",
+    "category": "sightseeing",
+    "hintWords": [
+      {"english": "guided", "korean": "가이드가 있는"},
+      {"english": "tour", "korean": "투어"}
+    ],
+    "tags": ["sightseeing", "tour", "question"]
+  },
+  {
+    "koreanText": "여기서 해변까지 걸어갈 수 있나요?",
+    "theme": "travel",
+    "difficulty": "beginner",
+    "category": "sightseeing",
+    "hintWords": [
+      {"english": "beach", "korean": "해변"},
+      {"english": "walk", "korean": "걸어가다"}
+    ],
+    "tags": ["sightseeing", "beach", "distance"]
+  },
+  {
+    "koreanText": "이 길이 맞나요?",
+    "theme": "travel",
+    "difficulty": "beginner",
+    "category": "sightseeing",
+    "hintWords": [
+      {"english": "right", "korean": "맞는"},
+      {"english": "way", "korean": "길"}
+    ],
+    "tags": ["sightseeing", "direction", "question"]
+  },
+  {
+    "koreanText": "여기가 어디인지 모르겠어요.",
+    "theme": "travel",
+    "difficulty": "beginner",
+    "category": "sightseeing",
+    "hintWords": [
+      {"english": "where", "korean": "어디"},
+      {"english": "lost", "korean": "길을 잃은"}
+    ],
+    "tags": ["sightseeing", "lost", "help"]
+  },
+  {
+    "koreanText": "도와주세요!",
+    "theme": "travel",
+    "difficulty": "beginner",
+    "category": "emergency",
+    "hintWords": [
+      {"english": "help", "korean": "도움"},
+      {"english": "please", "korean": "부탁합니다"}
+    ],
+    "tags": ["emergency", "help", "urgent"]
+  },
+  {
+    "koreanText": "지갑을 잃어버렸어요.",
+    "theme": "travel",
+    "difficulty": "beginner",
+    "category": "emergency",
+    "hintWords": [
+      {"english": "wallet", "korean": "지갑"},
+      {"english": "lost", "korean": "잃어버린"}
+    ],
+    "tags": ["emergency", "lost", "wallet"]
+  },
+  {
+    "koreanText": "경찰을 불러 주세요.",
+    "theme": "travel",
+    "difficulty": "beginner",
+    "category": "emergency",
+    "hintWords": [
+      {"english": "police", "korean": "경찰"},
+      {"english": "call", "korean": "부르다"}
+    ],
+    "tags": ["emergency", "police", "help"]
+  },
+  {
+    "koreanText": "병원이 어디에 있나요?",
+    "theme": "travel",
+    "difficulty": "beginner",
+    "category": "emergency",
+    "hintWords": [
+      {"english": "hospital", "korean": "병원"},
+      {"english": "where", "korean": "어디"}
+    ],
+    "tags": ["emergency", "hospital", "direction"]
+  },
+  {
+    "koreanText": "여기가 아파요.",
+    "theme": "travel",
+    "difficulty": "beginner",
+    "category": "emergency",
+    "hintWords": [
+      {"english": "hurts", "korean": "아프다"},
+      {"english": "here", "korean": "여기"}
+    ],
+    "tags": ["emergency", "pain", "health"]
+  },
+  {
+    "koreanText": "약국이 근처에 있나요?",
+    "theme": "travel",
+    "difficulty": "beginner",
+    "category": "emergency",
+    "hintWords": [
+      {"english": "pharmacy", "korean": "약국"},
+      {"english": "nearby", "korean": "근처에"}
+    ],
+    "tags": ["emergency", "pharmacy", "direction"]
+  },
+  {
+    "koreanText": "핸드폰을 도둑맞았어요.",
+    "theme": "travel",
+    "difficulty": "beginner",
+    "category": "emergency",
+    "hintWords": [
+      {"english": "phone", "korean": "핸드폰"},
+      {"english": "stolen", "korean": "도둑맞은"}
+    ],
+    "tags": ["emergency", "theft", "phone"]
+  },
+  {
+    "koreanText": "대사관에 연락하고 싶어요.",
+    "theme": "travel",
+    "difficulty": "beginner",
+    "category": "emergency",
+    "hintWords": [
+      {"english": "embassy", "korean": "대사관"},
+      {"english": "contact", "korean": "연락하다"}
+    ],
+    "tags": ["emergency", "embassy", "contact"]
+  },
+  {
+    "koreanText": "두통약 좀 있나요?",
+    "theme": "travel",
+    "difficulty": "beginner",
+    "category": "emergency",
+    "hintWords": [
+      {"english": "headache", "korean": "두통"},
+      {"english": "medicine", "korean": "약"}
+    ],
+    "tags": ["emergency", "medicine", "headache"]
+  },
+  {
+    "koreanText": "보험에 가입되어 있습니다.",
+    "theme": "travel",
+    "difficulty": "beginner",
+    "category": "emergency",
+    "hintWords": [
+      {"english": "insurance", "korean": "보험"},
+      {"english": "have", "korean": "가지고 있다"}
+    ],
+    "tags": ["emergency", "insurance", "health"]
+  },
+  {
+    "koreanText": "영어 할 줄 아세요?",
+    "theme": "travel",
+    "difficulty": "beginner",
+    "category": "communication",
+    "hintWords": [
+      {"english": "speak", "korean": "말하다"},
+      {"english": "English", "korean": "영어"}
+    ],
+    "tags": ["communication", "language", "question"]
+  },
+  {
+    "koreanText": "천천히 말해 주세요.",
+    "theme": "travel",
+    "difficulty": "beginner",
+    "category": "communication",
+    "hintWords": [
+      {"english": "slowly", "korean": "천천히"},
+      {"english": "speak", "korean": "말하다"}
+    ],
+    "tags": ["communication", "speed", "request"]
+  },
+  {
+    "koreanText": "다시 한번 말해 주세요.",
+    "theme": "travel",
+    "difficulty": "beginner",
+    "category": "communication",
+    "hintWords": [
+      {"english": "repeat", "korean": "반복하다"},
+      {"english": "please", "korean": "부탁합니다"}
+    ],
+    "tags": ["communication", "repeat", "request"]
+  },
+  {
+    "koreanText": "감사합니다, 정말 친절하시네요.",
+    "theme": "travel",
+    "difficulty": "beginner",
+    "category": "communication",
+    "hintWords": [
+      {"english": "thank you", "korean": "감사합니다"},
+      {"english": "kind", "korean": "친절한"}
+    ],
+    "tags": ["communication", "thanks", "compliment"]
+  },
+  {
+    "koreanText": "죄송합니다, 제 잘못이에요.",
+    "theme": "travel",
+    "difficulty": "beginner",
+    "category": "communication",
+    "hintWords": [
+      {"english": "sorry", "korean": "죄송한"},
+      {"english": "fault", "korean": "잘못"}
+    ],
+    "tags": ["communication", "apology", "mistake"]
+  },
+  {
+    "koreanText": "잠시만요.",
+    "theme": "travel",
+    "difficulty": "beginner",
+    "category": "communication",
+    "hintWords": [
+      {"english": "moment", "korean": "잠시"},
+      {"english": "wait", "korean": "기다리다"}
+    ],
+    "tags": ["communication", "wait", "basic"]
+  },
+  {
+    "koreanText": "무슨 뜻인가요?",
+    "theme": "travel",
+    "difficulty": "beginner",
+    "category": "communication",
+    "hintWords": [
+      {"english": "mean", "korean": "뜻하다"},
+      {"english": "what", "korean": "무엇"}
+    ],
+    "tags": ["communication", "meaning", "question"]
+  },
+  {
+    "koreanText": "이것 좀 적어 주세요.",
+    "theme": "travel",
+    "difficulty": "beginner",
+    "category": "communication",
+    "hintWords": [
+      {"english": "write down", "korean": "적다"},
+      {"english": "this", "korean": "이것"}
+    ],
+    "tags": ["communication", "write", "request"]
+  },
+  {
+    "koreanText": "좋은 하루 보내세요.",
+    "theme": "travel",
+    "difficulty": "beginner",
+    "category": "communication",
+    "hintWords": [
+      {"english": "nice", "korean": "좋은"},
+      {"english": "day", "korean": "하루"}
+    ],
+    "tags": ["communication", "farewell", "polite"]
+  },
+  {
+    "koreanText": "한국에서 왔어요.",
+    "theme": "travel",
+    "difficulty": "beginner",
+    "category": "communication",
+    "hintWords": [
+      {"english": "from", "korean": "~에서"},
+      {"english": "Korea", "korean": "한국"}
+    ],
+    "tags": ["communication", "origin", "introduce"]
+  },
+  {
+    "koreanText": "화장실이 어디인가요?",
+    "theme": "travel",
+    "difficulty": "beginner",
+    "category": "communication",
+    "hintWords": [
+      {"english": "restroom", "korean": "화장실"},
+      {"english": "where", "korean": "어디"}
+    ],
+    "tags": ["communication", "restroom", "direction"]
+  },
+  {
+    "koreanText": "통로 쪽 자리가 비어 있나요?",
+    "theme": "travel",
+    "difficulty": "beginner",
+    "category": "airport",
+    "hintWords": [
+      {"english": "aisle", "korean": "통로"},
+      {"english": "seat", "korean": "좌석"},
+      {"english": "available", "korean": "가능한"}
+    ],
+    "tags": ["airport", "seat", "aisle"]
+  },
+  {
+    "koreanText": "택시 타는 곳이 어디예요?",
+    "theme": "travel",
+    "difficulty": "beginner",
+    "category": "transport",
+    "hintWords": [
+      {"english": "taxi", "korean": "택시"},
+      {"english": "stand", "korean": "타는 곳"}
+    ],
+    "tags": ["transport", "taxi", "direction"]
+  },
+  {
+    "koreanText": "여기 전화 좀 빌려도 될까요?",
+    "theme": "travel",
+    "difficulty": "beginner",
+    "category": "emergency",
+    "hintWords": [
+      {"english": "borrow", "korean": "빌리다"},
+      {"english": "phone", "korean": "전화"}
+    ],
+    "tags": ["emergency", "phone", "request"]
+  },
+  {
+    "koreanText": "저는 채식주의자예요.",
+    "theme": "travel",
+    "difficulty": "beginner",
+    "category": "restaurant",
+    "hintWords": [
+      {"english": "vegetarian", "korean": "채식주의자"}
+    ],
+    "tags": ["restaurant", "diet", "vegetarian"]
+  },
+  {
+    "koreanText": "아이스 아메리카노 한 잔 주세요.",
+    "theme": "travel",
+    "difficulty": "beginner",
+    "category": "restaurant",
+    "hintWords": [
+      {"english": "iced", "korean": "아이스"},
+      {"english": "americano", "korean": "아메리카노"}
+    ],
+    "tags": ["restaurant", "coffee", "order"]
+  },
+  {
+    "koreanText": "이쪽으로 가면 되나요?",
+    "theme": "travel",
+    "difficulty": "beginner",
+    "category": "sightseeing",
+    "hintWords": [
+      {"english": "this way", "korean": "이쪽으로"},
+      {"english": "right", "korean": "맞는"}
+    ],
+    "tags": ["sightseeing", "direction", "question"]
+  },
+  {
+    "koreanText": "예약 확인해 주세요.",
+    "theme": "travel",
+    "difficulty": "beginner",
+    "category": "hotel",
+    "hintWords": [
+      {"english": "reservation", "korean": "예약"},
+      {"english": "confirm", "korean": "확인하다"}
+    ],
+    "tags": ["hotel", "reservation", "confirm"]
+  },
+  {
+    "koreanText": "왕복 티켓 주세요.",
+    "theme": "travel",
+    "difficulty": "beginner",
+    "category": "transport",
+    "hintWords": [
+      {"english": "round-trip", "korean": "왕복"},
+      {"english": "ticket", "korean": "티켓"}
+    ],
+    "tags": ["transport", "ticket", "round-trip"]
+  },
+  {
+    "koreanText": "미터기 켜 주세요.",
+    "theme": "travel",
+    "difficulty": "beginner",
+    "category": "transport",
+    "hintWords": [
+      {"english": "meter", "korean": "미터기"},
+      {"english": "turn on", "korean": "켜다"}
+    ],
+    "tags": ["transport", "taxi", "meter"]
+  },
+  {
+    "koreanText": "이 근처에 ATM이 있나요?",
+    "theme": "travel",
+    "difficulty": "beginner",
+    "category": "communication",
+    "hintWords": [
+      {"english": "ATM", "korean": "현금인출기"},
+      {"english": "nearby", "korean": "근처에"}
+    ],
+    "tags": ["communication", "ATM", "direction"]
+  },
+  {
+    "koreanText": "비행기를 놓쳤어요.",
+    "theme": "travel",
+    "difficulty": "beginner",
+    "category": "airport",
+    "hintWords": [
+      {"english": "missed", "korean": "놓친"},
+      {"english": "flight", "korean": "비행기"}
+    ],
+    "tags": ["airport", "missed", "problem"]
+  },
+  {
+    "koreanText": "탑승이 언제 시작되나요?",
+    "theme": "travel",
+    "difficulty": "beginner",
+    "category": "airport",
+    "hintWords": [
+      {"english": "boarding", "korean": "탑승"},
+      {"english": "begin", "korean": "시작하다"}
+    ],
+    "tags": ["airport", "boarding", "time"]
+  },
+  {
+    "koreanText": "온수가 안 나와요.",
+    "theme": "travel",
+    "difficulty": "beginner",
+    "category": "hotel",
+    "hintWords": [
+      {"english": "hot water", "korean": "온수"},
+      {"english": "work", "korean": "나오다"}
+    ],
+    "tags": ["hotel", "problem", "water"]
+  },
+  {
+    "koreanText": "디저트 메뉴 있나요?",
+    "theme": "travel",
+    "difficulty": "beginner",
+    "category": "restaurant",
+    "hintWords": [
+      {"english": "dessert", "korean": "디저트"},
+      {"english": "menu", "korean": "메뉴"}
+    ],
+    "tags": ["restaurant", "dessert", "question"]
+  },
+  {
+    "koreanText": "일행을 잃어버렸어요.",
+    "theme": "travel",
+    "difficulty": "beginner",
+    "category": "emergency",
+    "hintWords": [
+      {"english": "group", "korean": "일행"},
+      {"english": "lost", "korean": "잃어버린"}
+    ],
+    "tags": ["emergency", "lost", "group"]
+  },
+  {
+    "koreanText": "연결 항공편을 놓칠 것 같은데, 다음 항공편으로 변경할 수 있을까요?",
+    "theme": "travel",
+    "difficulty": "intermediate",
+    "category": "airport",
+    "hintWords": [
+      {"english": "connecting flight", "korean": "연결 항공편"},
+      {"english": "miss", "korean": "놓치다"},
+      {"english": "rebook", "korean": "재예약하다"}
+    ],
+    "tags": ["airport", "connection", "rebook"]
+  },
+  {
+    "koreanText": "짐이 파손되어서 보상을 요청하고 싶습니다.",
+    "theme": "travel",
+    "difficulty": "intermediate",
+    "category": "airport",
+    "hintWords": [
+      {"english": "luggage", "korean": "짐"},
+      {"english": "damaged", "korean": "파손된"},
+      {"english": "compensation", "korean": "보상"},
+      {"english": "claim", "korean": "요청하다"}
+    ],
+    "tags": ["airport", "damage", "claim"]
+  },
+  {
+    "koreanText": "비행기가 취소되면 대체 항공편을 제공해 주시나요?",
+    "theme": "travel",
+    "difficulty": "intermediate",
+    "category": "airport",
+    "hintWords": [
+      {"english": "cancelled", "korean": "취소된"},
+      {"english": "alternative", "korean": "대체"},
+      {"english": "provide", "korean": "제공하다"}
+    ],
+    "tags": ["airport", "cancellation", "alternative"]
+  },
+  {
+    "koreanText": "입국 심사에서 체류 기간을 물어보면 뭐라고 해야 하나요?",
+    "theme": "travel",
+    "difficulty": "intermediate",
+    "category": "airport",
+    "hintWords": [
+      {"english": "immigration", "korean": "입국 심사"},
+      {"english": "duration of stay", "korean": "체류 기간"},
+      {"english": "respond", "korean": "대답하다"}
+    ],
+    "tags": ["airport", "immigration", "advice"]
+  },
+  {
+    "koreanText": "수하물이 다른 공항으로 잘못 갔다고 하는데, 어떻게 하면 되나요?",
+    "theme": "travel",
+    "difficulty": "intermediate",
+    "category": "airport",
+    "hintWords": [
+      {"english": "baggage", "korean": "수하물"},
+      {"english": "misrouted", "korean": "잘못 보내진"},
+      {"english": "retrieve", "korean": "되찾다"}
+    ],
+    "tags": ["airport", "baggage", "misrouted"]
+  },
+  {
+    "koreanText": "좌석 업그레이드가 가능한지 확인해 주실 수 있나요?",
+    "theme": "travel",
+    "difficulty": "intermediate",
+    "category": "airport",
+    "hintWords": [
+      {"english": "upgrade", "korean": "업그레이드"},
+      {"english": "seat", "korean": "좌석"},
+      {"english": "available", "korean": "가능한"}
+    ],
+    "tags": ["airport", "upgrade", "request"]
+  },
+  {
+    "koreanText": "경유 시간이 8시간인데, 공항 밖으로 나갈 수 있나요?",
+    "theme": "travel",
+    "difficulty": "intermediate",
+    "category": "airport",
+    "hintWords": [
+      {"english": "layover", "korean": "경유"},
+      {"english": "leave the airport", "korean": "공항을 나가다"},
+      {"english": "permitted", "korean": "허용된"}
+    ],
+    "tags": ["airport", "layover", "transit"]
+  },
+  {
+    "koreanText": "세관에서 구매한 물품 가격을 물어보면 영수증을 보여줘야 하나요?",
+    "theme": "travel",
+    "difficulty": "intermediate",
+    "category": "airport",
+    "hintWords": [
+      {"english": "customs", "korean": "세관"},
+      {"english": "receipt", "korean": "영수증"},
+      {"english": "purchased items", "korean": "구매 물품"}
+    ],
+    "tags": ["airport", "customs", "receipt"]
+  },
+  {
+    "koreanText": "예약한 방과 실제 방이 다른데, 변경해 주실 수 있나요?",
+    "theme": "travel",
+    "difficulty": "intermediate",
+    "category": "hotel",
+    "hintWords": [
+      {"english": "reserved", "korean": "예약한"},
+      {"english": "different", "korean": "다른"},
+      {"english": "switch", "korean": "변경하다"}
+    ],
+    "tags": ["hotel", "room", "complaint"]
+  },
+  {
+    "koreanText": "옆방이 너무 시끄러운데, 방을 바꿔 주실 수 있을까요?",
+    "theme": "travel",
+    "difficulty": "intermediate",
+    "category": "hotel",
+    "hintWords": [
+      {"english": "next door", "korean": "옆방"},
+      {"english": "noisy", "korean": "시끄러운"},
+      {"english": "change rooms", "korean": "방을 바꾸다"}
+    ],
+    "tags": ["hotel", "noise", "complaint"]
+  },
+  {
+    "koreanText": "체크인이 아직 안 되면, 짐이라도 먼저 맡길 수 있나요?",
+    "theme": "travel",
+    "difficulty": "intermediate",
+    "category": "hotel",
+    "hintWords": [
+      {"english": "early", "korean": "이른"},
+      {"english": "check-in", "korean": "체크인"},
+      {"english": "store luggage", "korean": "짐을 맡기다"}
+    ],
+    "tags": ["hotel", "early", "luggage"]
+  },
+  {
+    "koreanText": "호텔에서 공항까지 셔틀버스를 운행하나요?",
+    "theme": "travel",
+    "difficulty": "intermediate",
+    "category": "hotel",
+    "hintWords": [
+      {"english": "shuttle", "korean": "셔틀"},
+      {"english": "airport", "korean": "공항"},
+      {"english": "operate", "korean": "운행하다"}
+    ],
+    "tags": ["hotel", "shuttle", "airport"]
+  },
+  {
+    "koreanText": "방에 벌레가 나왔는데, 다른 방으로 옮겨 주세요.",
+    "theme": "travel",
+    "difficulty": "intermediate",
+    "category": "hotel",
+    "hintWords": [
+      {"english": "insect", "korean": "벌레"},
+      {"english": "room", "korean": "방"},
+      {"english": "transfer", "korean": "옮기다"}
+    ],
+    "tags": ["hotel", "complaint", "insect"]
+  },
+  {
+    "koreanText": "숙박 요금에 조식이 포함되어 있나요, 아니면 별도인가요?",
+    "theme": "travel",
+    "difficulty": "intermediate",
+    "category": "hotel",
+    "hintWords": [
+      {"english": "rate", "korean": "요금"},
+      {"english": "breakfast", "korean": "조식"},
+      {"english": "included", "korean": "포함된"},
+      {"english": "separate", "korean": "별도의"}
+    ],
+    "tags": ["hotel", "breakfast", "price"]
+  },
+  {
+    "koreanText": "예약을 취소하면 위약금이 있나요?",
+    "theme": "travel",
+    "difficulty": "intermediate",
+    "category": "hotel",
+    "hintWords": [
+      {"english": "cancel", "korean": "취소하다"},
+      {"english": "reservation", "korean": "예약"},
+      {"english": "penalty", "korean": "위약금"}
+    ],
+    "tags": ["hotel", "cancellation", "penalty"]
+  },
+  {
+    "koreanText": "객실에 금고가 있나요? 귀중품을 보관하고 싶어요.",
+    "theme": "travel",
+    "difficulty": "intermediate",
+    "category": "hotel",
+    "hintWords": [
+      {"english": "safe", "korean": "금고"},
+      {"english": "valuables", "korean": "귀중품"},
+      {"english": "store", "korean": "보관하다"}
+    ],
+    "tags": ["hotel", "safe", "valuables"]
+  },
+  {
+    "koreanText": "체크아웃할 때 미니바 요금이 청구됐는데, 사용하지 않았거든요.",
+    "theme": "travel",
+    "difficulty": "intermediate",
+    "category": "hotel",
+    "hintWords": [
+      {"english": "minibar", "korean": "미니바"},
+      {"english": "charged", "korean": "청구된"},
+      {"english": "didn't use", "korean": "사용하지 않은"}
+    ],
+    "tags": ["hotel", "billing", "dispute"]
+  },
+  {
+    "koreanText": "이 음식에 글루텐이 들어가지 않은 옵션이 있나요?",
+    "theme": "travel",
+    "difficulty": "intermediate",
+    "category": "restaurant",
+    "hintWords": [
+      {"english": "gluten-free", "korean": "글루텐 프리"},
+      {"english": "option", "korean": "선택지"},
+      {"english": "available", "korean": "있는"}
+    ],
+    "tags": ["restaurant", "diet", "gluten-free"]
+  },
+  {
+    "koreanText": "주문한 지 30분이 넘었는데, 음식이 아직 안 나왔어요.",
+    "theme": "travel",
+    "difficulty": "intermediate",
+    "category": "restaurant",
+    "hintWords": [
+      {"english": "ordered", "korean": "주문한"},
+      {"english": "over 30 minutes", "korean": "30분 넘게"},
+      {"english": "still waiting", "korean": "아직 기다리는"}
+    ],
+    "tags": ["restaurant", "complaint", "wait"]
+  },
+  {
+    "koreanText": "팁은 보통 얼마 정도 남기나요?",
+    "theme": "travel",
+    "difficulty": "intermediate",
+    "category": "restaurant",
+    "hintWords": [
+      {"english": "tip", "korean": "팁"},
+      {"english": "usually", "korean": "보통"},
+      {"english": "how much", "korean": "얼마"}
+    ],
+    "tags": ["restaurant", "tip", "culture"]
+  },
+  {
+    "koreanText": "이 와인과 잘 어울리는 음식을 추천해 주세요.",
+    "theme": "travel",
+    "difficulty": "intermediate",
+    "category": "restaurant",
+    "hintWords": [
+      {"english": "wine", "korean": "와인"},
+      {"english": "pair well", "korean": "잘 어울리다"},
+      {"english": "recommend", "korean": "추천하다"}
+    ],
+    "tags": ["restaurant", "wine", "pairing"]
+  },
+  {
+    "koreanText": "계산이 잘못된 것 같은데, 확인해 주시겠어요?",
+    "theme": "travel",
+    "difficulty": "intermediate",
+    "category": "restaurant",
+    "hintWords": [
+      {"english": "bill", "korean": "계산서"},
+      {"english": "incorrect", "korean": "잘못된"},
+      {"english": "check", "korean": "확인하다"}
+    ],
+    "tags": ["restaurant", "bill", "error"]
+  },
+  {
+    "koreanText": "예약 없이 들어갈 수 있나요, 아니면 웨이팅이 있나요?",
+    "theme": "travel",
+    "difficulty": "intermediate",
+    "category": "restaurant",
+    "hintWords": [
+      {"english": "reservation", "korean": "예약"},
+      {"english": "walk-in", "korean": "예약 없이"},
+      {"english": "wait", "korean": "대기"}
+    ],
+    "tags": ["restaurant", "reservation", "wait"]
+  },
+  {
+    "koreanText": "현지인들이 자주 가는 맛집을 추천해 주시겠어요?",
+    "theme": "travel",
+    "difficulty": "intermediate",
+    "category": "restaurant",
+    "hintWords": [
+      {"english": "locals", "korean": "현지인"},
+      {"english": "popular", "korean": "인기 있는"},
+      {"english": "restaurant", "korean": "식당"},
+      {"english": "recommend", "korean": "추천하다"}
+    ],
+    "tags": ["restaurant", "local", "recommendation"]
+  },
+  {
+    "koreanText": "주문한 것과 다른 음식이 나왔어요.",
+    "theme": "travel",
+    "difficulty": "intermediate",
+    "category": "restaurant",
+    "hintWords": [
+      {"english": "ordered", "korean": "주문한"},
+      {"english": "wrong", "korean": "잘못된"},
+      {"english": "dish", "korean": "음식"}
+    ],
+    "tags": ["restaurant", "mistake", "order"]
+  },
+  {
+    "koreanText": "각자 계산하고 싶은데 가능한가요?",
+    "theme": "travel",
+    "difficulty": "intermediate",
+    "category": "restaurant",
+    "hintWords": [
+      {"english": "split the bill", "korean": "각자 계산"},
+      {"english": "possible", "korean": "가능한"}
+    ],
+    "tags": ["restaurant", "bill", "split"]
+  },
+  {
+    "koreanText": "내비게이션 주소를 입력했는데, 이 길이 맞는 건가요?",
+    "theme": "travel",
+    "difficulty": "intermediate",
+    "category": "transport",
+    "hintWords": [
+      {"english": "GPS", "korean": "내비게이션"},
+      {"english": "address", "korean": "주소"},
+      {"english": "correct route", "korean": "맞는 길"}
+    ],
+    "tags": ["transport", "GPS", "direction"]
+  },
+  {
+    "koreanText": "교통 카드를 충전하려면 어디서 하면 되나요?",
+    "theme": "travel",
+    "difficulty": "intermediate",
+    "category": "transport",
+    "hintWords": [
+      {"english": "transit card", "korean": "교통 카드"},
+      {"english": "top up", "korean": "충전하다"},
+      {"english": "where", "korean": "어디서"}
+    ],
+    "tags": ["transport", "card", "recharge"]
+  },
+  {
+    "koreanText": "렌터카 보험은 전체 보장이 되는 건가요?",
+    "theme": "travel",
+    "difficulty": "intermediate",
+    "category": "transport",
+    "hintWords": [
+      {"english": "rental car", "korean": "렌터카"},
+      {"english": "insurance", "korean": "보험"},
+      {"english": "full coverage", "korean": "전체 보장"}
+    ],
+    "tags": ["transport", "rental", "insurance"]
+  },
+  {
+    "koreanText": "이 노선이 시내 중심까지 가는 가장 빠른 길인가요?",
+    "theme": "travel",
+    "difficulty": "intermediate",
+    "category": "transport",
+    "hintWords": [
+      {"english": "route", "korean": "노선"},
+      {"english": "fastest", "korean": "가장 빠른"},
+      {"english": "city center", "korean": "시내 중심"}
+    ],
+    "tags": ["transport", "route", "fastest"]
+  },
+  {
+    "koreanText": "택시 기사가 미터기를 안 켜는데 어떻게 해야 하나요?",
+    "theme": "travel",
+    "difficulty": "intermediate",
+    "category": "transport",
+    "hintWords": [
+      {"english": "taxi driver", "korean": "택시 기사"},
+      {"english": "meter", "korean": "미터기"},
+      {"english": "refuse", "korean": "거부하다"}
+    ],
+    "tags": ["transport", "taxi", "scam"]
+  },
+  {
+    "koreanText": "차를 반납할 때 연료를 가득 채워야 하나요?",
+    "theme": "travel",
+    "difficulty": "intermediate",
+    "category": "transport",
+    "hintWords": [
+      {"english": "return", "korean": "반납하다"},
+      {"english": "fuel", "korean": "연료"},
+      {"english": "full tank", "korean": "가득 채운"}
+    ],
+    "tags": ["transport", "rental", "fuel"]
+  },
+  {
+    "koreanText": "막차 시간이 언제인지 아세요?",
+    "theme": "travel",
+    "difficulty": "intermediate",
+    "category": "transport",
+    "hintWords": [
+      {"english": "last train", "korean": "막차"},
+      {"english": "schedule", "korean": "시간표"},
+      {"english": "know", "korean": "알다"}
+    ],
+    "tags": ["transport", "schedule", "last"]
+  },
+  {
+    "koreanText": "우버나 리프트 같은 앱으로 차를 부를 수 있나요?",
+    "theme": "travel",
+    "difficulty": "intermediate",
+    "category": "transport",
+    "hintWords": [
+      {"english": "ride-hailing", "korean": "차량 호출"},
+      {"english": "app", "korean": "앱"},
+      {"english": "available", "korean": "이용 가능한"}
+    ],
+    "tags": ["transport", "rideshare", "app"]
+  },
+  {
+    "koreanText": "국제 운전면허증으로 이 나라에서 운전할 수 있나요?",
+    "theme": "travel",
+    "difficulty": "intermediate",
+    "category": "transport",
+    "hintWords": [
+      {"english": "international driver's license", "korean": "국제 운전면허증"},
+      {"english": "valid", "korean": "유효한"},
+      {"english": "country", "korean": "나라"}
+    ],
+    "tags": ["transport", "license", "driving"]
+  },
+  {
+    "koreanText": "이 제품에 대한 세금 환급을 받을 수 있나요?",
+    "theme": "travel",
+    "difficulty": "intermediate",
+    "category": "shopping",
+    "hintWords": [
+      {"english": "tax refund", "korean": "세금 환급"},
+      {"english": "product", "korean": "제품"},
+      {"english": "eligible", "korean": "자격이 있는"}
+    ],
+    "tags": ["shopping", "tax-refund", "question"]
+  },
+  {
+    "koreanText": "이 물건의 원산지가 어디인가요?",
+    "theme": "travel",
+    "difficulty": "intermediate",
+    "category": "shopping",
+    "hintWords": [
+      {"english": "origin", "korean": "원산지"},
+      {"english": "product", "korean": "물건"},
+      {"english": "made in", "korean": "제조국"}
+    ],
+    "tags": ["shopping", "origin", "question"]
+  },
+  {
+    "koreanText": "교환하고 싶은데, 영수증은 있어요.",
+    "theme": "travel",
+    "difficulty": "intermediate",
+    "category": "shopping",
+    "hintWords": [
+      {"english": "exchange", "korean": "교환"},
+      {"english": "receipt", "korean": "영수증"},
+      {"english": "have", "korean": "가지고 있다"}
+    ],
+    "tags": ["shopping", "exchange", "receipt"]
+  },
+  {
+    "koreanText": "이걸 한국까지 배송해 줄 수 있나요?",
+    "theme": "travel",
+    "difficulty": "intermediate",
+    "category": "shopping",
+    "hintWords": [
+      {"english": "ship", "korean": "배송하다"},
+      {"english": "Korea", "korean": "한국"},
+      {"english": "international", "korean": "국제"}
+    ],
+    "tags": ["shopping", "shipping", "international"]
+  },
+  {
+    "koreanText": "할인 쿠폰을 사용할 수 있나요?",
+    "theme": "travel",
+    "difficulty": "intermediate",
+    "category": "shopping",
+    "hintWords": [
+      {"english": "discount", "korean": "할인"},
+      {"english": "coupon", "korean": "쿠폰"},
+      {"english": "apply", "korean": "적용하다"}
+    ],
+    "tags": ["shopping", "coupon", "discount"]
+  },
+  {
+    "koreanText": "정품인지 어떻게 확인할 수 있나요?",
+    "theme": "travel",
+    "difficulty": "intermediate",
+    "category": "shopping",
+    "hintWords": [
+      {"english": "authentic", "korean": "정품인"},
+      {"english": "verify", "korean": "확인하다"},
+      {"english": "genuine", "korean": "진짜의"}
+    ],
+    "tags": ["shopping", "authenticity", "question"]
+  },
+  {
+    "koreanText": "대량으로 사면 할인이 되나요?",
+    "theme": "travel",
+    "difficulty": "intermediate",
+    "category": "shopping",
+    "hintWords": [
+      {"english": "bulk", "korean": "대량"},
+      {"english": "discount", "korean": "할인"},
+      {"english": "purchase", "korean": "구매"}
+    ],
+    "tags": ["shopping", "bulk", "discount"]
+  },
+  {
+    "koreanText": "보증 기간이 어떻게 되나요?",
+    "theme": "travel",
+    "difficulty": "intermediate",
+    "category": "shopping",
+    "hintWords": [
+      {"english": "warranty", "korean": "보증"},
+      {"english": "period", "korean": "기간"},
+      {"english": "how long", "korean": "얼마나"}
+    ],
+    "tags": ["shopping", "warranty", "question"]
+  },
+  {
+    "koreanText": "면세 한도가 얼마인지 아세요?",
+    "theme": "travel",
+    "difficulty": "intermediate",
+    "category": "shopping",
+    "hintWords": [
+      {"english": "duty-free", "korean": "면세"},
+      {"english": "limit", "korean": "한도"},
+      {"english": "allowance", "korean": "허용량"}
+    ],
+    "tags": ["shopping", "duty-free", "limit"]
+  },
+  {
+    "koreanText": "이 유적지의 역사에 대해 설명해 주실 수 있나요?",
+    "theme": "travel",
+    "difficulty": "intermediate",
+    "category": "sightseeing",
+    "hintWords": [
+      {"english": "historic site", "korean": "유적지"},
+      {"english": "history", "korean": "역사"},
+      {"english": "explain", "korean": "설명하다"}
+    ],
+    "tags": ["sightseeing", "history", "tour"]
+  },
+  {
+    "koreanText": "해질 무렵에 가면 사진이 정말 잘 나온다고 들었어요.",
+    "theme": "travel",
+    "difficulty": "intermediate",
+    "category": "sightseeing",
+    "hintWords": [
+      {"english": "sunset", "korean": "해질 무렵"},
+      {"english": "photos", "korean": "사진"},
+      {"english": "heard", "korean": "들었다"}
+    ],
+    "tags": ["sightseeing", "sunset", "photo"]
+  },
+  {
+    "koreanText": "현지 축제가 이번 주에 열린다고 하던데, 어디서 하는 건가요?",
+    "theme": "travel",
+    "difficulty": "intermediate",
+    "category": "sightseeing",
+    "hintWords": [
+      {"english": "local festival", "korean": "현지 축제"},
+      {"english": "this week", "korean": "이번 주"},
+      {"english": "location", "korean": "장소"}
+    ],
+    "tags": ["sightseeing", "festival", "event"]
+  },
+  {
+    "koreanText": "이 건물은 언제 지어진 건가요?",
+    "theme": "travel",
+    "difficulty": "intermediate",
+    "category": "sightseeing",
+    "hintWords": [
+      {"english": "building", "korean": "건물"},
+      {"english": "built", "korean": "지어진"},
+      {"english": "when", "korean": "언제"}
+    ],
+    "tags": ["sightseeing", "architecture", "history"]
+  },
+  {
+    "koreanText": "오디오 가이드가 한국어로도 있나요?",
+    "theme": "travel",
+    "difficulty": "intermediate",
+    "category": "sightseeing",
+    "hintWords": [
+      {"english": "audio guide", "korean": "오디오 가이드"},
+      {"english": "Korean", "korean": "한국어"},
+      {"english": "available", "korean": "이용 가능한"}
+    ],
+    "tags": ["sightseeing", "audio-guide", "language"]
+  },
+  {
+    "koreanText": "관광 패스를 사면 어디까지 무료 입장이 되나요?",
+    "theme": "travel",
+    "difficulty": "intermediate",
+    "category": "sightseeing",
+    "hintWords": [
+      {"english": "tourist pass", "korean": "관광 패스"},
+      {"english": "free admission", "korean": "무료 입장"},
+      {"english": "which places", "korean": "어떤 곳들"}
+    ],
+    "tags": ["sightseeing", "pass", "admission"]
+  },
+  {
+    "koreanText": "아이들과 함께 갈 만한 곳을 추천해 주세요.",
+    "theme": "travel",
+    "difficulty": "intermediate",
+    "category": "sightseeing",
+    "hintWords": [
+      {"english": "children", "korean": "아이들"},
+      {"english": "family-friendly", "korean": "가족 친화적인"},
+      {"english": "recommend", "korean": "추천하다"}
+    ],
+    "tags": ["sightseeing", "family", "recommendation"]
+  },
+  {
+    "koreanText": "날씨가 안 좋으면 실내에서 할 수 있는 활동이 있을까요?",
+    "theme": "travel",
+    "difficulty": "intermediate",
+    "category": "sightseeing",
+    "hintWords": [
+      {"english": "bad weather", "korean": "안 좋은 날씨"},
+      {"english": "indoor", "korean": "실내"},
+      {"english": "activities", "korean": "활동"}
+    ],
+    "tags": ["sightseeing", "indoor", "weather"]
+  },
+  {
+    "koreanText": "이 지역에서 꼭 먹어봐야 할 음식이 있나요?",
+    "theme": "travel",
+    "difficulty": "intermediate",
+    "category": "sightseeing",
+    "hintWords": [
+      {"english": "must-try", "korean": "꼭 먹어봐야 할"},
+      {"english": "local food", "korean": "현지 음식"},
+      {"english": "area", "korean": "지역"}
+    ],
+    "tags": ["sightseeing", "food", "local"]
+  },
+  {
+    "koreanText": "여행자 보험으로 진료비가 보장되는지 확인하고 싶습니다.",
+    "theme": "travel",
+    "difficulty": "intermediate",
+    "category": "emergency",
+    "hintWords": [
+      {"english": "travel insurance", "korean": "여행자 보험"},
+      {"english": "medical expenses", "korean": "진료비"},
+      {"english": "covered", "korean": "보장되는"}
+    ],
+    "tags": ["emergency", "insurance", "medical"]
+  },
+  {
+    "koreanText": "처방전 없이 살 수 있는 진통제가 있나요?",
+    "theme": "travel",
+    "difficulty": "intermediate",
+    "category": "emergency",
+    "hintWords": [
+      {"english": "over-the-counter", "korean": "처방전 없이"},
+      {"english": "painkiller", "korean": "진통제"},
+      {"english": "available", "korean": "구할 수 있는"}
+    ],
+    "tags": ["emergency", "medicine", "pharmacy"]
+  },
+  {
+    "koreanText": "소매치기를 당한 것 같은데, 경찰서가 어디인가요?",
+    "theme": "travel",
+    "difficulty": "intermediate",
+    "category": "emergency",
+    "hintWords": [
+      {"english": "pickpocketed", "korean": "소매치기당한"},
+      {"english": "police station", "korean": "경찰서"},
+      {"english": "where", "korean": "어디"}
+    ],
+    "tags": ["emergency", "theft", "police"]
+  },
+  {
+    "koreanText": "분실물 센터에 가방이 접수됐는지 확인해 주세요.",
+    "theme": "travel",
+    "difficulty": "intermediate",
+    "category": "emergency",
+    "hintWords": [
+      {"english": "lost and found", "korean": "분실물 센터"},
+      {"english": "bag", "korean": "가방"},
+      {"english": "check", "korean": "확인하다"}
+    ],
+    "tags": ["emergency", "lost", "inquiry"]
+  },
+  {
+    "koreanText": "알레르기 반응이 나타났는데, 가장 가까운 응급실이 어디인가요?",
+    "theme": "travel",
+    "difficulty": "intermediate",
+    "category": "emergency",
+    "hintWords": [
+      {"english": "allergic reaction", "korean": "알레르기 반응"},
+      {"english": "emergency room", "korean": "응급실"},
+      {"english": "nearest", "korean": "가장 가까운"}
+    ],
+    "tags": ["emergency", "allergy", "ER"]
+  },
+  {
+    "koreanText": "여권을 분실해서 임시 여행 서류를 발급받아야 합니다.",
+    "theme": "travel",
+    "difficulty": "intermediate",
+    "category": "emergency",
+    "hintWords": [
+      {"english": "passport", "korean": "여권"},
+      {"english": "lost", "korean": "분실한"},
+      {"english": "temporary travel document", "korean": "임시 여행 서류"},
+      {"english": "issue", "korean": "발급하다"}
+    ],
+    "tags": ["emergency", "passport", "embassy"]
+  },
+  {
+    "koreanText": "신용카드를 분실해서 정지시키고 싶은데, 도와주실 수 있나요?",
+    "theme": "travel",
+    "difficulty": "intermediate",
+    "category": "emergency",
+    "hintWords": [
+      {"english": "credit card", "korean": "신용카드"},
+      {"english": "lost", "korean": "분실한"},
+      {"english": "block", "korean": "정지시키다"}
+    ],
+    "tags": ["emergency", "card", "block"]
+  },
+  {
+    "koreanText": "렌터카에 긁힌 자국이 있었는데, 반납 시 문제가 될까요?",
+    "theme": "travel",
+    "difficulty": "intermediate",
+    "category": "emergency",
+    "hintWords": [
+      {"english": "scratch", "korean": "긁힌 자국"},
+      {"english": "rental car", "korean": "렌터카"},
+      {"english": "return", "korean": "반납"}
+    ],
+    "tags": ["emergency", "rental", "damage"]
+  },
+  {
+    "koreanText": "음식을 잘못 먹은 것 같아서 배가 너무 아파요.",
+    "theme": "travel",
+    "difficulty": "intermediate",
+    "category": "emergency",
+    "hintWords": [
+      {"english": "food poisoning", "korean": "식중독"},
+      {"english": "stomach", "korean": "배"},
+      {"english": "pain", "korean": "통증"}
+    ],
+    "tags": ["emergency", "health", "food-poisoning"]
+  },
+  {
+    "koreanText": "이 나라에서는 팁 문화가 어떻게 되나요?",
+    "theme": "travel",
+    "difficulty": "intermediate",
+    "category": "communication",
+    "hintWords": [
+      {"english": "tipping", "korean": "팁"},
+      {"english": "culture", "korean": "문화"},
+      {"english": "custom", "korean": "관습"}
+    ],
+    "tags": ["communication", "culture", "tipping"]
+  },
+  {
+    "koreanText": "혹시 한국어를 할 줄 아는 분이 계신가요?",
+    "theme": "travel",
+    "difficulty": "intermediate",
+    "category": "communication",
+    "hintWords": [
+      {"english": "anyone", "korean": "누군가"},
+      {"english": "speak", "korean": "말하다"},
+      {"english": "Korean", "korean": "한국어"}
+    ],
+    "tags": ["communication", "language", "Korean"]
+  },
+  {
+    "koreanText": "통역 앱을 쓸 테니까 잠시만 기다려 주세요.",
+    "theme": "travel",
+    "difficulty": "intermediate",
+    "category": "communication",
+    "hintWords": [
+      {"english": "translation app", "korean": "통역 앱"},
+      {"english": "moment", "korean": "잠시"},
+      {"english": "wait", "korean": "기다리다"}
+    ],
+    "tags": ["communication", "translation", "app"]
+  },
+  {
+    "koreanText": "현지 SIM 카드를 사려면 어디로 가야 하나요?",
+    "theme": "travel",
+    "difficulty": "intermediate",
+    "category": "communication",
+    "hintWords": [
+      {"english": "local SIM card", "korean": "현지 SIM 카드"},
+      {"english": "buy", "korean": "사다"},
+      {"english": "where", "korean": "어디"}
+    ],
+    "tags": ["communication", "SIM", "phone"]
+  },
+  {
+    "koreanText": "여기서 이런 행동은 실례가 되나요?",
+    "theme": "travel",
+    "difficulty": "intermediate",
+    "category": "communication",
+    "hintWords": [
+      {"english": "behavior", "korean": "행동"},
+      {"english": "rude", "korean": "실례되는"},
+      {"english": "considered", "korean": "여겨지는"}
+    ],
+    "tags": ["communication", "culture", "etiquette"]
+  },
+  {
+    "koreanText": "환전을 하고 싶은데, 수수료가 어떻게 되나요?",
+    "theme": "travel",
+    "difficulty": "intermediate",
+    "category": "communication",
+    "hintWords": [
+      {"english": "exchange currency", "korean": "환전하다"},
+      {"english": "commission", "korean": "수수료"},
+      {"english": "rate", "korean": "환율"}
+    ],
+    "tags": ["communication", "currency", "exchange"]
+  },
+  {
+    "koreanText": "인터넷이 잘 안 터지는데, 와이파이 핫스팟이 있는 곳을 아시나요?",
+    "theme": "travel",
+    "difficulty": "intermediate",
+    "category": "communication",
+    "hintWords": [
+      {"english": "internet", "korean": "인터넷"},
+      {"english": "Wi-Fi hotspot", "korean": "와이파이 핫스팟"},
+      {"english": "connection", "korean": "연결"}
+    ],
+    "tags": ["communication", "wifi", "connection"]
+  },
+  {
+    "koreanText": "이메일로 예약 확인서를 보내 주실 수 있나요?",
+    "theme": "travel",
+    "difficulty": "intermediate",
+    "category": "communication",
+    "hintWords": [
+      {"english": "email", "korean": "이메일"},
+      {"english": "confirmation", "korean": "확인서"},
+      {"english": "send", "korean": "보내다"}
+    ],
+    "tags": ["communication", "email", "reservation"]
+  },
+  {
+    "koreanText": "사진 촬영이 금지된 구역인지 몰랐어요. 죄송합니다.",
+    "theme": "travel",
+    "difficulty": "intermediate",
+    "category": "communication",
+    "hintWords": [
+      {"english": "photography", "korean": "사진 촬영"},
+      {"english": "prohibited", "korean": "금지된"},
+      {"english": "didn't know", "korean": "몰랐다"}
+    ],
+    "tags": ["communication", "apology", "rules"]
+  },
+  {
+    "koreanText": "이 지역의 치안이 괜찮은 편인가요?",
+    "theme": "travel",
+    "difficulty": "intermediate",
+    "category": "communication",
+    "hintWords": [
+      {"english": "area", "korean": "지역"},
+      {"english": "safe", "korean": "안전한"},
+      {"english": "generally", "korean": "대체로"}
+    ],
+    "tags": ["communication", "safety", "question"]
+  },
+  {
+    "koreanText": "출발 시간이 변경됐는지 확인해 주세요.",
+    "theme": "travel",
+    "difficulty": "intermediate",
+    "category": "airport",
+    "hintWords": [
+      {"english": "departure", "korean": "출발"},
+      {"english": "changed", "korean": "변경된"},
+      {"english": "confirm", "korean": "확인하다"}
+    ],
+    "tags": ["airport", "departure", "check"]
+  },
+  {
+    "koreanText": "라운지를 이용하려면 어떤 조건이 필요한가요?",
+    "theme": "travel",
+    "difficulty": "intermediate",
+    "category": "airport",
+    "hintWords": [
+      {"english": "lounge", "korean": "라운지"},
+      {"english": "access", "korean": "이용"},
+      {"english": "requirements", "korean": "조건"}
+    ],
+    "tags": ["airport", "lounge", "access"]
+  },
+  {
+    "koreanText": "콘센트가 안 맞는데, 변환 어댑터를 빌릴 수 있나요?",
+    "theme": "travel",
+    "difficulty": "intermediate",
+    "category": "hotel",
+    "hintWords": [
+      {"english": "outlet", "korean": "콘센트"},
+      {"english": "adapter", "korean": "어댑터"},
+      {"english": "borrow", "korean": "빌리다"}
+    ],
+    "tags": ["hotel", "adapter", "request"]
+  },
+  {
+    "koreanText": "드라이클리닝 서비스를 이용하고 싶은데, 얼마나 걸리나요?",
+    "theme": "travel",
+    "difficulty": "intermediate",
+    "category": "hotel",
+    "hintWords": [
+      {"english": "dry cleaning", "korean": "드라이클리닝"},
+      {"english": "service", "korean": "서비스"},
+      {"english": "how long", "korean": "얼마나 걸리는"}
+    ],
+    "tags": ["hotel", "laundry", "service"]
+  },
+  {
+    "koreanText": "이 관광지까지 가는 당일치기 투어가 있나요?",
+    "theme": "travel",
+    "difficulty": "intermediate",
+    "category": "sightseeing",
+    "hintWords": [
+      {"english": "day trip", "korean": "당일치기"},
+      {"english": "tourist spot", "korean": "관광지"},
+      {"english": "tour", "korean": "투어"}
+    ],
+    "tags": ["sightseeing", "day-trip", "tour"]
+  },
+  {
+    "koreanText": "여기서 일몰을 보기에 가장 좋은 장소가 어디인가요?",
+    "theme": "travel",
+    "difficulty": "intermediate",
+    "category": "sightseeing",
+    "hintWords": [
+      {"english": "sunset", "korean": "일몰"},
+      {"english": "best spot", "korean": "가장 좋은 장소"},
+      {"english": "watch", "korean": "보다"}
+    ],
+    "tags": ["sightseeing", "sunset", "spot"]
+  },
+  {
+    "koreanText": "가격표가 안 붙어 있는데, 바가지 아닌 거 맞죠?",
+    "theme": "travel",
+    "difficulty": "intermediate",
+    "category": "shopping",
+    "hintWords": [
+      {"english": "price tag", "korean": "가격표"},
+      {"english": "rip-off", "korean": "바가지"},
+      {"english": "fair price", "korean": "적정 가격"}
+    ],
+    "tags": ["shopping", "price", "scam"]
+  },
+  {
+    "koreanText": "비행기 안에서 입국 신고서를 미리 작성해야 하나요?",
+    "theme": "travel",
+    "difficulty": "intermediate",
+    "category": "airport",
+    "hintWords": [
+      {"english": "arrival card", "korean": "입국 신고서"},
+      {"english": "fill out", "korean": "작성하다"},
+      {"english": "in advance", "korean": "미리"}
+    ],
+    "tags": ["airport", "immigration", "form"]
+  },
+  {
+    "koreanText": "룸서비스를 주문하면 추가 비용이 있나요?",
+    "theme": "travel",
+    "difficulty": "intermediate",
+    "category": "hotel",
+    "hintWords": [
+      {"english": "room service", "korean": "룸서비스"},
+      {"english": "extra charge", "korean": "추가 비용"},
+      {"english": "order", "korean": "주문하다"}
+    ],
+    "tags": ["hotel", "room-service", "charge"]
+  },
+  {
+    "koreanText": "이 버스가 어디를 경유하는지 알 수 있을까요?",
+    "theme": "travel",
+    "difficulty": "intermediate",
+    "category": "transport",
+    "hintWords": [
+      {"english": "bus", "korean": "버스"},
+      {"english": "stops", "korean": "경유지"},
+      {"english": "route", "korean": "노선"}
+    ],
+    "tags": ["transport", "bus", "route"]
+  },
+  {
+    "koreanText": "약 처방을 받으려면 어떤 절차를 밟아야 하나요?",
+    "theme": "travel",
+    "difficulty": "intermediate",
+    "category": "emergency",
+    "hintWords": [
+      {"english": "prescription", "korean": "처방전"},
+      {"english": "procedure", "korean": "절차"},
+      {"english": "obtain", "korean": "받다"}
+    ],
+    "tags": ["emergency", "prescription", "medical"]
+  },
+  {
+    "koreanText": "공항에서 환전하는 것보다 시내에서 하는 게 더 낫나요?",
+    "theme": "travel",
+    "difficulty": "intermediate",
+    "category": "communication",
+    "hintWords": [
+      {"english": "exchange rate", "korean": "환율"},
+      {"english": "airport", "korean": "공항"},
+      {"english": "better", "korean": "더 나은"}
+    ],
+    "tags": ["communication", "currency", "advice"]
+  },
+  {
+    "koreanText": "탑승 수속을 온라인으로 미리 하면 시간을 절약할 수 있나요?",
+    "theme": "travel",
+    "difficulty": "intermediate",
+    "category": "airport",
+    "hintWords": [
+      {"english": "online check-in", "korean": "온라인 수속"},
+      {"english": "save time", "korean": "시간 절약"},
+      {"english": "advance", "korean": "미리"}
+    ],
+    "tags": ["airport", "online", "check-in"]
+  },
+  {
+    "koreanText": "테이블 위가 좀 지저분한데, 닦아 주시겠어요?",
+    "theme": "travel",
+    "difficulty": "intermediate",
+    "category": "restaurant",
+    "hintWords": [
+      {"english": "table", "korean": "테이블"},
+      {"english": "messy", "korean": "지저분한"},
+      {"english": "clean", "korean": "닦다"}
+    ],
+    "tags": ["restaurant", "request", "clean"]
+  },
+  {
+    "koreanText": "채식 메뉴가 따로 있나요, 아니면 일반 메뉴에서 골라야 하나요?",
+    "theme": "travel",
+    "difficulty": "intermediate",
+    "category": "restaurant",
+    "hintWords": [
+      {"english": "vegetarian menu", "korean": "채식 메뉴"},
+      {"english": "separate", "korean": "별도의"},
+      {"english": "regular", "korean": "일반"}
+    ],
+    "tags": ["restaurant", "vegetarian", "menu"]
+  },
+  {
+    "koreanText": "이 제품의 전압이 한국과 호환되나요?",
+    "theme": "travel",
+    "difficulty": "intermediate",
+    "category": "shopping",
+    "hintWords": [
+      {"english": "voltage", "korean": "전압"},
+      {"english": "compatible", "korean": "호환되는"},
+      {"english": "Korea", "korean": "한국"}
+    ],
+    "tags": ["shopping", "electronics", "voltage"]
+  },
+  {
+    "koreanText": "고속도로 톨비는 현금으로만 내야 하나요?",
+    "theme": "travel",
+    "difficulty": "intermediate",
+    "category": "transport",
+    "hintWords": [
+      {"english": "highway toll", "korean": "고속도로 톨비"},
+      {"english": "cash only", "korean": "현금만"},
+      {"english": "payment", "korean": "결제"}
+    ],
+    "tags": ["transport", "toll", "payment"]
+  },
+  {
+    "koreanText": "기차표를 현장에서 바로 살 수 있나요, 아니면 예매해야 하나요?",
+    "theme": "travel",
+    "difficulty": "intermediate",
+    "category": "transport",
+    "hintWords": [
+      {"english": "train ticket", "korean": "기차표"},
+      {"english": "on the spot", "korean": "현장에서"},
+      {"english": "book in advance", "korean": "예매하다"}
+    ],
+    "tags": ["transport", "train", "ticket"]
+  },
+  {
+    "koreanText": "이 사원에 들어갈 때 신발을 벗어야 하나요?",
+    "theme": "travel",
+    "difficulty": "intermediate",
+    "category": "sightseeing",
+    "hintWords": [
+      {"english": "temple", "korean": "사원"},
+      {"english": "shoes", "korean": "신발"},
+      {"english": "remove", "korean": "벗다"}
+    ],
+    "tags": ["sightseeing", "temple", "etiquette"]
+  },
+  {
+    "koreanText": "밤에 혼자 돌아다녀도 안전한 동네인가요?",
+    "theme": "travel",
+    "difficulty": "intermediate",
+    "category": "emergency",
+    "hintWords": [
+      {"english": "safe", "korean": "안전한"},
+      {"english": "at night", "korean": "밤에"},
+      {"english": "walk alone", "korean": "혼자 돌아다니다"}
+    ],
+    "tags": ["emergency", "safety", "night"]
+  },
+  {
+    "koreanText": "문화적으로 주의해야 할 점이 있으면 알려 주세요.",
+    "theme": "travel",
+    "difficulty": "intermediate",
+    "category": "communication",
+    "hintWords": [
+      {"english": "cultural", "korean": "문화적인"},
+      {"english": "etiquette", "korean": "예절"},
+      {"english": "aware of", "korean": "주의해야 할"}
+    ],
+    "tags": ["communication", "culture", "etiquette"]
+  },
+  {
+    "koreanText": "면세 신청서를 작성하려면 여권이 필요한가요?",
+    "theme": "travel",
+    "difficulty": "intermediate",
+    "category": "shopping",
+    "hintWords": [
+      {"english": "tax-free form", "korean": "면세 신청서"},
+      {"english": "passport", "korean": "여권"},
+      {"english": "required", "korean": "필요한"}
+    ],
+    "tags": ["shopping", "tax-free", "passport"]
+  },
+  {
+    "koreanText": "수영장 이용 시간이 따로 정해져 있나요?",
+    "theme": "travel",
+    "difficulty": "intermediate",
+    "category": "hotel",
+    "hintWords": [
+      {"english": "swimming pool", "korean": "수영장"},
+      {"english": "hours", "korean": "이용 시간"},
+      {"english": "designated", "korean": "정해진"}
+    ],
+    "tags": ["hotel", "pool", "hours"]
+  },
+  {
+    "koreanText": "야시장이 근처에 있다고 들었는데, 걸어서 갈 수 있나요?",
+    "theme": "travel",
+    "difficulty": "intermediate",
+    "category": "sightseeing",
+    "hintWords": [
+      {"english": "night market", "korean": "야시장"},
+      {"english": "walking distance", "korean": "걸어갈 수 있는 거리"},
+      {"english": "nearby", "korean": "근처에"}
+    ],
+    "tags": ["sightseeing", "night-market", "distance"]
+  },
+  {
+    "koreanText": "차에 긁힌 자국이 원래 있었는데, 사진으로 증거가 있어요.",
+    "theme": "travel",
+    "difficulty": "intermediate",
+    "category": "transport",
+    "hintWords": [
+      {"english": "scratch", "korean": "긁힌 자국"},
+      {"english": "pre-existing", "korean": "원래 있던"},
+      {"english": "evidence", "korean": "증거"},
+      {"english": "photo", "korean": "사진"}
+    ],
+    "tags": ["transport", "rental", "dispute"]
+  },
+  {
+    "koreanText": "응급 상황에서 전화할 수 있는 번호를 알려 주세요.",
+    "theme": "travel",
+    "difficulty": "intermediate",
+    "category": "emergency",
+    "hintWords": [
+      {"english": "emergency number", "korean": "응급 번호"},
+      {"english": "call", "korean": "전화하다"},
+      {"english": "tell me", "korean": "알려주다"}
+    ],
+    "tags": ["emergency", "phone", "number"]
+  },
+  {
+    "koreanText": "연착 때문에 호텔 예약에 늦을 것 같은데, 전화해 주실 수 있나요?",
+    "theme": "travel",
+    "difficulty": "intermediate",
+    "category": "airport",
+    "hintWords": [
+      {"english": "delay", "korean": "연착"},
+      {"english": "hotel reservation", "korean": "호텔 예약"},
+      {"english": "late", "korean": "늦은"},
+      {"english": "call", "korean": "전화하다"}
+    ],
+    "tags": ["airport", "delay", "hotel"]
+  },
+  {
+    "koreanText": "로밍 요금이 비싸서 포켓 와이파이를 빌리고 싶어요.",
+    "theme": "travel",
+    "difficulty": "intermediate",
+    "category": "communication",
+    "hintWords": [
+      {"english": "roaming charges", "korean": "로밍 요금"},
+      {"english": "expensive", "korean": "비싼"},
+      {"english": "pocket Wi-Fi", "korean": "포켓 와이파이"},
+      {"english": "rent", "korean": "빌리다"}
+    ],
+    "tags": ["communication", "wifi", "roaming"]
+  }
+]

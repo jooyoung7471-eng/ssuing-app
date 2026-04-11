@@ -76,7 +76,7 @@ export default function HistoryScreen() {
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
       <View style={styles.filterRow}>
-        {([undefined, 'daily', 'business'] as (Theme | undefined)[]).map((t) => (
+        {([undefined, 'daily', 'business', 'travel'] as (Theme | undefined)[]).map((t) => (
           <TouchableOpacity
             key={t ?? 'all'}
             style={[styles.filterChip, selectedTheme === t && styles.filterChipActive]}
@@ -88,7 +88,7 @@ export default function HistoryScreen() {
                 selectedTheme === t && styles.filterTextActive,
               ]}
             >
-              {t === undefined ? '전체' : t === 'daily' ? '일상' : '비즈니스'}
+              {t === undefined ? '전체' : t === 'daily' ? '일상' : t === 'travel' ? '여행' : '비즈니스'}
             </Text>
           </TouchableOpacity>
         ))}

@@ -1,4 +1,4 @@
-export type Theme = 'daily' | 'business';
+export type Theme = 'daily' | 'business' | 'travel';
 
 export interface HintWord {
   english: string;
