@@ -28,7 +28,7 @@ const tokenStorage = {
 };
 
 const api = axios.create({
-  baseURL: 'http://localhost:3000/api',
+  baseURL: 'https://ssuing-app-production.up.railway.app/api',
   timeout: 15000,
   headers: { 'Content-Type': 'application/json' },
 });
