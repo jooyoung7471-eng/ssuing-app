@@ -1,9 +1,8 @@
-import { exec } from "child_process";
-import { promisify } from "util";
+import Anthropic from "@anthropic-ai/sdk";
 import { LLMCorrectionResult } from "../types";
 import { AppError } from "../middleware/errorHandler";
 
-const execAsync = promisify(exec);
+const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY || "";
 
 const SYSTEM_PROMPT = `You are an English writing tutor for Korean learners.
 Rules:
@@ -18,10 +17,8 @@ Rules:
 JSON:
 {"correctedSentence":"...","nativeExpressions":["alt1","alt2"],"explanation":"한국어 설명","keyExpression":{"english":"표현","korean":"뜻","example":"예문"},"score":7,"highlights":[{"original":"...","corrected":"...","reason":"한국어 이유"}]}`;
 
-function buildPrompt(koreanText: string, userWriting: string, difficulty: string): string {
-  return `${SYSTEM_PROMPT}
-
-난이도: ${difficulty}
+function buildUserMessage(koreanText: string, userWriting: string, difficulty: string): string {
+  return `난이도: ${difficulty}
 한글: ${koreanText}
 학습자: ${userWriting}`;
 }
@@ -55,18 +52,37 @@ export async function correctWriting(
   userWriting: string,
   difficulty: string = "beginner"
 ): Promise<LLMCorrectionResult> {
-  const prompt = buildPrompt(koreanText, userWriting, difficulty);
+  if (!ANTHROPIC_API_KEY) {
+    throw new AppError(
+      503,
+      "LLM_NOT_CONFIGURED",
+      "ANTHROPIC_API_KEY 환경변수가 설정되지 않았습니다"
+    );
+  }
 
-  const escapedPrompt = prompt.replace(/\\/g, "\\\\").replace(/"/g, '\\"').replace(/\n/g, "\\n");
+  const client = new Anthropic({ apiKey: ANTHROPIC_API_KEY });
 
   try {
-    const { stdout } = await execAsync(
-      `claude -p "${escapedPrompt}" --model haiku --max-turns 1`,
-      { timeout: 20000, maxBuffer: 1024 * 1024 }
-    );
+    const message = await client.messages.create({
+      model: "claude-haiku-4-20250414",
+      max_tokens: 1024,
+      system: SYSTEM_PROMPT,
+      messages: [
+        {
+          role: "user",
+          content: buildUserMessage(koreanText, userWriting, difficulty),
+        },
+      ],
+    });
 
-    return parseResponse(stdout);
+    const textBlock = message.content.find((block) => block.type === "text");
+    if (!textBlock || textBlock.type !== "text") {
+      throw new Error("LLM 응답에 텍스트가 없습니다");
+    }
+
+    return parseResponse(textBlock.text);
   } catch (error) {
+    if (error instanceof AppError) throw error;
     const err = error as Error;
     throw new AppError(
       502,

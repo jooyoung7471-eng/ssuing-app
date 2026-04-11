@@ -8,15 +8,27 @@ const JWT_SECRET = process.env.JWT_SECRET || "dev-secret";
 const GUEST_USER_ID = "guest-user-00000000";
 const prisma = new PrismaClient();
 
+if (!process.env.JWT_SECRET) {
+  console.warn("WARNING: JWT_SECRET is not set. Using default dev secret. Set JWT_SECRET in production!");
+}
+
+let guestUserEnsured = false;
 async function ensureGuestUser() {
-  const existing = await prisma.user.findUnique({ where: { id: GUEST_USER_ID } });
-  if (!existing) {
-    await prisma.user.create({
-      data: { id: GUEST_USER_ID, email: "guest@engwrite.local", password: "guest" },
-    });
+  if (guestUserEnsured) return;
+  try {
+    const existing = await prisma.user.findUnique({ where: { id: GUEST_USER_ID } });
+    if (!existing) {
+      await prisma.user.create({
+        data: { id: GUEST_USER_ID, email: "guest@engwrite.local", password: "guest" },
+      });
+    }
+    guestUserEnsured = true;
+  } catch (err) {
+    console.warn("Guest user setup deferred:", (err as Error).message);
   }
 }
-ensureGuestUser().catch(() => {});
+// Defer guest user creation to avoid crash if DB isn't ready at import time
+setTimeout(() => ensureGuestUser(), 2000);
 
 export function authMiddleware(req: Request, _res: Response, next: NextFunction) {
   const header = req.headers.authorization;
