@@ -1,0 +1,109 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id              String          @id @default(uuid())
+  email           String          @unique
+  password        String
+  created_at      DateTime        @default(now())
+  daily_sentences DailySentence[]
+  corrections     Correction[]
+  stats           UserStats?
+  achievements    Achievement[]
+  review_sessions ReviewSession[]
+}
+
+model Sentence {
+  id              String          @id @default(uuid())
+  korean_text     String
+  theme           String          // "daily" | "business"
+  category        String          @default("general")
+  difficulty      String          @default("beginner") // "beginner" | "intermediate"
+  hint_words      String          // JSON string: [{ english, korean }]
+  tags            String          @default("[]") // JSON string
+  created_at      DateTime        @default(now())
+  daily_sentences DailySentence[]
+  corrections     Correction[]
+  review_answers  ReviewAnswer[]
+}
+
+model DailySentence {
+  id          String   @id @default(uuid())
+  user_id     String
+  sentence_id String
+  theme       String   // "daily" | "business"
+  difficulty  String   @default("beginner") // "beginner" | "intermediate"
+  date        String   // YYYY-MM-DD
+  order       Int      // 1, 2, 3
+  user        User     @relation(fields: [user_id], references: [id])
+  sentence    Sentence @relation(fields: [sentence_id], references: [id])
+
+  @@unique([user_id, date, theme, difficulty, order])
+}
+
+model Correction {
+  id                 String   @id @default(uuid())
+  user_id            String
+  sentence_id        String
+  user_writing       String
+  corrected_sentence String
+  explanation        String
+  score              Int      // 1-10
+  highlights         String   // JSON string
+  created_at         DateTime @default(now())
+  user               User     @relation(fields: [user_id], references: [id])
+  sentence           Sentence @relation(fields: [sentence_id], references: [id])
+}
+
+model UserStats {
+  id                  String  @id @default(uuid())
+  user_id             String  @unique
+  total_xp            Int     @default(0)
+  level               Int     @default(1)
+  streak_days         Int     @default(0)
+  longest_streak      Int     @default(0)
+  streak_freeze_count Int     @default(0)
+  last_practice_date  String? // YYYY-MM-DD
+  total_sentences     Int     @default(0)
+  total_perfect       Int     @default(0) // score 10
+  user                User    @relation(fields: [user_id], references: [id])
+}
+
+model Achievement {
+  id          String   @id @default(uuid())
+  user_id     String
+  type        String
+  unlocked_at DateTime @default(now())
+  user        User     @relation(fields: [user_id], references: [id])
+
+  @@unique([user_id, type])
+}
+
+model ReviewSession {
+  id          String         @id @default(uuid())
+  user_id     String
+  theme       String?
+  difficulty  String?
+  total_count Int
+  created_at  DateTime       @default(now())
+  user        User           @relation(fields: [user_id], references: [id])
+  answers     ReviewAnswer[]
+}
+
+model ReviewAnswer {
+  id           String        @id @default(uuid())
+  session_id   String
+  sentence_id  String
+  user_writing String
+  score        Int?
+  correction   String?       // JSON
+  answered_at  DateTime      @default(now())
+  session      ReviewSession @relation(fields: [session_id], references: [id])
+  sentence     Sentence      @relation(fields: [sentence_id], references: [id])
+}

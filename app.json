@@ -1,0 +1,32 @@
+{
+  "expo": {
+    "name": "쓰잉 - 영어 작문 트레이너",
+    "slug": "ssuing",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "scheme": "ssuing",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#5B4FE5"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.ssuing.app"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/icon.png",
+        "backgroundColor": "#5B4FE5"
+      },
+      "package": "com.ssuing.app"
+    },
+    "plugins": [
+      "expo-router",
+      "expo-secure-store",
+      "expo-font"
+    ]
+  }
+}
