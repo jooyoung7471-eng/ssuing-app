@@ -1,6 +1,8 @@
-import { Stack } from 'expo-router';
-import { StyleSheet, View, Platform } from 'react-native';
+import { useEffect } from 'react';
+import { Stack, useRouter, useSegments } from 'expo-router';
+import { StyleSheet, View, Platform, ActivityIndicator } from 'react-native';
 import { colors } from '../constants/colors';
+import { useAuthStore } from '../stores/authStore';
 
 const isWeb = Platform.OS === 'web';
 
@@ -15,7 +17,49 @@ if (!isWeb) {
   }
 }
 
+function useProtectedRoute() {
+  const { token, isGuest, isReady } = useAuthStore();
+  const segments = useSegments();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!isReady) return;
+
+    const inAuthScreen = segments[0] === 'auth';
+    const isAuthenticated = !!token || isGuest;
+
+    if (!isAuthenticated && !inAuthScreen) {
+      router.replace('/auth');
+    } else if (isAuthenticated && inAuthScreen) {
+      router.replace('/(tabs)');
+    }
+  }, [token, isGuest, isReady, segments]);
+}
+
 export default function RootLayout() {
+  const { loadToken, isReady } = useAuthStore();
+
+  useEffect(() => {
+    loadToken();
+  }, []);
+
+  useProtectedRoute();
+
+  if (!isReady) {
+    const loading = (
+      <View style={[styles.root, styles.loading]}>
+        <ActivityIndicator size="large" color={colors.primary} />
+      </View>
+    );
+
+    if (!isWeb) return loading;
+    return (
+      <View style={styles.webOuter}>
+        <View style={styles.webFrame}>{loading}</View>
+      </View>
+    );
+  }
+
   const content = (
     <Wrapper style={styles.root}>
       <Stack
@@ -26,6 +70,7 @@ export default function RootLayout() {
           contentStyle: { backgroundColor: colors.background },
         }}
       >
+        <Stack.Screen name="auth" options={{ headerShown: false }} />
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         <Stack.Screen
           name="practice/[theme]"
@@ -78,6 +123,11 @@ export default function RootLayout() {
 
 const styles = StyleSheet.create({
   root: { flex: 1 },
+  loading: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: colors.background,
+  },
   webOuter: {
     flex: 1,
     backgroundColor: '#1A1A2E',

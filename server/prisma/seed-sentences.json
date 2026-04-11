@@ -2896,7 +2896,7 @@
   {
     "koreanText": "이 가격은 협상 가능한가요?",
     "theme": "daily",
-    "difficulty": "beginner",
+    "difficulty": "intermediate",
     "category": "쇼핑",
     "hintWords": [
       {
@@ -11424,7 +11424,7 @@
   {
     "koreanText": "오늘 하루가 정말 피곤했어.",
     "theme": "daily",
-    "difficulty": "intermediate",
+    "difficulty": "beginner",
     "category": "감정표현",
     "hintWords": [
       {
@@ -11760,7 +11760,7 @@
   {
     "koreanText": "고마워서 말로 다 못해.",
     "theme": "daily",
-    "difficulty": "intermediate",
+    "difficulty": "beginner",
     "category": "감정표현",
     "hintWords": [
       {
@@ -21655,7 +21655,7 @@
   {
     "koreanText": "가격을 좀 깎아 주실 수 있을까요?",
     "theme": "business",
-    "difficulty": "beginner",
+    "difficulty": "intermediate",
     "category": "협상/계약",
     "hintWords": [
       {
@@ -21727,7 +21727,7 @@
   {
     "koreanText": "더 좋은 조건으로 협상할 수 있을까요?",
     "theme": "business",
-    "difficulty": "beginner",
+    "difficulty": "intermediate",
     "category": "협상/계약",
     "hintWords": [
       {
@@ -21967,7 +21967,7 @@
   {
     "koreanText": "할인을 좀 더 주실 수 있을까요?",
     "theme": "business",
-    "difficulty": "beginner",
+    "difficulty": "intermediate",
     "category": "협상/계약",
     "hintWords": [
       {
@@ -27734,7 +27734,7 @@
   {
     "koreanText": "배당금이 얼마예요?",
     "theme": "business",
-    "difficulty": "beginner",
+    "difficulty": "intermediate",
     "category": "주식/투자",
     "hintWords": [
       {
@@ -27758,7 +27758,7 @@
   {
     "koreanText": "투자 위험이 크네요.",
     "theme": "business",
-    "difficulty": "beginner",
+    "difficulty": "intermediate",
     "category": "주식/투자",
     "hintWords": [
       {
@@ -27878,7 +27878,7 @@
   {
     "koreanText": "포트폴리오를 관리하세요.",
     "theme": "business",
-    "difficulty": "beginner",
+    "difficulty": "intermediate",
     "category": "주식/투자",
     "hintWords": [
       {
@@ -27950,7 +27950,7 @@
   {
     "koreanText": "배당 수익률이 높아요.",
     "theme": "business",
-    "difficulty": "beginner",
+    "difficulty": "intermediate",
     "category": "주식/투자",
     "hintWords": [
       {
@@ -28094,7 +28094,7 @@
   {
     "koreanText": "장기 투자를 할 거야.",
     "theme": "business",
-    "difficulty": "beginner",
+    "difficulty": "intermediate",
     "category": "주식/투자",
     "hintWords": [
       {
@@ -28142,7 +28142,7 @@
   {
     "koreanText": "배당금을 받았습니다.",
     "theme": "business",
-    "difficulty": "beginner",
+    "difficulty": "intermediate",
     "category": "주식/투자",
     "hintWords": [
       {
@@ -28190,7 +28190,7 @@
   {
     "koreanText": "증시가 변동했어요.",
     "theme": "business",
-    "difficulty": "beginner",
+    "difficulty": "intermediate",
     "category": "주식/투자",
     "hintWords": [
       {
@@ -28238,7 +28238,7 @@
   {
     "koreanText": "자산 배분이 필요해.",
     "theme": "business",
-    "difficulty": "beginner",
+    "difficulty": "intermediate",
     "category": "주식/투자",
     "hintWords": [
       {
@@ -29006,7 +29006,7 @@
   {
     "koreanText": "매출이 30% 증가했다.",
     "theme": "business",
-    "difficulty": "beginner",
+    "difficulty": "intermediate",
     "category": "기업동향/뉴스",
     "hintWords": [
       {
@@ -29102,7 +29102,7 @@
   {
     "koreanText": "투자금 1000억을 받았다.",
     "theme": "business",
-    "difficulty": "beginner",
+    "difficulty": "intermediate",
     "category": "기업동향/뉴스",
     "hintWords": [
       {
@@ -29150,7 +29150,7 @@
   {
     "koreanText": "배당금이 지급되었다.",
     "theme": "business",
-    "difficulty": "beginner",
+    "difficulty": "intermediate",
     "category": "기업동향/뉴스",
     "hintWords": [
       {
@@ -29198,7 +29198,7 @@
   {
     "koreanText": "경쟁사가 인수되었다.",
     "theme": "business",
-    "difficulty": "beginner",
+    "difficulty": "intermediate",
     "category": "기업동향/뉴스",
     "hintWords": [
       {
@@ -29222,7 +29222,7 @@
   {
     "koreanText": "기술 개발에 투자한다.",
     "theme": "business",
-    "difficulty": "beginner",
+    "difficulty": "intermediate",
     "category": "기업동향/뉴스",
     "hintWords": [
       {
@@ -32624,7 +32624,7 @@
   {
     "koreanText": "배당금을 받았다.",
     "theme": "business",
-    "difficulty": "beginner",
+    "difficulty": "intermediate",
     "category": "주식/투자",
     "hintWords": [
       {
@@ -32765,7 +32765,7 @@
   {
     "koreanText": "포트폴리오를 다양화했다.",
     "theme": "business",
-    "difficulty": "beginner",
+    "difficulty": "intermediate",
     "category": "주식/투자",
     "hintWords": [
       {
@@ -32821,7 +32821,7 @@
   {
     "koreanText": "장기 투자가 낫다.",
     "theme": "business",
-    "difficulty": "beginner",
+    "difficulty": "intermediate",
     "category": "주식/투자",
     "hintWords": [
       {
@@ -32989,7 +32989,7 @@
   {
     "koreanText": "주가 차트를 분석했다.",
     "theme": "business",
-    "difficulty": "beginner",
+    "difficulty": "intermediate",
     "category": "주식/투자",
     "hintWords": [
       {
@@ -33073,7 +33073,7 @@
   {
     "koreanText": "증권사에서 주식을 샀다.",
     "theme": "business",
-    "difficulty": "beginner",
+    "difficulty": "intermediate",
     "category": "주식/투자",
     "hintWords": [
       {
@@ -33101,7 +33101,7 @@
   {
     "koreanText": "펀드에 투자했다.",
     "theme": "business",
-    "difficulty": "beginner",
+    "difficulty": "intermediate",
     "category": "주식/투자",
     "hintWords": [
       {
@@ -33129,7 +33129,7 @@
   {
     "koreanText": "시장 변동성이 크다.",
     "theme": "business",
-    "difficulty": "beginner",
+    "difficulty": "intermediate",
     "category": "주식/투자",
     "hintWords": [
       {
@@ -34010,7 +34010,7 @@
   {
     "koreanText": "주식은 회사의 소유권을 나누어 판매하는 증권입니다.",
     "theme": "business",
-    "difficulty": "beginner",
+    "difficulty": "intermediate",
     "category": "주식/투자",
     "hintWords": [
       {
@@ -34192,7 +34192,7 @@
   {
     "koreanText": "포트폴리오는 투자자가 보유한 여러 자산의 모음입니다.",
     "theme": "business",
-    "difficulty": "beginner",
+    "difficulty": "intermediate",
     "category": "주식/투자",
     "hintWords": [
       {
@@ -34254,7 +34254,7 @@
   {
     "koreanText": "장기 투자는 수 년 이상 주식을 보유하는 전략입니다.",
     "theme": "business",
-    "difficulty": "beginner",
+    "difficulty": "intermediate",
     "category": "주식/투자",
     "hintWords": [
       {
@@ -34316,7 +34316,7 @@
   {
     "koreanText": "분산 투자를 통해 리스크를 줄일 수 있습니다.",
     "theme": "business",
-    "difficulty": "beginner",
+    "difficulty": "intermediate",
     "category": "주식/투자",
     "hintWords": [
       {
@@ -34403,7 +34403,7 @@
   {
     "koreanText": "주식 시장은 주식이 사고팔리는 장소입니다.",
     "theme": "business",
-    "difficulty": "beginner",
+    "difficulty": "intermediate",
     "category": "주식/투자",
     "hintWords": [
       {
@@ -34490,7 +34490,7 @@
   {
     "koreanText": "주가는 수급에 따라 지속적으로 변동합니다.",
     "theme": "business",
-    "difficulty": "beginner",
+    "difficulty": "intermediate",
     "category": "주식/투자",
     "hintWords": [
       {
@@ -34523,7 +34523,7 @@
   {
     "koreanText": "투자 전략은 개인의 목표에 맞게 수립해야 합니다.",
     "theme": "business",
-    "difficulty": "beginner",
+    "difficulty": "intermediate",
     "category": "주식/투자",
     "hintWords": [
       {
@@ -34581,7 +34581,7 @@
   {
     "koreanText": "실적 발표는 기업이 분기별 성과를 공개하는 날입니다.",
     "theme": "business",
-    "difficulty": "beginner",
+    "difficulty": "intermediate",
     "category": "주식/투자",
     "hintWords": [
       {
@@ -35700,7 +35700,7 @@
   {
     "koreanText": "구글이 AI 기술 개발에 투자를 늘렸다.",
     "theme": "business",
-    "difficulty": "beginner",
+    "difficulty": "intermediate",
     "category": "기업동향/뉴스",
     "hintWords": [
       {
@@ -36077,7 +36077,7 @@
   {
     "koreanText": "메타의 광고 수익이 증가했다.",
     "theme": "business",
-    "difficulty": "beginner",
+    "difficulty": "intermediate",
     "category": "기업동향/뉴스",
     "hintWords": [
       {
@@ -37667,7 +37667,7 @@
   {
     "koreanText": "디지털 전환이 비즈니스 전략의 핵심 요소가 되었다.",
     "theme": "business",
-    "difficulty": "beginner",
+    "difficulty": "intermediate",
     "category": "기업동향/뉴스",
     "hintWords": [
       {
