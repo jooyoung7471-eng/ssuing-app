@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Stack, useRouter, useSegments } from 'expo-router';
 import { StyleSheet, View, Platform, ActivityIndicator } from 'react-native';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { colors } from '../constants/colors';
 import { useAuthStore } from '../stores/authStore';
@@ -9,17 +10,7 @@ const ONBOARDING_KEY = 'onboarding_completed';
 const TERMS_AGREED_KEY = 'terms_agreed';
 
 const isWeb = Platform.OS === 'web';
-
-// Web doesn't need GestureHandlerRootView — it causes crashes
-let Wrapper: React.ComponentType<{ style?: any; children?: React.ReactNode }> = View;
-if (!isWeb) {
-  try {
-    const { GestureHandlerRootView } = require('react-native-gesture-handler');
-    Wrapper = GestureHandlerRootView;
-  } catch {
-    // fallback to View
-  }
-}
+const Wrapper = isWeb ? View : GestureHandlerRootView;
 
 function useProtectedRoute(onboardingDone: boolean | null, termsAgreed: boolean | null) {
   const { token, isGuest, isReady } = useAuthStore();

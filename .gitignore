@@ -6,3 +6,4 @@ server/prisma/dev.db
 .env
 server/.env
 server/dist/
+dist/
