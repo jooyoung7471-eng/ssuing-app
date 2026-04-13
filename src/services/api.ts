@@ -1,6 +1,16 @@
 import axios from 'axios';
 import { Platform } from 'react-native';
 
+const DEVICE_ID_KEY = 'device_id';
+
+function generateUUID(): string {
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+    const r = (Math.random() * 16) | 0;
+    const v = c === 'x' ? r : (r & 0x3) | 0x8;
+    return v.toString(16);
+  });
+}
+
 const tokenStorage = {
   async get(): Promise<string | null> {
     if (Platform.OS === 'web') {
@@ -25,6 +35,23 @@ const tokenStorage = {
     const SecureStore = await import('expo-secure-store');
     await SecureStore.deleteItemAsync('auth_token');
   },
+  async getDeviceId(): Promise<string> {
+    if (Platform.OS === 'web') {
+      let id = localStorage.getItem(DEVICE_ID_KEY);
+      if (!id) {
+        id = generateUUID();
+        localStorage.setItem(DEVICE_ID_KEY, id);
+      }
+      return id;
+    }
+    const SecureStore = await import('expo-secure-store');
+    let id = await SecureStore.getItemAsync(DEVICE_ID_KEY);
+    if (!id) {
+      id = generateUUID();
+      await SecureStore.setItemAsync(DEVICE_ID_KEY, id);
+    }
+    return id;
+  },
 };
 
 const api = axios.create({
@@ -34,9 +61,15 @@ const api = axios.create({
 });
 
 api.interceptors.request.use(async (config) => {
-  const token = await tokenStorage.get();
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
+  try {
+    const token = await tokenStorage.get();
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    const deviceId = await tokenStorage.getDeviceId();
+    config.headers['X-Device-Id'] = deviceId;
+  } catch {
+    // SecureStore unavailable, proceed without
   }
   return config;
 });

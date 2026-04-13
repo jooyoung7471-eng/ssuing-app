@@ -1,12 +1,30 @@
+import { useEffect, useState } from 'react';
 import { Stack } from 'expo-router';
 import { StyleSheet, View, Platform } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import * as SplashScreen from 'expo-splash-screen';
 import { colors } from '../constants/colors';
 
 const isWeb = Platform.OS === 'web';
 const Wrapper = isWeb ? View : GestureHandlerRootView;
 
+SplashScreen.preventAutoHideAsync();
+
 export default function RootLayout() {
+  const [appReady, setAppReady] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      SplashScreen.hideAsync();
+      setAppReady(true);
+    }, 1500);
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (!appReady && !isWeb) {
+    return null;
+  }
+
   const content = (
     <Wrapper style={styles.root}>
       <Stack

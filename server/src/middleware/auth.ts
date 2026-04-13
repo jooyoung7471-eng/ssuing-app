@@ -16,23 +16,26 @@ const JWT_SECRET = process.env.JWT_SECRET || "dev-secret-DO-NOT-USE-IN-PRODUCTIO
 const GUEST_USER_ID = "guest-user-00000000";
 const prisma = new PrismaClient();
 
-let guestUserEnsured = false;
-async function ensureGuestUser() {
-  if (guestUserEnsured) return;
+const ensuredDevices = new Set<string>();
+
+async function ensureGuestUser(deviceId?: string) {
+  const userId = deviceId ? `guest-${deviceId}` : GUEST_USER_ID;
+  if (ensuredDevices.has(userId)) return userId;
   try {
-    const existing = await prisma.user.findUnique({ where: { id: GUEST_USER_ID } });
+    const existing = await prisma.user.findUnique({ where: { id: userId } });
     if (!existing) {
       const hashedGuestPassword = await bcrypt.hash("guest-no-login-allowed", 10);
       await prisma.user.create({
-        data: { id: GUEST_USER_ID, email: "guest@engwrite.local", password: hashedGuestPassword },
+        data: { id: userId, email: `guest-${deviceId || "default"}@engwrite.local`, password: hashedGuestPassword },
       });
     }
-    guestUserEnsured = true;
+    ensuredDevices.add(userId);
   } catch (err) {
     console.warn("Guest user setup deferred:", (err as Error).message);
   }
+  return userId;
 }
-// Defer guest user creation to avoid crash if DB isn't ready at import time
+// Ensure legacy guest user exists
 setTimeout(() => ensureGuestUser(), 2000);
 
 export function authMiddleware(req: Request, _res: Response, next: NextFunction) {
@@ -51,7 +54,7 @@ export function authMiddleware(req: Request, _res: Response, next: NextFunction)
   }
 }
 
-export function optionalAuthMiddleware(req: Request, _res: Response, next: NextFunction) {
+export async function optionalAuthMiddleware(req: Request, _res: Response, next: NextFunction) {
   const header = req.headers.authorization;
   if (header?.startsWith("Bearer ")) {
     const token = header.slice(7);
@@ -63,6 +66,8 @@ export function optionalAuthMiddleware(req: Request, _res: Response, next: NextF
       // invalid token — fall through to guest
     }
   }
-  req.user = { userId: GUEST_USER_ID, email: "guest@engwrite.local" };
+  const deviceId = req.headers["x-device-id"] as string | undefined;
+  const userId = await ensureGuestUser(deviceId);
+  req.user = { userId, email: `guest-${deviceId || "default"}@engwrite.local` };
   next();
 }
