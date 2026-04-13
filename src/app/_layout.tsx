@@ -1,19 +1,10 @@
 import { Stack } from 'expo-router';
 import { StyleSheet, View, Platform } from 'react-native';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { colors } from '../constants/colors';
 
 const isWeb = Platform.OS === 'web';
-
-// Web doesn't need GestureHandlerRootView — it causes crashes
-let Wrapper: React.ComponentType<{ style?: any; children?: React.ReactNode }> = View;
-if (!isWeb) {
-  try {
-    const { GestureHandlerRootView } = require('react-native-gesture-handler');
-    Wrapper = GestureHandlerRootView;
-  } catch {
-    // fallback to View
-  }
-}
+const Wrapper = isWeb ? View : GestureHandlerRootView;
 
 export default function RootLayout() {
   const content = (
