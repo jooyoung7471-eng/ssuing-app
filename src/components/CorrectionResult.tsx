@@ -32,7 +32,7 @@ export default function CorrectionResult({
       <View style={styles.errorContainer}>
         <Text style={styles.errorText}>{error}</Text>
         {onRetry && (
-          <Text style={styles.retryText} onPress={onRetry}>
+          <Text style={styles.retryText} onPress={onRetry} hitSlop={{ top: 12, bottom: 12, left: 24, right: 24 }}>
             다시 시도
           </Text>
         )}
