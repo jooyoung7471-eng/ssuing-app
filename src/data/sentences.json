@@ -9,10 +9,6 @@
       {
         "english": "hello",
         "korean": "안녕"
-      },
-      {
-        "english": "polite",
-        "korean": "존댓말"
       }
     ],
     "tags": [
@@ -22,7 +18,7 @@
   },
   {
     "id": "sent_0002",
-    "koreanText": "저는 김철수입니다.",
+    "koreanText": "저는 김철수라고 합니다.",
     "theme": "daily",
     "difficulty": "beginner",
     "category": "인사/소개",
@@ -30,10 +26,6 @@
       {
         "english": "name",
         "korean": "이름"
-      },
-      {
-        "english": "be",
-        "korean": "이다"
       }
     ],
     "tags": [
@@ -135,7 +127,7 @@
   },
   {
     "id": "sent_0007",
-    "koreanText": "저는 학생입니다.",
+    "koreanText": "저 학생이에요.",
     "theme": "daily",
     "difficulty": "beginner",
     "category": "인사/소개",
@@ -143,10 +135,6 @@
       {
         "english": "student",
         "korean": "학생"
-      },
-      {
-        "english": "be",
-        "korean": "이다"
       }
     ],
     "tags": [
@@ -156,18 +144,18 @@
   },
   {
     "id": "sent_0008",
-    "koreanText": "저는 회사원입니다.",
+    "koreanText": "저 회사 다녀요.",
     "theme": "daily",
     "difficulty": "beginner",
     "category": "인사/소개",
     "hintWords": [
       {
-        "english": "office",
-        "korean": "회사"
+        "english": "work at",
+        "korean": "다니다"
       },
       {
-        "english": "worker",
-        "korean": "사원"
+        "english": "company",
+        "korean": "회사"
       }
     ],
     "tags": [
@@ -177,15 +165,11 @@
   },
   {
     "id": "sent_0009",
-    "koreanText": "잘 부탁드립니다.",
+    "koreanText": "앞으로 잘 부탁해요.",
     "theme": "daily",
     "difficulty": "beginner",
     "category": "인사/소개",
     "hintWords": [
-      {
-        "english": "well",
-        "korean": "잘"
-      },
       {
         "english": "ask",
         "korean": "부탁"
@@ -231,10 +215,6 @@
       {
         "english": "name",
         "korean": "이름"
-      },
-      {
-        "english": "be",
-        "korean": "이다"
       }
     ],
     "tags": [
@@ -256,10 +236,6 @@
       {
         "english": "age",
         "korean": "살"
-      },
-      {
-        "english": "be",
-        "korean": "이다"
       }
     ],
     "tags": [
@@ -331,10 +307,6 @@
       {
         "english": "person",
         "korean": "사람"
-      },
-      {
-        "english": "be",
-        "korean": "이다"
       }
     ],
     "tags": [
@@ -402,10 +374,6 @@
       {
         "english": "three",
         "korean": "셋"
-      },
-      {
-        "english": "be",
-        "korean": "이다"
       }
     ],
     "tags": [
@@ -473,10 +441,6 @@
       {
         "english": "music",
         "korean": "음악"
-      },
-      {
-        "english": "very",
-        "korean": "아주"
       },
       {
         "english": "like",
@@ -573,10 +537,6 @@
       {
         "english": "day off",
         "korean": "휴무"
-      },
-      {
-        "english": "be",
-        "korean": "이다"
       }
     ],
     "tags": [
@@ -1002,7 +962,7 @@
   },
   {
     "id": "sent_0042",
-    "koreanText": "저는 고객 만족도를 최우선으로 생각합니다.",
+    "koreanText": "고객 만족이 가장 중요하다고 생각해요.",
     "theme": "daily",
     "difficulty": "intermediate",
     "category": "인사/소개",
@@ -1106,7 +1066,7 @@
   },
   {
     "id": "sent_0046",
-    "koreanText": "저는 새로운 도전과 책임감이 있는 일을 좋아합니다.",
+    "koreanText": "새로운 도전이나 책임감 있는 일을 좋아해요.",
     "theme": "daily",
     "difficulty": "intermediate",
     "category": "인사/소개",
@@ -1680,10 +1640,6 @@
         "korean": "버터"
       },
       {
-        "english": "can",
-        "korean": "수 있다"
-      },
-      {
         "english": "give",
         "korean": "주다"
       }
@@ -1905,7 +1861,7 @@
         "korean": "분위기"
       },
       {
-        "english": "recommend",
+        "english": "suggest",
         "korean": "추천하다"
       }
     ],
@@ -2280,7 +2236,7 @@
         "korean": "괜찮은"
       },
       {
-        "english": "recommend",
+        "english": "suggest",
         "korean": "알려주다"
       }
     ],
@@ -2807,11 +2763,7 @@
       },
       {
         "english": "buy",
-        "korean": "구매하다"
-      },
-      {
-        "english": "purchase",
-        "korean": "구입"
+        "korean": "사다"
       }
     ],
     "tags": [
@@ -2979,10 +2931,6 @@
       {
         "english": "pay",
         "korean": "내다"
-      },
-      {
-        "english": "can",
-        "korean": "할 수 있다"
       }
     ],
     "tags": [
@@ -3004,10 +2952,6 @@
       {
         "english": "repeat",
         "korean": "반복하다"
-      },
-      {
-        "english": "can",
-        "korean": "할 수 있다"
       }
     ],
     "tags": [
@@ -3027,7 +2971,7 @@
         "korean": "가격"
       },
       {
-        "english": "negotiate",
+        "english": "work out",
         "korean": "협상하다"
       },
       {
@@ -3106,8 +3050,8 @@
         "korean": "전에/이전에"
       },
       {
-        "english": "purchase",
-        "korean": "구매하다"
+        "english": "buy",
+        "korean": "사다"
       }
     ],
     "tags": [
@@ -3306,8 +3250,8 @@
     "category": "쇼핑",
     "hintWords": [
       {
-        "english": "purchase",
-        "korean": "구입하다"
+        "english": "buy",
+        "korean": "사다"
       },
       {
         "english": "uncomfortable",
@@ -3414,7 +3358,7 @@
         "korean": "예산"
       },
       {
-        "english": "exceed",
+        "english": "go over",
         "korean": "초과하다"
       },
       {
@@ -3648,8 +3592,8 @@
         "korean": "품절되다"
       },
       {
-        "english": "purchase",
-        "korean": "구매하다"
+        "english": "buy",
+        "korean": "사다"
       },
       {
         "english": "quickly",
@@ -4179,10 +4123,6 @@
       {
         "english": "buy",
         "korean": "사다"
-      },
-      {
-        "english": "purchase",
-        "korean": "구매하다"
       }
     ],
     "tags": [
@@ -5579,10 +5519,6 @@
       {
         "english": "change",
         "korean": "바뀌다"
-      },
-      {
-        "english": "can",
-        "korean": "수있다"
       }
     ],
     "tags": [
@@ -6156,7 +6092,7 @@
         "korean": "계획"
       },
       {
-        "english": "postpone",
+        "english": "put off",
         "korean": "미루다"
       }
     ],
@@ -7413,7 +7349,7 @@
   },
   {
     "id": "sent_0297",
-    "koreanText": "건강한 체중을 유지하는 것이 만성질환을 예방하는 좋은 방법이에요.",
+    "koreanText": "적정 체중을 유지하면 만성질환 예방에 좋아요.",
     "theme": "daily",
     "difficulty": "intermediate",
     "category": "건강",
@@ -7423,7 +7359,7 @@
         "korean": "건강한 체중"
       },
       {
-        "english": "maintain",
+        "english": "keep up",
         "korean": "유지하다"
       },
       {
@@ -7604,10 +7540,6 @@
       {
         "english": "morning",
         "korean": "아침"
-      },
-      {
-        "english": "do",
-        "korean": "하다"
       }
     ],
     "tags": [
@@ -8854,10 +8786,6 @@
       {
         "english": "check",
         "korean": "확인하다"
-      },
-      {
-        "english": "did",
-        "korean": "했어"
       }
     ],
     "tags": [
@@ -8904,10 +8832,6 @@
       {
         "english": "book",
         "korean": "예약하다"
-      },
-      {
-        "english": "did",
-        "korean": "했니"
       }
     ],
     "tags": [
@@ -9711,7 +9635,7 @@
         "korean": "가이드 투어"
       },
       {
-        "english": "participate",
+        "english": "join",
         "korean": "참여하다"
       },
       {
@@ -10328,10 +10252,6 @@
     "category": "가족/친구",
     "hintWords": [
       {
-        "english": "we",
-        "korean": "우리"
-      },
-      {
         "english": "again",
         "korean": "또"
       },
@@ -10405,10 +10325,6 @@
       {
         "english": "what",
         "korean": "뭐"
-      },
-      {
-        "english": "do",
-        "korean": "하다"
       },
       {
         "english": "activity",
@@ -10526,10 +10442,6 @@
       {
         "english": "you",
         "korean": "너"
-      },
-      {
-        "english": "well",
-        "korean": "잘"
       },
       {
         "english": "great",
@@ -10799,7 +10711,7 @@
     "category": "가족/친구",
     "hintWords": [
       {
-        "english": "recommend",
+        "english": "suggest",
         "korean": "추천하다"
       },
       {
@@ -12484,7 +12396,7 @@
         "korean": "자랑스럽다"
       },
       {
-        "english": "accomplish",
+        "english": "pull off",
         "korean": "해내다"
       },
       {
@@ -12565,10 +12477,6 @@
       {
         "english": "call",
         "korean": "전화하다"
-      },
-      {
-        "english": "will",
-        "korean": "할거야"
       }
     ],
     "tags": [
@@ -12661,10 +12569,6 @@
       {
         "english": "meet",
         "korean": "만나다"
-      },
-      {
-        "english": "can",
-        "korean": "수 있다"
       }
     ],
     "tags": [
@@ -12732,10 +12636,6 @@
       {
         "english": "thank you",
         "korean": "고마워"
-      },
-      {
-        "english": "well",
-        "korean": "잘"
       },
       {
         "english": "received",
@@ -12934,10 +12834,6 @@
         "korean": "그럼"
       },
       {
-        "english": "me",
-        "korean": "내가"
-      },
-      {
         "english": "call",
         "korean": "걸다"
       }
@@ -13057,10 +12953,6 @@
       {
         "english": "not",
         "korean": "아니다"
-      },
-      {
-        "english": "be",
-        "korean": "이다"
       }
     ],
     "tags": [
@@ -13132,10 +13024,6 @@
       {
         "english": "contact",
         "korean": "연락"
-      },
-      {
-        "english": "do",
-        "korean": "해"
       }
     ],
     "tags": [
@@ -14790,7 +14678,7 @@
         "korean": "다음 주"
       },
       {
-        "english": "postpone",
+        "english": "put off",
         "korean": "미루다"
       }
     ],
@@ -14890,7 +14778,7 @@
         "korean": "그 시간"
       },
       {
-        "english": "confirm",
+        "english": "lock in",
         "korean": "확정하다"
       }
     ],
@@ -15013,10 +14901,6 @@
       {
         "english": "clean",
         "korean": "청소하다"
-      },
-      {
-        "english": "do",
-        "korean": "하다"
       }
     ],
     "tags": [
@@ -15038,10 +14922,6 @@
       {
         "english": "dark",
         "korean": "어둡다"
-      },
-      {
-        "english": "very",
-        "korean": "정말"
       }
     ],
     "tags": [
@@ -16313,10 +16193,6 @@
       {
         "english": "save",
         "korean": "저장"
-      },
-      {
-        "english": "will",
-        "korean": "겠습니다"
       }
     ],
     "tags": [
@@ -16463,10 +16339,6 @@
       {
         "english": "ask",
         "korean": "물어보다"
-      },
-      {
-        "english": "to",
-        "korean": "한테"
       }
     ],
     "tags": [
@@ -16511,8 +16383,8 @@
         "korean": "회의"
       },
       {
-        "english": "postpone",
-        "korean": "연기"
+        "english": "put off",
+        "korean": "미루다"
       },
       {
         "english": "30 minutes",
@@ -16538,10 +16410,6 @@
       {
         "english": "tell",
         "korean": "알려드리다"
-      },
-      {
-        "english": "will",
-        "korean": "게요"
       }
     ],
     "tags": [
@@ -16911,7 +16779,7 @@
         "korean": "보고서"
       },
       {
-        "english": "submit",
+        "english": "turn in",
         "korean": "제출하다"
       },
       {
@@ -16940,7 +16808,7 @@
         "korean": "도움을 청하다"
       },
       {
-        "english": "participate",
+        "english": "join",
         "korean": "참여하다"
       }
     ],
@@ -17111,7 +16979,7 @@
         "korean": "예산"
       },
       {
-        "english": "exceed",
+        "english": "go over",
         "korean": "초과하다"
       },
       {
@@ -17440,7 +17308,7 @@
         "korean": "우선순위"
       },
       {
-        "english": "determine",
+        "english": "figure out",
         "korean": "정하다"
       }
     ],
@@ -18149,7 +18017,7 @@
         "korean": "올리다"
       },
       {
-        "english": "exceed",
+        "english": "hit",
         "korean": "넘다"
       }
     ],
@@ -18399,8 +18267,8 @@
         "korean": "조회수"
       },
       {
-        "english": "exceed",
-        "korean": "넘어서다"
+        "english": "hit",
+        "korean": "달하다"
       }
     ],
     "tags": [
@@ -18570,8 +18438,8 @@
         "korean": "알고리즘"
       },
       {
-        "english": "recommend",
-        "korean": "추천"
+        "english": "suggest",
+        "korean": "추천하다"
       },
       {
         "english": "similar",
@@ -18970,10 +18838,6 @@
         "korean": "어떻게 지내세요"
       },
       {
-        "english": "well",
-        "korean": "잘"
-      },
-      {
         "english": "everyone",
         "korean": "모두"
       }
@@ -19118,10 +18982,6 @@
       {
         "english": "send",
         "korean": "보내다"
-      },
-      {
-        "english": "will",
-        "korean": "겠습니다"
       }
     ],
     "tags": [
@@ -19166,12 +19026,8 @@
         "korean": "좋은 소식"
       },
       {
-        "english": "inform",
+        "english": "let ~ know",
         "korean": "알리다"
-      },
-      {
-        "english": "will",
-        "korean": "겠습니다"
       }
     ],
     "tags": [
@@ -19437,7 +19293,7 @@
     "category": "이메일/서신",
     "hintWords": [
       {
-        "english": "confirm",
+        "english": "lock in",
         "korean": "확정하다"
       },
       {
@@ -19591,7 +19447,7 @@
         "korean": "급한"
       },
       {
-        "english": "postpone",
+        "english": "put off",
         "korean": "미루다"
       },
       {
@@ -19841,7 +19697,7 @@
         "korean": "예상하다"
       },
       {
-        "english": "require",
+        "english": "need",
         "korean": "필요하다"
       },
       {
@@ -19891,7 +19747,7 @@
         "korean": "회의 시간"
       },
       {
-        "english": "confirm",
+        "english": "make sure",
         "korean": "확인하다"
       },
       {
@@ -20181,7 +20037,7 @@
   },
   {
     "id": "sent_0810",
-    "koreanText": "이것이 매우 중요합니다",
+    "koreanText": "이거 진짜 중요해요.",
     "theme": "business",
     "difficulty": "beginner",
     "category": "회의/프레젠테이션",
@@ -20193,10 +20049,6 @@
       {
         "english": "key",
         "korean": "핵심"
-      },
-      {
-        "english": "crucial",
-        "korean": "결정적인"
       }
     ],
     "tags": [
@@ -20441,7 +20293,7 @@
         "korean": "목표"
       },
       {
-        "english": "confirm",
+        "english": "check",
         "korean": "확인하다"
       },
       {
@@ -20854,7 +20706,7 @@
         "korean": "전략"
       },
       {
-        "english": "establish",
+        "english": "set up",
         "korean": "수립하다"
       }
     ],
@@ -21140,8 +20992,8 @@
         "korean": "기한"
       },
       {
-        "english": "submit",
-        "korean": "제출"
+        "english": "turn in",
+        "korean": "제출하다"
       }
     ],
     "tags": [
@@ -21381,7 +21233,7 @@
   },
   {
     "id": "sent_0857",
-    "koreanText": "예산을 증액해야 합니다.",
+    "koreanText": "예산을 좀 늘려야 할 것 같아요.",
     "theme": "business",
     "difficulty": "beginner",
     "category": "보고/제안",
@@ -21441,7 +21293,7 @@
         "korean": "계획"
       },
       {
-        "english": "modify",
+        "english": "change",
         "korean": "수정하다"
       },
       {
@@ -21493,10 +21345,6 @@
       {
         "english": "report",
         "korean": "보고하다"
-      },
-      {
-        "english": "will",
-        "korean": "겠습니다"
       }
     ],
     "tags": [
@@ -21531,7 +21379,7 @@
   },
   {
     "id": "sent_0863",
-    "koreanText": "가격을 인상해야 합니다.",
+    "koreanText": "가격을 올려야 할 것 같아요.",
     "theme": "business",
     "difficulty": "beginner",
     "category": "보고/제안",
@@ -21593,10 +21441,6 @@
       {
         "english": "discuss",
         "korean": "논의하다"
-      },
-      {
-        "english": "will",
-        "korean": "겠습니다"
       }
     ],
     "tags": [
@@ -21693,10 +21537,6 @@
       {
         "english": "assign",
         "korean": "지정하다"
-      },
-      {
-        "english": "will",
-        "korean": "겠습니다"
       }
     ],
     "tags": [
@@ -21743,10 +21583,6 @@
       {
         "english": "discuss",
         "korean": "논의하다"
-      },
-      {
-        "english": "will",
-        "korean": "겠습니다"
       }
     ],
     "tags": [
@@ -21841,7 +21677,7 @@
         "korean": "수정안"
       },
       {
-        "english": "submit",
+        "english": "turn in",
         "korean": "제출하다"
       },
       {
@@ -21887,8 +21723,8 @@
     "category": "보고/제안",
     "hintWords": [
       {
-        "english": "exceed",
-        "korean": "초과하다"
+        "english": "beat",
+        "korean": "초과달성하다"
       },
       {
         "english": "target",
@@ -22181,8 +22017,8 @@
         "korean": "검토"
       },
       {
-        "english": "recommend",
-        "korean": "권장"
+        "english": "suggest",
+        "korean": "권하다"
       }
     ],
     "tags": [
@@ -22441,8 +22277,8 @@
         "korean": "조율"
       },
       {
-        "english": "essential",
-        "korean": "필수적"
+        "english": "must-have",
+        "korean": "필수적인"
       }
     ],
     "tags": [
@@ -22519,8 +22355,8 @@
         "korean": "사업 전략"
       },
       {
-        "english": "recommend",
-        "korean": "권고"
+        "english": "suggest",
+        "korean": "권하다"
       }
     ],
     "tags": [
@@ -22606,7 +22442,7 @@
   },
   {
     "id": "sent_0905",
-    "koreanText": "조건을 다시 논의해야 합니다.",
+    "koreanText": "조건을 다시 얘기해 봐야 할 것 같아요.",
     "theme": "business",
     "difficulty": "beginner",
     "category": "협상/계약",
@@ -22731,7 +22567,7 @@
   },
   {
     "id": "sent_0910",
-    "koreanText": "계약 취소는 가능합니까?",
+    "koreanText": "계약 취소할 수 있나요?",
     "theme": "business",
     "difficulty": "beginner",
     "category": "협상/계약",
@@ -22816,8 +22652,8 @@
         "korean": "최종"
       },
       {
-        "english": "confirm",
-        "korean": "확인"
+        "english": "check",
+        "korean": "확인하다"
       },
       {
         "english": "approval",
@@ -22862,8 +22698,8 @@
     "category": "협상/계약",
     "hintWords": [
       {
-        "english": "confirm",
-        "korean": "확인"
+        "english": "check",
+        "korean": "확인하다"
       },
       {
         "english": "contract",
@@ -23316,7 +23152,7 @@
         "korean": "진행하다"
       },
       {
-        "english": "confirm",
+        "english": "make sure",
         "korean": "확인하다"
       },
       {
@@ -23495,7 +23331,7 @@
         "korean": "처벌"
       },
       {
-        "english": "specify",
+        "english": "spell out",
         "korean": "명시하다"
       }
     ],
@@ -23606,7 +23442,7 @@
   },
   {
     "id": "sent_0945",
-    "koreanText": "양사의 책임 범위를 명확히 하는 것이 중요합니다.",
+    "koreanText": "양쪽 책임 범위를 확실히 정하는 게 중요해요.",
     "theme": "business",
     "difficulty": "intermediate",
     "category": "협상/계약",
@@ -23670,8 +23506,8 @@
         "korean": "서면"
       },
       {
-        "english": "confirm",
-        "korean": "확인받다"
+        "english": "make sure",
+        "korean": "확인하다"
       }
     ],
     "tags": [
@@ -23691,7 +23527,7 @@
         "korean": "입장"
       },
       {
-        "english": "modify",
+        "english": "change",
         "korean": "수정하다"
       },
       {
@@ -23720,7 +23556,7 @@
         "korean": "법률"
       },
       {
-        "english": "confirm",
+        "english": "make sure",
         "korean": "확인하다"
       }
     ],
@@ -23741,7 +23577,7 @@
         "korean": "상호 동의"
       },
       {
-        "english": "terminate",
+        "english": "end",
         "korean": "종료하다"
       },
       {
@@ -23766,7 +23602,7 @@
         "korean": "이력서"
       },
       {
-        "english": "submit",
+        "english": "turn in",
         "korean": "제출하다"
       },
       {
@@ -23941,12 +23777,8 @@
         "korean": "불합격하다"
       },
       {
-        "english": "reject",
+        "english": "turn down",
         "korean": "거절하다"
-      },
-      {
-        "english": "decline",
-        "korean": "거절"
       }
     ],
     "tags": [
@@ -24387,7 +24219,7 @@
     "category": "HR/채용",
     "hintWords": [
       {
-        "english": "confirm",
+        "english": "lock in",
         "korean": "확정하다"
       },
       {
@@ -24421,8 +24253,8 @@
         "korean": "지원자"
       },
       {
-        "english": "exceed",
-        "korean": "예상을 뛰어넘다"
+        "english": "beat",
+        "korean": "넘다"
       }
     ],
     "tags": [
@@ -25293,10 +25125,6 @@
       {
         "english": "reliable",
         "korean": "안정적인"
-      },
-      {
-        "english": "we",
-        "korean": "우리"
       }
     ],
     "tags": [
@@ -25412,7 +25240,7 @@
     "category": "마케팅/영업",
     "hintWords": [
       {
-        "english": "recommend",
+        "english": "suggest",
         "korean": "추천하다"
       },
       {
@@ -25591,7 +25419,7 @@
         "korean": "전문가"
       },
       {
-        "english": "recommend",
+        "english": "suggest",
         "korean": "추천하다"
       },
       {
@@ -26268,7 +26096,7 @@
         "korean": "고객 유지"
       },
       {
-        "english": "implement",
+        "english": "put in place",
         "korean": "도입하다"
       }
     ],
@@ -26491,7 +26319,7 @@
         "korean": "손실"
       },
       {
-        "english": "decline",
+        "english": "drop",
         "korean": "감소"
       },
       {
@@ -26566,8 +26394,8 @@
         "korean": "이익"
       },
       {
-        "english": "distribute",
-        "korean": "배분"
+        "english": "hand out",
+        "korean": "나누다"
       },
       {
         "english": "divide",
@@ -26770,8 +26598,8 @@
         "korean": "상황"
       },
       {
-        "english": "confirm",
-        "korean": "확인"
+        "english": "check",
+        "korean": "확인하다"
       }
     ],
     "tags": [
@@ -27049,7 +26877,7 @@
         "korean": "업계 평균"
       },
       {
-        "english": "exceed",
+        "english": "go over",
         "korean": "초과하다"
       }
     ],
@@ -27253,7 +27081,7 @@
         "korean": "신용 평가 등급"
       },
       {
-        "english": "decline",
+        "english": "drop",
         "korean": "하락하다"
       },
       {
@@ -27585,7 +27413,7 @@
   },
   {
     "id": "sent_1101",
-    "koreanText": "소프트웨어를 설치해야 합니다.",
+    "koreanText": "소프트웨어를 깔아야 해요.",
     "theme": "business",
     "difficulty": "beginner",
     "category": "IT/기술",
@@ -27760,7 +27588,7 @@
   },
   {
     "id": "sent_1108",
-    "koreanText": "업데이트를 설치해야 합니다.",
+    "koreanText": "업데이트를 깔아야 해요.",
     "theme": "business",
     "difficulty": "beginner",
     "category": "IT/기술",
@@ -28035,7 +27863,7 @@
   },
   {
     "id": "sent_1119",
-    "koreanText": "앱을 설치해야 합니다.",
+    "koreanText": "앱을 깔아야 해요.",
     "theme": "business",
     "difficulty": "beginner",
     "category": "IT/기술",
@@ -28985,7 +28813,7 @@
   },
   {
     "id": "sent_1157",
-    "koreanText": "손실을 피해야 합니다.",
+    "koreanText": "손실은 피해야 해.",
     "theme": "business",
     "difficulty": "beginner",
     "category": "주식/투자",
@@ -29174,7 +29002,7 @@
         "korean": "떨어지다"
       },
       {
-        "english": "decline",
+        "english": "drop",
         "korean": "하락"
       }
     ],
@@ -29370,7 +29198,7 @@
         "korean": "증시"
       },
       {
-        "english": "fluctuate",
+        "english": "go up and down",
         "korean": "변동하다"
       },
       {
@@ -29474,7 +29302,7 @@
         "korean": "주식 시장"
       },
       {
-        "english": "fluctuate",
+        "english": "go up and down",
         "korean": "변동하다"
       }
     ],
@@ -29574,8 +29402,8 @@
         "korean": "재구성하다"
       },
       {
-        "english": "allocate",
-        "korean": "배분하다"
+        "english": "put together",
+        "korean": "구성하다"
       }
     ],
     "tags": [
@@ -29624,7 +29452,7 @@
         "korean": "분석"
       },
       {
-        "english": "crucial",
+        "english": "key",
         "korean": "중요한"
       }
     ],
@@ -29895,7 +29723,7 @@
         "korean": "기대 수익"
       },
       {
-        "english": "exceed",
+        "english": "go over",
         "korean": "초과하다"
       },
       {
@@ -29949,7 +29777,7 @@
         "korean": "방어주"
       },
       {
-        "english": "allocate",
+        "english": "make up",
         "korean": "구성하다"
       }
     ],
@@ -30149,7 +29977,7 @@
         "korean": "올라가다"
       },
       {
-        "english": "significantly",
+        "english": "a lot",
         "korean": "크게"
       }
     ],
@@ -30245,7 +30073,7 @@
         "korean": "구조조정"
       },
       {
-        "english": "implement",
+        "english": "carry out",
         "korean": "단행하다"
       },
       {
@@ -30599,7 +30427,7 @@
         "korean": "분기"
       },
       {
-        "english": "decline",
+        "english": "drop",
         "korean": "감소하다"
       }
     ],
@@ -30774,7 +30602,7 @@
         "korean": "주가"
       },
       {
-        "english": "decline",
+        "english": "drop",
         "korean": "하락하다"
       }
     ],
@@ -31149,8 +30977,8 @@
         "korean": "구조 변화"
       },
       {
-        "english": "inevitable",
-        "korean": "불가피"
+        "english": "bound to happen",
+        "korean": "불가피한"
       }
     ],
     "tags": [
@@ -31422,10 +31250,6 @@
       {
         "english": "reservation",
         "korean": "예약"
-      },
-      {
-        "english": "did",
-        "korean": "했어요"
       }
     ],
     "tags": [
@@ -31472,10 +31296,6 @@
       {
         "english": "check",
         "korean": "확인"
-      },
-      {
-        "english": "did",
-        "korean": "했어요"
       }
     ],
     "tags": [
@@ -31543,10 +31363,6 @@
       {
         "english": "arrive",
         "korean": "도착"
-      },
-      {
-        "english": "did",
-        "korean": "했어요"
       }
     ],
     "tags": [
@@ -31764,10 +31580,6 @@
       {
         "english": "check-in",
         "korean": "체크인"
-      },
-      {
-        "english": "do",
-        "korean": "하다"
       },
       {
         "english": "checked in",
@@ -32545,7 +32357,7 @@
         "korean": "최종 보고서"
       },
       {
-        "english": "submit",
+        "english": "turn in",
         "korean": "제출하다"
       }
     ],
@@ -32589,10 +32401,6 @@
       {
         "english": "help",
         "korean": "도움"
-      },
-      {
-        "english": "can",
-        "korean": "할 수 있다"
       },
       {
         "english": "you",
@@ -32743,10 +32551,6 @@
       {
         "english": "popular",
         "korean": "인기"
-      },
-      {
-        "english": "very",
-        "korean": "매우"
       }
     ],
     "tags": [
@@ -32816,12 +32620,8 @@
         "korean": "환불"
       },
       {
-        "english": "help",
-        "korean": "도움"
-      },
-      {
-        "english": "assist",
-        "korean": "도우미"
+        "english": "help out",
+        "korean": "도와주다"
       }
     ],
     "tags": [
@@ -32943,10 +32743,6 @@
       {
         "english": "help",
         "korean": "도움"
-      },
-      {
-        "english": "can",
-        "korean": "할 수 있다"
       }
     ],
     "tags": [
@@ -33220,7 +33016,7 @@
         "korean": "빠르게"
       },
       {
-        "english": "assist",
+        "english": "help out",
         "korean": "도와주다"
       }
     ],
@@ -33466,8 +33262,8 @@
         "korean": "할인"
       },
       {
-        "english": "purchase",
-        "korean": "구매"
+        "english": "buy",
+        "korean": "사다"
       },
       {
         "english": "offer",
@@ -33745,7 +33541,7 @@
         "korean": "추가 정보"
       },
       {
-        "english": "require",
+        "english": "need",
         "korean": "필요하다"
       }
     ],
@@ -34167,7 +33963,7 @@
         "korean": "내려가다"
       },
       {
-        "english": "decline",
+        "english": "drop",
         "korean": "하락하다"
       },
       {
@@ -34461,8 +34257,8 @@
         "korean": "중개인"
       },
       {
-        "english": "purchase",
-        "korean": "구매"
+        "english": "buy",
+        "korean": "사다"
       }
     ],
     "tags": [
@@ -34540,12 +34336,12 @@
         "korean": "주식을 매수하다"
       },
       {
-        "english": "purchase",
-        "korean": "구매"
+        "english": "buy",
+        "korean": "사다"
       },
       {
-        "english": "acquire",
-        "korean": "획득하다"
+        "english": "get",
+        "korean": "얻다"
       },
       {
         "english": "long position",
@@ -35121,7 +34917,7 @@
         "korean": "수익성"
       },
       {
-        "english": "decline",
+        "english": "drop",
         "korean": "떨어지다"
       },
       {
@@ -35147,8 +34943,8 @@
         "korean": "IPO 공모가"
       },
       {
-        "english": "determine",
-        "korean": "결정하다"
+        "english": "figure out",
+        "korean": "정하다"
       },
       {
         "english": "trading volume",
@@ -35453,8 +35249,8 @@
         "korean": "투자자"
       },
       {
-        "english": "purchase",
-        "korean": "매수"
+        "english": "buy",
+        "korean": "사다"
       },
       {
         "english": "shareholder",
@@ -35525,8 +35321,8 @@
         "korean": "주주"
       },
       {
-        "english": "distribute",
-        "korean": "나누어주다"
+        "english": "hand out",
+        "korean": "나누다"
       }
     ],
     "tags": [
@@ -35573,8 +35369,8 @@
     "category": "주식/투자",
     "hintWords": [
       {
-        "english": "purchase",
-        "korean": "매수"
+        "english": "buy",
+        "korean": "사다"
       },
       {
         "english": "time",
@@ -35713,8 +35509,8 @@
         "korean": "정기적"
       },
       {
-        "english": "purchase",
-        "korean": "매수"
+        "english": "buy",
+        "korean": "사다"
       }
     ],
     "tags": [
@@ -35799,7 +35595,7 @@
         "korean": "수익"
       },
       {
-        "english": "confirm",
+        "english": "lock in",
         "korean": "확정하다"
       },
       {
@@ -35923,7 +35719,7 @@
         "korean": "수요"
       },
       {
-        "english": "fluctuate",
+        "english": "go up and down",
         "korean": "변동하다"
       },
       {
@@ -35953,7 +35749,7 @@
         "korean": "목표"
       },
       {
-        "english": "establish",
+        "english": "set up",
         "korean": "수립하다"
       },
       {
@@ -36409,8 +36205,8 @@
         "korean": "공개 모집"
       },
       {
-        "english": "initial",
-        "korean": "초기"
+        "english": "first",
+        "korean": "처음의"
       }
     ],
     "tags": [
@@ -37081,7 +36877,7 @@
         "korean": "그래픽 처리기"
       },
       {
-        "english": "significantly",
+        "english": "a lot",
         "korean": "크게"
       }
     ],
@@ -37137,8 +36933,8 @@
         "korean": "시리즈"
       },
       {
-        "english": "reveal",
-        "korean": "공개하다"
+        "english": "roll out",
+        "korean": "출시하다"
       },
       {
         "english": "new",
@@ -37347,7 +37143,7 @@
         "korean": "오르다"
       },
       {
-        "english": "significantly",
+        "english": "a lot",
         "korean": "크게"
       },
       {
@@ -38239,7 +38035,7 @@
         "korean": "사용자 만족도"
       },
       {
-        "english": "significantly",
+        "english": "a lot",
         "korean": "크게"
       },
       {
@@ -38651,7 +38447,7 @@
         "korean": "우위"
       },
       {
-        "english": "maintain",
+        "english": "keep up",
         "korean": "유지하다"
       }
     ],
@@ -38707,7 +38503,7 @@
         "korean": "국제 표준"
       },
       {
-        "english": "cooperate",
+        "english": "work with",
         "korean": "협력하다"
       },
       {
@@ -39439,10 +39235,6 @@
       {
         "english": "new trend",
         "korean": "새로운 트렌드"
-      },
-      {
-        "english": "be",
-        "korean": "이다"
       }
     ],
     "tags": [
@@ -40119,7 +39911,7 @@
         "korean": "투자자 신뢰도"
       },
       {
-        "english": "decline",
+        "english": "drop",
         "korean": "하락하다"
       }
     ],
@@ -40539,10 +40331,6 @@
       {
         "english": "Korean cafe",
         "korean": "한국 카페"
-      },
-      {
-        "english": "in",
-        "korean": "에서"
       }
     ],
     "tags": [
@@ -40647,10 +40435,6 @@
       {
         "english": "tonight",
         "korean": "오늘 저녁"
-      },
-      {
-        "english": "will",
-        "korean": "거예요"
       }
     ],
     "tags": [
@@ -40707,10 +40491,6 @@
       {
         "english": "cafe",
         "korean": "카페"
-      },
-      {
-        "english": "did",
-        "korean": "했어요"
       }
     ],
     "tags": [
@@ -40733,10 +40513,6 @@
       {
         "english": "want to eat",
         "korean": "먹고 싶다"
-      },
-      {
-        "english": "to",
-        "korean": "고"
       },
       {
         "english": "object marker",
@@ -40939,14 +40715,6 @@
       {
         "english": "eat",
         "korean": "식사하다"
-      },
-      {
-        "english": "did",
-        "korean": "했어요"
-      },
-      {
-        "english": "in",
-        "korean": "에서"
       }
     ],
     "tags": [
@@ -40973,10 +40741,6 @@
       {
         "english": "cafe",
         "korean": "카페"
-      },
-      {
-        "english": "in",
-        "korean": "에서"
       }
     ],
     "tags": [
@@ -41257,10 +41021,6 @@
       {
         "english": "this weekend",
         "korean": "이번 주말"
-      },
-      {
-        "english": "will",
-        "korean": "거예요"
       }
     ],
     "tags": [
@@ -42541,8 +42301,8 @@
         "korean": "가이드 투어"
       },
       {
-        "english": "participate",
-        "korean": "참가하다"
+        "english": "join",
+        "korean": "참여하다"
       }
     ],
     "tags": [
@@ -43077,7 +42837,7 @@
         "korean": "프론트"
       },
       {
-        "english": "inquire",
+        "english": "ask about",
         "korean": "문의하다"
       }
     ],
@@ -43223,8 +42983,8 @@
         "korean": "짐"
       },
       {
-        "english": "exceed",
-        "korean": "초과되다"
+        "english": "go over",
+        "korean": "초과하다"
       },
       {
         "english": "extra charge",
@@ -44001,22 +43761,14 @@
   },
   {
     "id": "sent_1681",
-    "koreanText": "나는 이 일을 잘할 수 있어",
+    "koreanText": "나는 이 일을 잘 해낼 수 있어.",
     "theme": "daily",
     "difficulty": "beginner",
     "category": "감정표현",
     "hintWords": [
       {
-        "english": "can",
-        "korean": "할 수 있어"
-      },
-      {
-        "english": "do",
-        "korean": "하다"
-      },
-      {
-        "english": "well",
-        "korean": "잘"
+        "english": "pull off",
+        "korean": "해내다"
       }
     ],
     "tags": [
@@ -44491,10 +44243,6 @@
         "korean": "일"
       },
       {
-        "english": "do",
-        "korean": "하다"
-      },
-      {
         "english": "ignore",
         "korean": "무시하다"
       },
@@ -44745,10 +44493,6 @@
       {
         "english": "overcome",
         "korean": "이겨내다"
-      },
-      {
-        "english": "can",
-        "korean": "할 수 있다"
       }
     ],
     "tags": [
@@ -45503,10 +45247,6 @@
       {
         "english": "get",
         "korean": "받다"
-      },
-      {
-        "english": "do",
-        "korean": "하다"
       }
     ],
     "tags": [
@@ -45593,10 +45333,6 @@
       {
         "english": "use",
         "korean": "사용"
-      },
-      {
-        "english": "well",
-        "korean": "잘"
       }
     ],
     "tags": [
@@ -45951,10 +45687,6 @@
       {
         "english": "receive",
         "korean": "받다"
-      },
-      {
-        "english": "can",
-        "korean": "할 수 있다"
       }
     ],
     "tags": [
@@ -47115,10 +46847,6 @@
     "category": "restaurant",
     "hintWords": [
       {
-        "english": "this",
-        "korean": "이것"
-      },
-      {
         "english": "please",
         "korean": "부탁합니다"
       }
@@ -47159,7 +46887,7 @@
     "category": "restaurant",
     "hintWords": [
       {
-        "english": "recommend",
+        "english": "suggest",
         "korean": "추천하다"
       },
       {
@@ -47557,10 +47285,6 @@
       {
         "english": "how much",
         "korean": "얼마"
-      },
-      {
-        "english": "this",
-        "korean": "이것"
       }
     ],
     "tags": [
@@ -47623,10 +47347,6 @@
       {
         "english": "try on",
         "korean": "입어 보다"
-      },
-      {
-        "english": "this",
-        "korean": "이것"
       }
     ],
     "tags": [
@@ -48371,10 +48091,6 @@
       {
         "english": "write down",
         "korean": "적다"
-      },
-      {
-        "english": "this",
-        "korean": "이것"
       }
     ],
     "tags": [
@@ -48593,7 +48309,7 @@
         "korean": "예약"
       },
       {
-        "english": "confirm",
+        "english": "check",
         "korean": "확인하다"
       }
     ],
@@ -48877,7 +48593,7 @@
         "korean": "체류 기간"
       },
       {
-        "english": "respond",
+        "english": "answer",
         "korean": "대답하다"
       }
     ],
@@ -49323,7 +49039,7 @@
         "korean": "잘 어울리다"
       },
       {
-        "english": "recommend",
+        "english": "suggest",
         "korean": "추천하다"
       }
     ],
@@ -49405,7 +49121,7 @@
         "korean": "식당"
       },
       {
-        "english": "recommend",
+        "english": "suggest",
         "korean": "추천하다"
       }
     ],
@@ -49869,8 +49585,8 @@
         "korean": "할인"
       },
       {
-        "english": "purchase",
-        "korean": "구매"
+        "english": "buy",
+        "korean": "사다"
       }
     ],
     "tags": [
@@ -50103,7 +49819,7 @@
         "korean": "가족 친화적인"
       },
       {
-        "english": "recommend",
+        "english": "suggest",
         "korean": "추천하다"
       }
     ],
@@ -50679,7 +50395,7 @@
         "korean": "변경된"
       },
       {
-        "english": "confirm",
+        "english": "check",
         "korean": "확인하다"
       }
     ],
@@ -50939,8 +50655,8 @@
         "korean": "절차"
       },
       {
-        "english": "obtain",
-        "korean": "받다"
+        "english": "get",
+        "korean": "얻다"
       }
     ],
     "tags": [
