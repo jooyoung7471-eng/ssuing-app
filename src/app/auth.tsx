@@ -211,26 +211,6 @@ export default function AuthScreen() {
               </TouchableOpacity>
             )}
 
-            {/* Google Sign In */}
-            <TouchableOpacity
-              style={styles.googleButton}
-              onPress={() => handleSocialLogin('google')}
-              activeOpacity={0.8}
-            >
-              <Text style={styles.googleIcon}>G</Text>
-              <Text style={styles.googleButtonText}>Google{'\uB85C \uACC4\uC18D\uD558\uAE30'}</Text>
-            </TouchableOpacity>
-
-            {/* Kakao Sign In */}
-            <TouchableOpacity
-              style={styles.kakaoButton}
-              onPress={() => handleSocialLogin('kakao')}
-              activeOpacity={0.8}
-            >
-              <Text style={styles.kakaoIcon}>K</Text>
-              <Text style={styles.kakaoButtonText}>{'\uCE74\uCE74\uC624\uB85C \uACC4\uC18D\uD558\uAE30'}</Text>
-            </TouchableOpacity>
-
             {/* Guest link */}
             <TouchableOpacity onPress={handleGuest} style={styles.guestButton}>
               <Text style={styles.guestText}>{'\uAC8C\uC2A4\uD2B8\uB85C \uB458\uB7EC\uBCF4\uAE30'}</Text>

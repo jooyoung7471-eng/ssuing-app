@@ -226,20 +226,7 @@ export default function SettingsScreen() {
                   <Text style={styles.linkAppleText}>Apple \uACC4\uC815 \uC5F0\uB3D9</Text>
                 </TouchableOpacity>
               )}
-              <TouchableOpacity
-                style={styles.linkGoogleButton}
-                onPress={() => handleLinkAccount('google')}
-                activeOpacity={0.7}
-              >
-                <Text style={styles.linkGoogleText}>Google \uACC4\uC815 \uC5F0\uB3D9</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.linkKakaoButton}
-                onPress={() => handleLinkAccount('kakao')}
-                activeOpacity={0.7}
-              >
-                <Text style={styles.linkKakaoText}>{'\uCE74\uCE74\uC624 \uACC4\uC815 \uC5F0\uB3D9'}</Text>
-              </TouchableOpacity>
+              {/* Google/카카오는 추후 지원 예정 */}
             </View>
           </View>
         )}
