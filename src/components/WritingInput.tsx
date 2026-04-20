@@ -5,8 +5,6 @@ import {
   TextInput,
   TouchableOpacity,
   View,
-  KeyboardAvoidingView,
-  Platform,
   ActivityIndicator,
 } from 'react-native';
 import { colors } from '../constants/colors';
@@ -31,10 +29,7 @@ export default function WritingInput({
   const canSubmit = value.length >= MIN_CHARS && !loading && !disabled;
 
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      style={styles.container}
-    >
+    <View style={styles.container}>
       <View style={styles.inputCard}>
         <TextInput
           style={styles.input}
@@ -70,7 +65,7 @@ export default function WritingInput({
           )}
         </TouchableOpacity>
       </View>
-    </KeyboardAvoidingView>
+    </View>
   );
 }
 

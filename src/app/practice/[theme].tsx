@@ -265,6 +265,7 @@ export default function PracticeScreen() {
           contentContainerStyle={styles.scroll}
           keyboardShouldPersistTaps="handled"
           showsVerticalScrollIndicator={false}
+          automaticallyAdjustKeyboardInsets
         >
           {currentSentence && (
             <View key={currentSentence.id}>
