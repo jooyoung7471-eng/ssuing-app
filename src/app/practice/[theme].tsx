@@ -245,7 +245,7 @@ export default function PracticeScreen() {
         <View style={styles.decoCircle3} />
 
         <SafeAreaView edges={['top']} style={styles.topBar}>
-          <Text style={styles.backButton} onPress={() => router.back()}>{'\u2190'}</Text>
+          <Text style={styles.backButton} onPress={() => router.back()} hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}>{'\u2190'}</Text>
           <Text style={styles.pageCounter}>{currentIndex + 1} / {safeSentences.length}</Text>
           <View style={{ width: 30 }} />
         </SafeAreaView>
@@ -350,7 +350,7 @@ export default function PracticeScreen() {
       <CompletionModal
         visible={showModal}
         themeTitle={themeTitle}
-        averageScore={averageScore}
+        averageScore={Math.round(averageScore * 10) / 10}
         streakDays={0}
         totalXp={totalXpEarned}
         currentLevel={currentLevel}

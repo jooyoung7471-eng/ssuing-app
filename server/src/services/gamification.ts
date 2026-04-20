@@ -69,12 +69,11 @@ export async function processCorrection(
   const xpEarned = calculateXP(score);
 
   // Get or create UserStats
-  let stats = await prisma.userStats.findUnique({ where: { user_id: userId } });
-  if (!stats) {
-    stats = await prisma.userStats.create({
-      data: { user_id: userId },
-    });
-  }
+  let stats = await prisma.userStats.upsert({
+    where: { user_id: userId },
+    update: {},
+    create: { user_id: userId },
+  });
 
   // Calculate streak
   let newStreakDays = stats.streak_days;
@@ -167,12 +166,11 @@ export async function processCorrection(
 }
 
 export async function getStats(userId: string) {
-  let stats = await prisma.userStats.findUnique({ where: { user_id: userId } });
-  if (!stats) {
-    stats = await prisma.userStats.create({
-      data: { user_id: userId },
-    });
-  }
+  let stats = await prisma.userStats.upsert({
+    where: { user_id: userId },
+    update: {},
+    create: { user_id: userId },
+  });
   return {
     totalXP: stats.total_xp,
     level: stats.level,

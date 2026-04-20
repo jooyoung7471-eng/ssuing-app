@@ -33,7 +33,7 @@ export default function ScoreDisplay({ score, maxScore = 10 }: ScoreDisplayProps
   return (
     <View style={styles.container}>
       <View style={styles.scoreRow}>
-        <Text style={[styles.score, { color: scoreColor }]}>{score}</Text>
+        <Text style={[styles.score, { color: scoreColor }]}>{Math.round(score * 10) / 10}</Text>
         <Text style={styles.maxScore}>/{maxScore}</Text>
       </View>
       <View style={styles.barBg}>

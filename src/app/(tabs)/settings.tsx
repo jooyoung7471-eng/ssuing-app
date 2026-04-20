@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, Alert, Platform, Switch } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Alert, Platform, Switch, Linking } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
@@ -297,11 +297,35 @@ export default function SettingsScreen() {
           )}
         </View>
 
-        {/* Version */}
+        {/* Version & Links */}
         <View style={styles.item}>
           <Text style={styles.label}>버전</Text>
-          <Text style={styles.value}>1.0.0</Text>
+          <Text style={styles.value}>1.1.0</Text>
         </View>
+
+        <TouchableOpacity
+          style={styles.item}
+          onPress={() => Linking.openURL('https://ssuing-app-production.up.railway.app/privacy')}
+          activeOpacity={0.7}
+        >
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+            <Ionicons name="shield-checkmark-outline" size={18} color={colors.text.primary} />
+            <Text style={styles.label}>개인정보 처리방침</Text>
+          </View>
+          <Ionicons name="chevron-forward" size={16} color={colors.text.hint} />
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.item}
+          onPress={() => Linking.openURL('mailto:ssuing.app@gmail.com?subject=[쓰잉] 문의')}
+          activeOpacity={0.7}
+        >
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+            <Ionicons name="mail-outline" size={18} color={colors.text.primary} />
+            <Text style={styles.label}>문의하기</Text>
+          </View>
+          <Text style={[styles.value, { fontSize: 12 }]}>ssuing.app@gmail.com</Text>
+        </TouchableOpacity>
 
         {/* Logout button */}
         <TouchableOpacity

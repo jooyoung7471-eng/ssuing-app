@@ -45,6 +45,9 @@ export default function WritingInput({
           onChangeText={onChangeText}
           editable={!disabled}
           textAlignVertical="top"
+          submitBehavior="submit"
+          onSubmitEditing={() => { if (canSubmit) onSubmit(); }}
+          returnKeyType="done"
         />
       </View>
 

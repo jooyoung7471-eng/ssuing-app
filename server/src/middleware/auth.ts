@@ -16,23 +16,27 @@ const JWT_SECRET = process.env.JWT_SECRET || "dev-secret-DO-NOT-USE-IN-PRODUCTIO
 const GUEST_USER_ID = "guest-user-00000000";
 const prisma = new PrismaClient();
 
-let guestUserEnsured = false;
-async function ensureGuestUser() {
-  if (guestUserEnsured) return;
+const ensuredDevices = new Set<string>();
+
+async function ensureGuestUser(deviceId?: string) {
+  const userId = deviceId ? `guest-${deviceId}` : GUEST_USER_ID;
+  if (ensuredDevices.has(userId)) return userId;
   try {
-    const existing = await prisma.user.findUnique({ where: { id: GUEST_USER_ID } });
-    if (!existing) {
-      const hashedGuestPassword = await bcrypt.hash("guest-no-login-allowed", 10);
-      await prisma.user.create({
-        data: { id: GUEST_USER_ID, email: "guest@engwrite.local", password: hashedGuestPassword },
-      });
-    }
-    guestUserEnsured = true;
+    const email = `guest-${deviceId || "default"}@engwrite.local`;
+    const hashedGuestPassword = await bcrypt.hash("guest-no-login-allowed", 10);
+    await prisma.user.upsert({
+      where: { id: userId },
+      update: {},
+      create: { id: userId, email, password: hashedGuestPassword },
+    });
+    ensuredDevices.add(userId);
   } catch (err) {
-    console.warn("Guest user setup deferred:", (err as Error).message);
+    // DB 에러 시에도 userId는 반환 (다음 요청에서 재시도)
+    console.warn("Guest user setup:", (err as Error).message);
   }
+  return userId;
 }
-// Defer guest user creation to avoid crash if DB isn't ready at import time
+// Ensure legacy guest user exists
 setTimeout(() => ensureGuestUser(), 2000);
 
 export function authMiddleware(req: Request, _res: Response, next: NextFunction) {
@@ -63,6 +67,10 @@ export function optionalAuthMiddleware(req: Request, _res: Response, next: NextF
       // invalid token — fall through to guest
     }
   }
-  req.user = { userId: GUEST_USER_ID, email: "guest@engwrite.local" };
+  const deviceId = req.headers["x-device-id"] as string | undefined;
+  const userId = deviceId ? `guest-${deviceId}` : GUEST_USER_ID;
+  req.user = { userId, email: `guest-${deviceId || "default"}@engwrite.local` };
+  // 게스트 유저 DB 생성은 백그라운드로 (미들웨어 블로킹 방지)
+  ensureGuestUser(deviceId).catch(() => {});
   next();
 }

@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Stack, useRouter, useSegments } from 'expo-router';
 import { StyleSheet, View, Platform, ActivityIndicator } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import * as SplashScreen from 'expo-splash-screen';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { colors } from '../constants/colors';
 import { useAuthStore } from '../stores/authStore';
@@ -12,13 +13,14 @@ const TERMS_AGREED_KEY = 'terms_agreed';
 const isWeb = Platform.OS === 'web';
 const Wrapper = isWeb ? View : GestureHandlerRootView;
 
+SplashScreen.preventAutoHideAsync();
+
 function useProtectedRoute(onboardingDone: boolean | null, termsAgreed: boolean | null) {
   const { token, isGuest, isReady } = useAuthStore();
   const segments = useSegments();
   const router = useRouter();
 
   useEffect(() => {
-    // Wait until all async checks are ready
     if (onboardingDone === null || termsAgreed === null || !isReady) return;
 
     const inOnboarding = segments[0] === 'onboarding';
@@ -26,18 +28,15 @@ function useProtectedRoute(onboardingDone: boolean | null, termsAgreed: boolean 
     const inTermsScreen = segments[0] === 'terms';
     const isAuthenticated = !!token || isGuest;
 
-    // Step 1: onboarding not done yet → go to onboarding
     if (!onboardingDone && !inOnboarding) {
       router.replace('/onboarding');
       return;
     }
 
-    // Step 2: onboarding done → normal auth flow
     if (onboardingDone) {
       if (!isAuthenticated && !inAuthScreen && !inOnboarding) {
         router.replace('/auth');
       } else if (isAuthenticated && !termsAgreed && !inTermsScreen && !inAuthScreen && !inOnboarding) {
-        // Authenticated but hasn't agreed to terms yet
         router.replace('/terms');
       } else if (isAuthenticated && termsAgreed && (inAuthScreen || inOnboarding || inTermsScreen)) {
         router.replace('/(tabs)');
@@ -59,6 +58,9 @@ export default function RootLayout() {
     AsyncStorage.getItem(TERMS_AGREED_KEY).then((value) => {
       setTermsAgreed(value === 'true');
     });
+    // 스플래시 1.5초 유지 후 숨김
+    const timer = setTimeout(() => SplashScreen.hideAsync(), 1500);
+    return () => clearTimeout(timer);
   }, []);
 
   useProtectedRoute(onboardingDone, termsAgreed);

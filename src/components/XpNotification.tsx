@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import Animated, { FadeIn, FadeOut, SlideInUp } from 'react-native-reanimated';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 interface XpNotificationProps {
   xpEarned: number;
@@ -15,6 +16,8 @@ export default function XpNotification({
   newLevel,
   onDismiss,
 }: XpNotificationProps) {
+  const insets = useSafeAreaInsets();
+
   useEffect(() => {
     const timer = setTimeout(onDismiss, 2000);
     return () => clearTimeout(timer);
@@ -24,7 +27,7 @@ export default function XpNotification({
     <Animated.View
       entering={SlideInUp.duration(400)}
       exiting={FadeOut.duration(300)}
-      style={styles.container}
+      style={[styles.container, { paddingTop: insets.top + 12 }]}
     >
       <View style={styles.content}>
         <Text style={styles.xpText}>+{xpEarned} XP</Text>

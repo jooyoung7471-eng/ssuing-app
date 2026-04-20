@@ -32,7 +32,7 @@ export default function CorrectionResult({
       <View style={styles.errorContainer}>
         <Text style={styles.errorText}>{error}</Text>
         {onRetry && (
-          <Text style={styles.retryText} onPress={onRetry}>
+          <Text style={styles.retryText} onPress={onRetry} hitSlop={{ top: 12, bottom: 12, left: 24, right: 24 }}>
             다시 시도
           </Text>
         )}
@@ -175,6 +175,7 @@ const styles = StyleSheet.create({
   highlightRow: {
     flexDirection: 'row',
     alignItems: 'center',
+    flexWrap: 'wrap',
     gap: 8,
     marginBottom: 2,
   },
@@ -183,6 +184,7 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     color: colors.error,
     textDecorationLine: 'line-through',
+    flexShrink: 1,
   },
   arrow: {
     fontSize: 14,
@@ -192,6 +194,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '700',
     color: colors.success,
+    flexShrink: 1,
   },
   reason: {
     fontSize: 12,
