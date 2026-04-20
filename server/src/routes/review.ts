@@ -90,6 +90,7 @@ router.post("/retry", optionalAuthMiddleware, async (req: Request, res: Response
         createdAt: correction.created_at.toISOString(),
         xpEarned: gamification.xpEarned,
         levelUp: gamification.levelUp,
+        newLevel: gamification.newLevel,
         newAchievements: gamification.newAchievements,
       },
     });

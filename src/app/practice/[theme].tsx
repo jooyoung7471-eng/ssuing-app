@@ -22,7 +22,7 @@ import type { Theme } from '../../types';
 const THEME_GRADIENTS: Record<string, [string, string]> = {
   daily: [colors.primary, colors.primaryDark],
   travel: [colors.theme.travel, '#065F46'],
-  biz: [colors.secondary, colors.secondaryDark],
+  business: [colors.secondary, colors.secondaryDark],
 };
 
 export default function PracticeScreen() {
