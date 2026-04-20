@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8"/>
+<title>쓰잉 UI · 3 Styles</title>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="tokens.js"></script>
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/babel" src="design-canvas.jsx"></script>
+<script type="text/babel" src="ios-frame.jsx"></script>
+<script type="text/babel" src="screens-duolingo.jsx"></script>
+<script type="text/babel" src="screens-notion.jsx"></script>
+<script type="text/babel" src="screens-original.jsx"></script>
+<script type="text/babel" src="screens-c-v2.jsx"></script>
+<script type="text/babel" src="screens-c-v3.jsx"></script>
+
+<script type="text/babel">
+const SCREENS = [
+  { key: 'Onboarding', label: '1. 온보딩', dark: true },
+  { key: 'Onb2',       label: '1b. 온보딩 2', dark: false },
+  { key: 'Onb3',       label: '1c. 온보딩 3', dark: false },
+  { key: 'Login',      label: '2. 로그인',  dark: true },
+  { key: 'Terms',      label: '3. 약관 동의', dark: false },
+  { key: 'Home',       label: '4. 홈 ★',     dark: false, star: true },
+  { key: 'HomeDark',   label: '4b. 홈 (다크)', dark: true },
+  { key: 'Practice',   label: '5. 학습',     dark: false },
+  { key: 'History',    label: '6. 학습 기록', dark: false },
+  { key: 'Empty',      label: '6b. 빈 상태', dark: false },
+  { key: 'Error',      label: '6c. 에러 상태', dark: false },
+  { key: 'Settings',   label: '7. 설정',     dark: false },
+  // v3 practice flow + rewards
+  { key: 'PracticeEmpty',   label: '5a. 학습 · 작성 전',   dark: false },
+  { key: 'PracticeTyping',  label: '5b. 학습 · 작성 중',   dark: false },
+  { key: 'PracticeGrading', label: '5c. 학습 · AI 분석',   dark: false },
+  { key: 'PracticeResult',  label: '5d. 학습 · 결과',      dark: false },
+  { key: 'DailyComplete',   label: '5e. 데일리 완료',      dark: false },
+  { key: 'LevelUp',         label: '5f. 레벨업',           dark: false },
+  { key: 'StreakPlus',      label: '5g. 스트릭 +1',        dark: false },
+];
+
+// Scales the screen content (390×780) into the iOS frame interior.
+// IOSDevice inner area is about 390×780 already (width 402, height 874).
+const PhoneFrame = ({ children, dark }) => (
+  <div style={{ transform: 'scale(0.72)', transformOrigin: 'top left',
+    width: 402*0.72 + 'px', height: 874*0.72 + 'px' }}>
+    <IOSDevice width={402} height={874} dark={dark}>
+      {/* iOS frame already renders a status bar + Dynamic Island (≈ y=0–54).
+          Push app content below so its own header bar clears the island. */}
+      <div style={{ paddingTop: 4 }}>{children}</div>
+    </IOSDevice>
+  </div>
+);
+
+const Row = ({ title, subtitle, screens, setName, accent }) => (
+  <DCSection title={title} subtitle={subtitle} gap={28}>
+    {SCREENS.map(s => {
+      const Comp = setName && setName[s.key];
+      if (!Comp) return null;
+      return (
+        <DCArtboard
+          key={s.key}
+          label={s.label}
+          width={402*0.72}
+          height={874*0.72}
+          style={{ background: 'transparent', boxShadow: 'none', borderRadius: 0, overflow: 'visible' }}
+        >
+          <PhoneFrame dark={s.dark}>
+            <Comp/>
+          </PhoneFrame>
+        </DCArtboard>
+      );
+    })}
+  </DCSection>
+);
+
+// ─── Tweaks panel ───────────────────────────────────────────
+const SWATCHES = [
+  { name: '브랜드 블루 (기본)',  c: '#4A90D9' },
+  { name: '듀오 그린',           c: '#58CC02' },
+  { name: '바이올렛',            c: '#7C3AED' },
+  { name: '코랄',                c: '#FB7185' },
+  { name: '에메랄드',            c: '#10B981' },
+  { name: '인디고',              c: '#4F46E5' },
+  { name: '선셋 오렌지',         c: '#F97316' },
+  { name: '노션 블랙',           c: '#37352F' },
+];
+
+function TweaksPanel({ visible, value, onChange, onClose }) {
+  if (!visible) return null;
+  return (
+    <div style={{
+      position: 'fixed', right: 20, bottom: 20, zIndex: 1000,
+      width: 280, background: '#fff', borderRadius: 16,
+      boxShadow: '0 24px 48px -12px rgba(0,0,0,0.25), 0 0 0 1px rgba(0,0,0,0.08)',
+      fontFamily: window.TOKENS.font, overflow: 'hidden',
+    }}>
+      <div style={{ padding: '12px 14px', display: 'flex', alignItems: 'center',
+        borderBottom: '1px solid #EAECEF', background: '#FAFBFC' }}>
+        <span style={{ fontSize: 14, fontWeight: 800, letterSpacing: -0.3, flex: 1 }}>Tweaks</span>
+        <button onClick={onClose} style={{ background: 'transparent', border: 'none', fontSize: 18, cursor: 'pointer', color: '#6B7280' }}>×</button>
+      </div>
+      <div style={{ padding: 14 }}>
+        <div style={{ fontSize: 11, fontWeight: 700, color: '#6B7280', textTransform: 'uppercase', letterSpacing: 0.8, marginBottom: 8 }}>
+          Primary Color
+        </div>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 8 }}>
+          {SWATCHES.map(s => {
+            const active = value.toLowerCase() === s.c.toLowerCase();
+            return (
+              <button key={s.c} onClick={() => onChange(s.c)} title={s.name} style={{
+                width: '100%', aspectRatio: '1',
+                background: s.c, border: active ? '3px solid #111' : '2px solid #fff',
+                outline: active ? 'none' : `1px solid #EAECEF`,
+                borderRadius: 12, cursor: 'pointer',
+                boxShadow: active ? '0 0 0 3px #fff, 0 0 0 5px #111' : 'none',
+              }}/>
+            );
+          })}
+        </div>
+        <div style={{ marginTop: 10, fontSize: 11, color: '#6B7280', lineHeight: 1.4 }}>
+          홈 화면의 프로필 카드, 일상 테마, 학습 화면의 헤더 및 CTA에 적용됩니다.
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ToggleHint({ visible }) {
+  if (visible) return null;
+  return (
+    <div style={{
+      position: 'fixed', right: 20, bottom: 20, zIndex: 999,
+      background: '#1A1A2E', color: '#fff', padding: '10px 14px', borderRadius: 12,
+      fontFamily: window.TOKENS.font, fontSize: 12, fontWeight: 600,
+      boxShadow: '0 8px 20px -4px rgba(0,0,0,0.25)', opacity: 0.85,
+    }}>
+      툴바의 <b style={{ color: '#FFC800' }}>Tweaks</b> 토글로 Primary 색상 변경
+    </div>
+  );
+}
+
+function App() {
+  const [primary, setPrimary] = React.useState(window.TWEAK_DEFAULTS.primaryColor);
+  const [tweaksOn, setTweaksOn] = React.useState(false);
+
+  React.useEffect(() => { window.applyPrimary(primary); }, [primary]);
+
+  // Tweaks protocol — register listener BEFORE announcing
+  React.useEffect(() => {
+    const handler = (e) => {
+      if (!e.data || typeof e.data !== 'object') return;
+      if (e.data.type === '__activate_edit_mode') setTweaksOn(true);
+      if (e.data.type === '__deactivate_edit_mode') setTweaksOn(false);
+    };
+    window.addEventListener('message', handler);
+    window.parent.postMessage({ type: '__edit_mode_available' }, '*');
+    return () => window.removeEventListener('message', handler);
+  }, []);
+
+  const onChange = (c) => {
+    setPrimary(c);
+    window.parent.postMessage({ type: '__edit_mode_set_keys', edits: { primaryColor: c } }, '*');
+  };
+
+  return (
+    <>
+      <DesignCanvas>
+        {/* hero title */}
+        <div style={{ padding: '0 60px 36px' }}>
+          <div style={{ fontSize: 13, fontWeight: 700, color: '#6B7280', letterSpacing: 1.4, marginBottom: 8 }}>
+            SSUING · UI EXPLORATION
+          </div>
+          <div style={{ fontSize: 44, fontWeight: 900, letterSpacing: -1.5, lineHeight: 1.1, color: '#1A1A2E' }}>
+            쓰잉 — 영어 작문 학습 앱
+          </div>
+          <div style={{ fontSize: 15, color: '#6B7280', marginTop: 8, maxWidth: 600, lineHeight: 1.6 }}>
+            7개 핵심 화면을 세 가지 방향으로 탐색했습니다. 각 방향은 동일한 정보 구조를 공유하되,
+            시각 언어·어조·게이미피케이션의 강도가 다릅니다. iPhone 15 Pro 프레임, Pretendard 적용.
+          </div>
+
+          <a href="prototype.html" style={{
+            display: 'inline-flex', alignItems: 'center', gap: 10,
+            marginTop: 20, padding: '12px 18px',
+            background: 'linear-gradient(135deg, #4A90D9, #7C5CFA)',
+            color: '#fff', textDecoration: 'none',
+            borderRadius: 12, fontSize: 14, fontWeight: 700, letterSpacing: -0.2,
+            boxShadow: '0 8px 24px rgba(74,144,217,0.35)',
+          }}>
+            <span style={{ fontSize: 16 }}>▶</span>
+            인터랙티브 프로토타입 열기
+            <span style={{ opacity: 0.7, fontSize: 12, fontWeight: 500 }}>온보딩 → 학습 → 완료</span>
+          </a>
+        </div>
+
+        <Row
+          title="Option A — 듀오링고 스타일"
+          subtitle="게임처럼 중독성 · 두꺼운 폰트 · 하단 그림자(neobrutalism-lite) · 활기찬 색상"
+          setName={window.DuoScreens}
+        />
+        <Row
+          title="Option B — 노션 스타일"
+          subtitle="문서처럼 차분 · 미니멀 · 여백과 타이포 중심 · 의도적으로 덜 장식적"
+          setName={window.NotionScreens}
+        />
+        <Row
+          title="Option C — 오리지널 (프리미엄 브랜드)"
+          subtitle="부드러운 그라데이션 · 세련된 카드 · 유료 앱 감성 · 쓰잉 고유의 톤"
+          setName={window.OrigScreens}
+        />
+
+        <div style={{ padding: '40px 60px 20px' }}>
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: 10, padding: '6px 14px',
+            borderRadius: 999, background: '#1A1A2E', color: '#fff', fontSize: 12, fontWeight: 800, letterSpacing: 0.8 }}>
+            <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#58CC02' }}/>
+            SELECTED · C 베이스 디벨롭 v2
+          </div>
+          <div style={{ fontSize: 28, fontWeight: 900, letterSpacing: -1, marginTop: 12, color: '#1A1A2E' }}>
+            Option C · v2 — 선택안 고도화
+          </div>
+          <div style={{ fontSize: 14, color: '#6B7280', marginTop: 6, maxWidth: 720, lineHeight: 1.6 }}>
+            C의 프리미엄 톤을 유지하면서 A의 스트릭 배지·퀵액세스 뱃지, XP 카운트업 애니메이션을 병합했습니다.
+            홈의 테마 카드에는 <b>진행 중 / 완료</b> 상태를 추가했습니다. 온보딩 2·3 페이지, 빈 상태, 에러 상태,
+            다크 모드 홈까지 보조 화면을 추가했습니다.
+          </div>
+        </div>
+
+        <Row
+          title="v2.1 — 홈 디벨롭 + 스트릭 배지"
+          subtitle="🔥 스트릭 배지(A에서) · XP 게이지 진입 애니메이션 · 테마 카드의 3가지 상태(기본·진행중·완료) · 퀵액세스 숫자 뱃지"
+          setName={{ Home: window.CV2Screens && window.CV2Screens.Home }}
+        />
+
+        <Row
+          title="v2.2 — 온보딩 시퀀스 확장"
+          subtitle="1·2·3 페이지 전체 시퀀스 — 블루(제품 소개) → 그린(AI 교정) → 앰버(하루 3문장 습관)"
+          setName={{
+            Onboarding: window.CV2Screens && window.CV2Screens.Onboarding,
+            Onb2: window.CV2Screens && window.CV2Screens.Onb2,
+            Onb3: window.CV2Screens && window.CV2Screens.Onb3,
+          }}
+        />
+
+        <Row
+          title="v2.3 — 보조 상태 + 다크 모드"
+          subtitle="빈 상태(첫 사용 유도) · 에러 상태(오프라인 폴백) · 다크 모드 홈 — 시스템 화면들의 디테일"
+          setName={{
+            Empty: window.CV2Screens && window.CV2Screens.Empty,
+            Error: window.CV2Screens && window.CV2Screens.Error,
+            HomeDark: window.CV2Screens && window.CV2Screens.HomeDark,
+          }}
+        />
+
+        <div style={{ padding: '40px 60px 20px' }}>
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: 10, padding: '6px 14px',
+            borderRadius: 999, background: '#1A1A2E', color: '#fff', fontSize: 12, fontWeight: 800, letterSpacing: 0.8 }}>
+            <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#FB923C' }}/>
+            v3 · 핵심 플로우 고도화
+          </div>
+          <div style={{ fontSize: 28, fontWeight: 900, letterSpacing: -1, marginTop: 12, color: '#1A1A2E' }}>
+            Option C · v3 — 학습 경험 디벨롭
+          </div>
+          <div style={{ fontSize: 14, color: '#6B7280', marginTop: 6, maxWidth: 720, lineHeight: 1.6 }}>
+            앱의 심장인 <b>AI 교정 플로우</b>를 5단계로 쪼개 각 순간을 정밀하게 디자인했습니다.
+            완료 후 성취감을 느낄 수 있는 <b>데일리 리워드·레벨업·스트릭</b> 축하 화면도 추가했습니다.
+          </div>
+        </div>
+
+        <Row
+          title="v3.1 — 학습 플로우 5단계"
+          subtitle="작성 전(빈 입력) → 작성 중(라이브 어시스트) → AI 분석(프로그레스) → 결과(diff 하이라이트)"
+          setName={{
+            PracticeEmpty: window.CV3Screens && window.CV3Screens.PracticeEmpty,
+            PracticeTyping: window.CV3Screens && window.CV3Screens.PracticeTyping,
+            PracticeGrading: window.CV3Screens && window.CV3Screens.PracticeGrading,
+            PracticeResult: window.CV3Screens && window.CV3Screens.PracticeResult,
+          }}
+        />
+
+        <Row
+          title="v3.2 — 성취 · 축하 순간"
+          subtitle="데일리 3문장 완수 · 레벨업 모달 · 스트릭 +1 토스트 — 동기 부여의 핵심 터치포인트"
+          setName={{
+            DailyComplete: window.CV3Screens && window.CV3Screens.DailyComplete,
+            LevelUp: window.CV3Screens && window.CV3Screens.LevelUp,
+            StreakPlus: window.CV3Screens && window.CV3Screens.StreakPlus,
+          }}
+        />
+
+        <DCPostIt top={-20} left={520} rotate={-3}>
+          Option A 홈화면: 프로필 카드 + 테마 카드의 '4px bottom shadow' 듀오링고 시그니처 🎮
+        </DCPostIt>
+        <DCPostIt top={-10} left={1720} rotate={2} width={200}>
+          Option B: 모든 화면을 노션 문서처럼 설계 — 속성 테이블, 토글 리스트, 콜아웃 사용
+        </DCPostIt>
+
+        <div style={{ padding: '20px 60px 60px', maxWidth: 900, color: '#6B7280', fontSize: 13, lineHeight: 1.7 }}>
+          <b style={{ color: '#1A1A2E', fontSize: 14 }}>다음 단계 제안</b><br/>
+          • 세 방향 중 베이스 선정 → 나머지에서 좋은 요소 병합 (예: A의 프로필 카드 + C의 테마 카드)<br/>
+          • 커스텀 일러스트 발전: 현재 플랫 SVG를 일러스트레이터 발주용 가이드로 변환<br/>
+          • 다크 모드 변형 · 교정 애니메이션(점수 카운트업, 문장 하이라이트) 목업<br/>
+          • 온보딩 2/3페이지, 빈 상태, 에러 상태 등 보조 화면 추가
+        </div>
+      </DesignCanvas>
+
+      <TweaksPanel
+        visible={tweaksOn}
+        value={primary}
+        onChange={onChange}
+        onClose={() => {
+          setTweaksOn(false);
+          window.parent.postMessage({ type: '__edit_mode_deactivated' }, '*');
+        }}
+      />
+      <ToggleHint visible={tweaksOn}/>
+    </>
+  );
+}
+
+// Poll until all three screen sets are registered by their Babel-transpiled scripts.
+(function waitAndMount() {
+  if (window.DuoScreens && window.NotionScreens && window.OrigScreens && window.CV2Screens && window.CV3Screens
+      && window.DesignCanvas && window.IOSDevice) {
+    ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+  } else {
+    setTimeout(waitAndMount, 50);
+  }
+})();
+</script>
+</body>
+</html>
