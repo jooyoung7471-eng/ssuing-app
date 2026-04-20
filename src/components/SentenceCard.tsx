@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, LayoutAnimation, Platform, UIManager } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { colors } from '../constants/colors';
+import { typography } from '../constants/typography';
+import { spacing, radius, shadows } from '../constants/spacing';
 import HintWords from './HintWords';
 import type { Sentence } from '../types';
 
@@ -16,7 +18,7 @@ interface SentenceCardProps {
 }
 
 export default function SentenceCard({ sentence, index, total }: SentenceCardProps) {
-  const [vocabOpen, setVocabOpen] = useState(false);
+  const [vocabOpen, setVocabOpen] = useState(true);
 
   const toggleVocab = () => {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
@@ -25,22 +27,36 @@ export default function SentenceCard({ sentence, index, total }: SentenceCardPro
 
   return (
     <View style={styles.container}>
+      {/* Number badge */}
       <View style={styles.numberBadge}>
         <Text style={styles.numberText}>{index + 1}</Text>
       </View>
 
+      {/* Korean prompt card */}
       <View style={styles.korCard}>
+        <View style={styles.korHeader}>
+          <Text style={styles.korLabel}>KOREAN</Text>
+        </View>
         <Text style={styles.koreanText}>{sentence.koreanText}</Text>
+        {(sentence as any).grammarHint && (
+          <Text style={styles.grammarHint}>
+            {'\u{1F4A1}'} {(sentence as any).grammarHint}
+          </Text>
+        )}
       </View>
 
+      {/* Vocab toggle */}
       <TouchableOpacity style={styles.vocabHeader} onPress={toggleVocab} activeOpacity={0.7}>
-        <Text style={styles.vocabTitle}>KEY VOCABULARY</Text>
         <Ionicons
           name={vocabOpen ? 'chevron-up' : 'chevron-down'}
-          size={18}
-          color="#374151"
+          size={16}
+          color={colors.text.secondary}
         />
+        <Text style={styles.vocabTitle}>
+          {vocabOpen ? '힌트 접기' : '힌트 보기'}
+        </Text>
       </TouchableOpacity>
+
       {vocabOpen && (
         <View style={styles.vocabBody}>
           <HintWords hints={sentence.hintWords || []} />
@@ -52,67 +68,74 @@ export default function SentenceCard({ sentence, index, total }: SentenceCardPro
 
 const styles = StyleSheet.create({
   container: {
-    paddingHorizontal: 20,
+    paddingHorizontal: spacing.screenPadding,
     alignItems: 'center',
   },
   numberBadge: {
-    width: 28,
-    height: 28,
-    borderRadius: 14,
-    backgroundColor: '#2563EB',
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    backgroundColor: colors.primary,
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 20,
+    marginBottom: spacing.md,
+    ...shadows.sm,
   },
   numberText: {
     fontSize: 14,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.text.inverse,
   },
   korCard: {
-    backgroundColor: '#FFF8F0',
-    borderRadius: 12,
-    borderLeftWidth: 3,
-    borderLeftColor: '#EF4444',
-    padding: 20,
+    backgroundColor: colors.surfaceAlt,
+    borderRadius: radius.md,
+    padding: spacing.md,
     width: '100%',
-    marginBottom: 12,
+    marginBottom: spacing.sm,
+    borderWidth: 1,
+    borderColor: colors.border,
   },
+  korHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: spacing.xs,
+  },
+  korLabel: {
+    ...typography.label,
+    color: colors.primary,
+  } as any,
   koreanText: {
-    fontSize: 18,
-    fontWeight: '600',
+    ...typography.h3,
     color: colors.text.primary,
     lineHeight: 28,
+  } as any,
+  grammarHint: {
+    fontSize: 12,
+    fontWeight: '500',
+    color: colors.text.secondary,
+    marginTop: spacing.xs,
+    lineHeight: 18,
   },
   vocabHeader: {
     width: '100%',
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    gap: 6,
-    borderWidth: 1,
-    borderColor: colors.border,
-    borderRadius: 12,
-    paddingVertical: 12,
-    paddingHorizontal: 16,
-    backgroundColor: colors.card,
+    gap: spacing.xxs,
+    paddingVertical: spacing.xs,
   },
   vocabTitle: {
-    fontSize: 14,
-    fontWeight: '700',
-    color: '#374151',
-    letterSpacing: 1,
+    fontSize: 12,
+    fontWeight: '600',
+    color: colors.text.secondary,
   },
   vocabBody: {
     width: '100%',
-    borderWidth: 1,
-    borderTopWidth: 0,
-    borderColor: colors.border,
-    borderBottomLeftRadius: 12,
-    borderBottomRightRadius: 12,
-    padding: 16,
     backgroundColor: colors.card,
-    marginTop: -12,
-    paddingTop: 20,
+    borderWidth: 1,
+    borderColor: colors.border,
+    borderRadius: radius.sm,
+    padding: spacing.md,
   },
 });

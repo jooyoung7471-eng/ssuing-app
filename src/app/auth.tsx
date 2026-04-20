@@ -14,9 +14,18 @@ import { router } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { colors } from '../constants/colors';
 import { typography } from '../constants/typography';
+import { spacing, radius, shadows } from '../constants/spacing';
 import { useAuthStore, SocialProvider } from '../stores/authStore';
 
 const TERMS_AGREED_KEY = 'terms_agreed';
+
+// Dark theme colors for this screen only
+const DARK = {
+  bg: '#1A1A2E',
+  surface: '#2A2A3E',
+  textPrimary: '#FFFFFF',
+  textSecondary: 'rgba(255,255,255,0.7)',
+};
 
 export default function AuthScreen() {
   const [error, setError] = useState('');
@@ -43,18 +52,18 @@ export default function AuthScreen() {
       }
       await navigateAfterLogin();
     } catch (err: any) {
-      // User cancellation — don't show error
+      // User cancellation -- don't show error
       if (err?.code === 'ERR_REQUEST_CANCELED' || err?.code === 'ERR_CANCELED') {
         return;
       }
-      const msg = err?.message || '소셜 로그인에 실패했습니다.';
+      const msg = err?.message || '\uC18C\uC15C \uB85C\uADF8\uC778\uC5D0 \uC2E4\uD328\uD588\uC2B5\uB2C8\uB2E4.';
       setError(msg);
     }
   };
 
   const handleAppleLogin = async () => {
     if (Platform.OS === 'web') {
-      throw new Error('Apple 로그인은 iOS에서만 사용 가능합니다.');
+      throw new Error('Apple \uB85C\uADF8\uC778\uC740 iOS\uC5D0\uC11C\uB9CC \uC0AC\uC6A9 \uAC00\uB2A5\uD569\uB2C8\uB2E4.');
     }
     const AppleAuthentication = await import('expo-apple-authentication');
     const credential = await AppleAuthentication.signInAsync({
@@ -92,7 +101,7 @@ export default function AuthScreen() {
     const result = await WebBrowser.openAuthSessionAsync(authUrl, redirectUri);
 
     if (result.type !== 'success' || !result.url) {
-      const err = new Error('Google 로그인이 취소되었습니다.');
+      const err = new Error('Google \uB85C\uADF8\uC778\uC774 \uCDE8\uC18C\uB418\uC5C8\uC2B5\uB2C8\uB2E4.');
       (err as any).code = 'ERR_REQUEST_CANCELED';
       throw err;
     }
@@ -101,7 +110,7 @@ export default function AuthScreen() {
     const params = new URLSearchParams(result.url.split('#')[1] || '');
     const idToken = params.get('id_token');
     if (!idToken) {
-      throw new Error('Google 로그인 토큰을 받지 못했습니다.');
+      throw new Error('Google \uB85C\uADF8\uC778 \uD1A0\uD070\uC744 \uBC1B\uC9C0 \uBABB\uD588\uC2B5\uB2C8\uB2E4.');
     }
 
     // Decode JWT payload to get email and name (no verification on client)
@@ -127,7 +136,7 @@ export default function AuthScreen() {
     const result = await WebBrowser.openAuthSessionAsync(authUrl, redirectUri);
 
     if (result.type !== 'success' || !result.url) {
-      const err = new Error('카카오 로그인이 취소되었습니다.');
+      const err = new Error('\uCE74\uCE74\uC624 \uB85C\uADF8\uC778\uC774 \uCDE8\uC18C\uB418\uC5C8\uC2B5\uB2C8\uB2E4.');
       (err as any).code = 'ERR_REQUEST_CANCELED';
       throw err;
     }
@@ -136,12 +145,10 @@ export default function AuthScreen() {
     const url = new URL(result.url);
     const code = url.searchParams.get('code');
     if (!code) {
-      throw new Error('카카오 로그인 코드를 받지 못했습니다.');
+      throw new Error('\uCE74\uCE74\uC624 \uB85C\uADF8\uC778 \uCF54\uB4DC\uB97C \uBC1B\uC9C0 \uBABB\uD588\uC2B5\uB2C8\uB2E4.');
     }
 
     // Send the authorization code to our server
-    // The server would exchange this for an access token and get user info
-    // For now, we send the code as the token
     await socialLogin('kakao', code);
   };
 
@@ -150,28 +157,34 @@ export default function AuthScreen() {
     await navigateAfterLogin();
   };
 
-  const showApple = true; // 모든 플랫폼에서 Apple 로그인 표시
+  const showApple = true; // Show Apple login on all platforms
 
   return (
-    <ScrollView
-      contentContainerStyle={styles.scrollContent}
-      keyboardShouldPersistTaps="handled"
-    >
-      {/* Header gradient */}
+    <View style={styles.screen}>
+      {/* Gradient header with curved bottom */}
       <LinearGradient
-        colors={['#4F46E5', '#7C3AED']}
+        colors={[colors.onboarding.purple, '#7C3AED', '#A78BFA']}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
-        style={styles.header}
+        style={styles.headerGradient}
       >
-        <Text style={styles.logo}>쓰잉</Text>
-        <Text style={styles.subtitle}>매일 영어 작문 습관</Text>
+        {/* Decorative dots */}
+        <View style={[styles.dot, { top: 40, right: 40, width: 12, height: 12 }]} />
+        <View style={[styles.dot, { top: 80, left: 40, width: 6, height: 6, opacity: 0.5 }]} />
+        <View style={[styles.dot, { top: 140, right: 60, width: 8, height: 8, opacity: 0.5 }]} />
       </LinearGradient>
 
-      {/* Social login area */}
-      <View style={styles.formArea}>
-        <Text style={styles.sectionTitle}>시작하기</Text>
+      {/* Logo area (overlaps gradient) */}
+      <View style={styles.logoArea}>
+        <View style={styles.logoIcon}>
+          <Text style={styles.logoChar}>{'\uC4F0'}</Text>
+        </View>
+        <Text style={styles.logoTitle}>{'\uC4F0\uC789'}</Text>
+        <Text style={styles.tagline}>{'\uB9E4\uC77C\uC758 \uC601\uC5B4 \uC791\uBB38 \uC2B5\uAD00'}</Text>
+      </View>
 
+      {/* Bottom social login buttons */}
+      <View style={styles.bottomArea}>
         {/* Error message */}
         {error ? (
           <View style={styles.errorBox}>
@@ -181,12 +194,12 @@ export default function AuthScreen() {
 
         {isLoading ? (
           <View style={styles.loadingContainer}>
-            <ActivityIndicator size="large" color="#4F46E5" />
-            <Text style={styles.loadingText}>로그인 중...</Text>
+            <ActivityIndicator size="large" color={colors.onboarding.purple} />
+            <Text style={styles.loadingText}>{'\uB85C\uADF8\uC778 \uC911...'}</Text>
           </View>
         ) : (
           <>
-            {/* Apple Sign In — iOS only */}
+            {/* Apple Sign In */}
             {showApple && (
               <TouchableOpacity
                 style={styles.appleButton}
@@ -194,7 +207,7 @@ export default function AuthScreen() {
                 activeOpacity={0.8}
               >
                 <Text style={styles.appleIcon}>{'\uF8FF'}</Text>
-                <Text style={styles.appleButtonText}>Apple로 계속하기</Text>
+                <Text style={styles.appleButtonText}>Apple{'\uB85C \uACC4\uC18D\uD558\uAE30'}</Text>
               </TouchableOpacity>
             )}
 
@@ -205,7 +218,7 @@ export default function AuthScreen() {
               activeOpacity={0.8}
             >
               <Text style={styles.googleIcon}>G</Text>
-              <Text style={styles.googleButtonText}>Google로 계속하기</Text>
+              <Text style={styles.googleButtonText}>Google{'\uB85C \uACC4\uC18D\uD558\uAE30'}</Text>
             </TouchableOpacity>
 
             {/* Kakao Sign In */}
@@ -215,71 +228,86 @@ export default function AuthScreen() {
               activeOpacity={0.8}
             >
               <Text style={styles.kakaoIcon}>K</Text>
-              <Text style={styles.kakaoButtonText}>카카오로 계속하기</Text>
+              <Text style={styles.kakaoButtonText}>{'\uCE74\uCE74\uC624\uB85C \uACC4\uC18D\uD558\uAE30'}</Text>
             </TouchableOpacity>
-
-            {/* Divider */}
-            <View style={styles.divider}>
-              <View style={styles.dividerLine} />
-              <Text style={styles.dividerText}>또는</Text>
-              <View style={styles.dividerLine} />
-            </View>
 
             {/* Guest link */}
             <TouchableOpacity onPress={handleGuest} style={styles.guestButton}>
-              <Text style={styles.guestText}>게스트로 시작하기</Text>
+              <Text style={styles.guestText}>{'\uAC8C\uC2A4\uD2B8\uB85C \uB458\uB7EC\uBCF4\uAE30'}</Text>
             </TouchableOpacity>
-
-            <Text style={styles.guestNote}>
-              게스트 모드에서는 학습 기록이 기기에만 저장됩니다.{'\n'}
-              나중에 설정에서 소셜 계정을 연동할 수 있습니다.
-            </Text>
           </>
         )}
       </View>
-    </ScrollView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  scrollContent: {
-    flexGrow: 1,
-    backgroundColor: colors.background,
-  },
-  header: {
-    paddingTop: 80,
-    paddingBottom: 48,
-    alignItems: 'center',
-    borderBottomLeftRadius: 32,
-    borderBottomRightRadius: 32,
-  },
-  logo: {
-    fontSize: 40,
-    fontWeight: '800',
-    color: '#FFFFFF',
-    marginBottom: 8,
-  },
-  subtitle: {
-    ...typography.body,
-    color: 'rgba(255,255,255,0.85)',
-  },
-  formArea: {
+  screen: {
     flex: 1,
-    paddingHorizontal: 24,
-    paddingTop: 32,
+    backgroundColor: DARK.bg,
   },
-  sectionTitle: {
-    ...typography.bodyBold,
-    color: colors.text.primary,
-    fontSize: 18,
-    textAlign: 'center',
-    marginBottom: 24,
+  // Gradient header
+  headerGradient: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    height: 380,
+    borderBottomLeftRadius: 80,
+    borderBottomRightRadius: 80,
+  },
+  dot: {
+    position: 'absolute',
+    borderRadius: 999,
+    backgroundColor: '#FFFFFF',
+    opacity: 0.7,
+  },
+  // Logo
+  logoArea: {
+    alignItems: 'center',
+    paddingTop: 120,
+  },
+  logoIcon: {
+    width: 92,
+    height: 92,
+    borderRadius: 26,
+    backgroundColor: '#FFFFFF',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: spacing.lg,
+    ...shadows.lg,
+  },
+  logoChar: {
+    fontSize: 44,
+    fontWeight: '900',
+    color: colors.onboarding.purple,
+    letterSpacing: -2,
+  },
+  logoTitle: {
+    fontSize: 40,
+    fontWeight: '900',
+    color: '#FFFFFF',
+    letterSpacing: -1.2,
+    marginBottom: 6,
+  },
+  tagline: {
+    fontSize: 14,
+    fontWeight: '500',
+    color: 'rgba(255,255,255,0.9)',
+  },
+  // Bottom area
+  bottomArea: {
+    position: 'absolute',
+    bottom: 28,
+    left: 28,
+    right: 28,
   },
   errorBox: {
-    backgroundColor: colors.errorLight,
-    borderRadius: 10,
-    padding: 12,
-    marginBottom: 16,
+    backgroundColor: 'rgba(239,68,68,0.15)',
+    borderRadius: radius.sm,
+    padding: spacing.sm,
+    marginBottom: spacing.md,
   },
   errorText: {
     ...typography.caption,
@@ -287,12 +315,12 @@ const styles = StyleSheet.create({
   },
   loadingContainer: {
     alignItems: 'center',
-    paddingVertical: 40,
-    gap: 12,
+    paddingVertical: spacing.xxxl,
+    gap: spacing.sm,
   },
   loadingText: {
     ...typography.body,
-    color: colors.text.secondary,
+    color: DARK.textSecondary,
   },
   // Apple button
   appleButton: {
@@ -300,9 +328,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#000000',
-    borderRadius: 14,
-    height: 52,
-    marginBottom: 12,
+    borderRadius: radius.sm,
+    height: 50,
+    marginBottom: 10,
     gap: 10,
   },
   appleIcon: {
@@ -312,7 +340,6 @@ const styles = StyleSheet.create({
   appleButtonText: {
     ...typography.button,
     color: '#FFFFFF',
-    fontSize: 16,
   },
   // Google button
   googleButton: {
@@ -320,11 +347,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#FFFFFF',
-    borderRadius: 14,
-    height: 52,
-    marginBottom: 12,
+    borderRadius: radius.sm,
+    height: 50,
+    marginBottom: 10,
     borderWidth: 1,
-    borderColor: '#DADCE0',
+    borderColor: colors.border,
     gap: 10,
   },
   googleIcon: {
@@ -334,8 +361,7 @@ const styles = StyleSheet.create({
   },
   googleButtonText: {
     ...typography.button,
-    color: '#1F1F1F',
-    fontSize: 16,
+    color: colors.text.primary,
   },
   // Kakao button
   kakaoButton: {
@@ -343,56 +369,29 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#FEE500',
-    borderRadius: 14,
-    height: 52,
-    marginBottom: 16,
+    borderRadius: radius.sm,
+    height: 50,
+    marginBottom: 10,
     gap: 10,
   },
   kakaoIcon: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#191919',
+    color: '#3A1D1D',
   },
   kakaoButtonText: {
     ...typography.button,
-    color: '#191919',
-    fontSize: 16,
-  },
-  // Divider
-  divider: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginVertical: 16,
-  },
-  dividerLine: {
-    flex: 1,
-    height: 1,
-    backgroundColor: colors.border,
-  },
-  dividerText: {
-    ...typography.caption,
-    color: colors.text.hint,
-    marginHorizontal: 16,
+    color: '#3A1D1D',
   },
   // Guest
   guestButton: {
     alignItems: 'center',
-    paddingVertical: 14,
-    borderRadius: 14,
-    borderWidth: 1,
-    borderColor: colors.border,
-    marginBottom: 12,
+    paddingVertical: spacing.sm,
+    marginTop: spacing.xs,
   },
   guestText: {
-    ...typography.button,
-    color: colors.text.secondary,
-    fontSize: 16,
-  },
-  guestNote: {
-    ...typography.caption,
-    color: colors.text.hint,
-    textAlign: 'center',
-    lineHeight: 18,
-    marginBottom: 32,
+    ...typography.bodySmall,
+    color: DARK.textSecondary,
+    textDecorationLine: 'underline',
   },
 });

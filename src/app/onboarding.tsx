@@ -9,38 +9,63 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { router } from 'expo-router';
+import { colors } from '../constants/colors';
+import { typography } from '../constants/typography';
+import { spacing, radius, shadows } from '../constants/spacing';
 
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
+const { width: SCREEN_WIDTH } = Dimensions.get('window');
+
+// --- Page data ---
 
 interface OnboardingPage {
   id: string;
-  backgroundColor: string;
+  themeColor: string;
+  gradientEnd: string;
   icon: keyof typeof Ionicons.glyphMap;
-  title: string;
+  label: string;
+  titleParts: { text: string; highlight?: boolean }[];
   subtitle: string;
 }
 
 const pages: OnboardingPage[] = [
   {
     id: '1',
-    backgroundColor: '#4F46E5',
-    icon: 'pencil-outline',
-    title: '쓰면, 늘어요',
-    subtitle: '한글을 보고 영어로 써보세요',
+    themeColor: colors.onboarding.purple,
+    gradientEnd: '#7C3AED',
+    icon: 'create-outline',
+    label: '01 \u00B7 DAILY HABIT',
+    titleParts: [
+      { text: '\uC4F0\uBA74\uC11C ' },
+      { text: '\uC790\uB77C\uB294', highlight: true },
+      { text: '\n\uC601\uC5B4 \uBB38\uC7A5\uB825' },
+    ],
+    subtitle: '\uD558\uB8E8 3\uBB38\uC7A5, \uAFB8\uC900\uD55C \uAE30\uB85D\uC774\n\uC9C4\uC9DC \uC2E4\uB825\uC774 \uB418\uC5B4 \uB3CC\uC544\uC635\uB2C8\uB2E4.',
   },
   {
     id: '2',
-    backgroundColor: '#10B981',
+    themeColor: colors.onboarding.green,
+    gradientEnd: '#059669',
     icon: 'checkmark-circle-outline',
-    title: 'AI가 바로 교정',
-    subtitle: '원어민이 쓰는 자연스러운 표현으로\n고쳐주고 설명까지',
+    label: '02 \u00B7 INSTANT FEEDBACK',
+    titleParts: [
+      { text: 'AI\uAC00 \uBC14\uB85C\n' },
+      { text: '\uAD50\uC815', highlight: true },
+      { text: '\uD574\uB4DC\uB824\uC694' },
+    ],
+    subtitle: '\uBB38\uBC95\u00B7\uC5B4\uC21C\u00B7\uC790\uC5F0\uC2A4\uB7EC\uC6C0\uAE4C\uC9C0 \uC138\uC2EC\uD558\uAC8C\n\uC124\uBA85\uACFC \uD568\uAED8 \uB2E4\uB4EC\uC5B4\uB4DC\uB9BD\uB2C8\uB2E4.',
   },
   {
     id: '3',
-    backgroundColor: '#F59E0B',
+    themeColor: colors.onboarding.amber,
+    gradientEnd: '#EA580C',
     icon: 'flame-outline',
-    title: '하루 3문장이면 충분',
-    subtitle: '매일 5분 투자로\n영어 작문 실력이 달라집니다',
+    label: '03 \u00B7 DAILY THREE',
+    titleParts: [
+      { text: '\uD558\uB8E8 ' },
+      { text: '3\uBB38\uC7A5', highlight: true },
+      { text: '\uC774\uBA74\n\uCDA9\uBD84\uD574\uC694' },
+    ],
+    subtitle: '\uBD80\uB2F4 \uC5C6\uB294 \uC591\uC73C\uB85C \uAFB8\uC900\uD788.\n\uC791\uC740 \uC2B5\uAD00\uC774 \uD070 \uBCC0\uD654\uB97C \uB9CC\uB4ED\uB2C8\uB2E4.',
   },
 ];
 
@@ -65,120 +90,209 @@ export default function OnboardingScreen() {
   };
 
   return (
-    <View style={[styles.container, { backgroundColor: page.backgroundColor }]}>
-      {/* Skip button */}
-      <TouchableOpacity style={styles.skipButton} onPress={completeOnboarding}>
-        <Text style={styles.skipText}>건너뛰기</Text>
-      </TouchableOpacity>
-
-      {/* Content */}
-      <View style={styles.content}>
-        <Ionicons name={page.icon} size={120} color="#FFFFFF" />
-        <Text style={styles.title}>{page.title}</Text>
-        <Text style={styles.subtitle}>{page.subtitle}</Text>
-      </View>
-
-      {/* Bottom area */}
-      <View style={styles.bottomContainer}>
-        {/* Dot indicators */}
-        <View style={styles.dotsContainer}>
+    <View style={styles.container}>
+      {/* Top bar: progress + skip */}
+      <View style={styles.topBar}>
+        <View style={styles.progressContainer}>
           {pages.map((_, index) => (
             <View
               key={index}
               style={[
-                styles.dot,
-                index === currentIndex ? styles.dotActive : styles.dotInactive,
+                styles.progressSegment,
+                {
+                  width: index === currentIndex ? 24 : 8,
+                  backgroundColor:
+                    index === currentIndex
+                      ? page.themeColor
+                      : colors.border,
+                },
               ]}
             />
           ))}
         </View>
+        {!isLastPage ? (
+          <TouchableOpacity onPress={completeOnboarding} hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}>
+            <Text style={styles.skipText}>건너뛰기</Text>
+          </TouchableOpacity>
+        ) : (
+          <View style={{ width: 60 }} />
+        )}
+      </View>
 
-        {/* Next / Start button */}
+      {/* Hero illustration card */}
+      <View
+        style={[
+          styles.heroCard,
+          {
+            backgroundColor: page.themeColor,
+          },
+        ]}
+      >
+        {/* Decorative circles */}
+        <View style={[styles.heroCircle1, { backgroundColor: 'rgba(255,255,255,0.1)' }]} />
+        <View style={[styles.heroCircle2, { backgroundColor: 'rgba(255,255,255,0.08)' }]} />
+
+        {/* Icon */}
+        <View style={styles.heroIconContainer}>
+          <Ionicons name={page.icon} size={100} color="rgba(255,255,255,0.95)" />
+        </View>
+      </View>
+
+      {/* Text content */}
+      <View style={styles.textContent}>
+        <Text style={[styles.label, { color: page.themeColor }]}>
+          {page.label}
+        </Text>
+        <Text style={styles.title}>
+          {page.titleParts.map((part, i) => (
+            <Text
+              key={i}
+              style={part.highlight ? { color: page.themeColor } : undefined}
+            >
+              {part.text}
+            </Text>
+          ))}
+        </Text>
+        <Text style={styles.subtitle}>{page.subtitle}</Text>
+      </View>
+
+      {/* Bottom CTA */}
+      {isLastPage ? (
         <TouchableOpacity
-          style={styles.startButton}
+          style={[styles.fullButton, { backgroundColor: colors.primary }]}
           onPress={handleNext}
           activeOpacity={0.8}
         >
-          <Text style={styles.startButtonText}>
-            {isLastPage ? '시작하기' : '다음'}
-          </Text>
+          <Text style={styles.fullButtonText}>시작하기</Text>
         </TouchableOpacity>
-      </View>
+      ) : (
+        <TouchableOpacity
+          style={[styles.circleButton, { backgroundColor: page.themeColor }]}
+          onPress={handleNext}
+          activeOpacity={0.8}
+        >
+          <Ionicons name="arrow-forward" size={24} color="#FFFFFF" />
+        </TouchableOpacity>
+      )}
     </View>
   );
 }
 
+const HERO_MARGIN = spacing.xl;
+const HERO_WIDTH = SCREEN_WIDTH - HERO_MARGIN * 2;
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    minHeight: SCREEN_HEIGHT,
+    backgroundColor: '#FFFFFF',
   },
-  skipButton: {
-    position: 'absolute',
-    top: 60,
-    right: 24,
-    zIndex: 10,
-    padding: 8,
-  },
-  skipText: {
-    color: 'rgba(255, 255, 255, 0.7)',
-    fontSize: 16,
-  },
-  content: {
-    flex: 1,
+  // Top bar
+  topBar: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     alignItems: 'center',
-    justifyContent: 'center',
-    paddingHorizontal: 40,
+    paddingHorizontal: spacing.xl,
+    paddingTop: 66,
+    paddingBottom: spacing.xs,
   },
-  title: {
-    fontSize: 32,
-    fontWeight: 'bold',
-    color: '#FFFFFF',
-    textAlign: 'center',
-    marginTop: 40,
-    marginBottom: 16,
-  },
-  subtitle: {
-    fontSize: 18,
-    color: 'rgba(255, 255, 255, 0.8)',
-    textAlign: 'center',
-    lineHeight: 26,
-  },
-  bottomContainer: {
-    paddingBottom: 60,
-    alignItems: 'center',
-  },
-  dotsContainer: {
+  progressContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 32,
+    gap: 6,
   },
-  dot: {
-    borderRadius: 5,
-    marginHorizontal: 4,
+  progressSegment: {
+    height: 4,
+    borderRadius: 2,
   },
-  dotActive: {
-    width: 10,
-    height: 10,
-    backgroundColor: '#FFFFFF',
+  skipText: {
+    ...typography.body,
+    color: colors.text.secondary,
+    fontSize: 14,
   },
-  dotInactive: {
-    width: 8,
-    height: 8,
-    backgroundColor: 'rgba(255, 255, 255, 0.4)',
+  // Hero card
+  heroCard: {
+    marginHorizontal: HERO_MARGIN,
+    marginTop: spacing.xxl,
+    height: 340,
+    borderRadius: radius.xxl,
+    overflow: 'hidden',
+    ...shadows.lg,
   },
-  startButton: {
-    backgroundColor: '#FFFFFF',
-    height: 56,
-    borderRadius: 28,
-    paddingHorizontal: 48,
+  heroCircle1: {
+    position: 'absolute',
+    top: -30,
+    right: -30,
+    width: 160,
+    height: 160,
+    borderRadius: 80,
+  },
+  heroCircle2: {
+    position: 'absolute',
+    bottom: -40,
+    left: -40,
+    width: 140,
+    height: 140,
+    borderRadius: 70,
+  },
+  heroIconContainer: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
     alignItems: 'center',
     justifyContent: 'center',
-    minWidth: 200,
   },
-  startButtonText: {
-    color: '#4F46E5',
-    fontSize: 18,
-    fontWeight: 'bold',
+  // Text content
+  textContent: {
+    paddingHorizontal: 28,
+    paddingTop: 28,
+  },
+  label: {
+    ...typography.label,
+    marginBottom: spacing.xs,
+  },
+  title: {
+    ...typography.h1,
+    fontSize: 28,
+    lineHeight: 34,
+    marginBottom: spacing.sm,
+    color: colors.text.primary,
+  },
+  subtitle: {
+    ...typography.body,
+    fontSize: 14,
+    lineHeight: 22,
+    color: colors.text.secondary,
+  },
+  // Circle next button (pages 1-2)
+  circleButton: {
+    position: 'absolute',
+    bottom: 28,
+    right: spacing.xl,
+    width: 56,
+    height: 56,
+    borderRadius: radius.pill,
+    alignItems: 'center',
+    justifyContent: 'center',
+    ...shadows.md,
+  },
+  // Full-width start button (page 3)
+  fullButton: {
+    position: 'absolute',
+    bottom: 28,
+    left: spacing.xl,
+    right: spacing.xl,
+    height: 56,
+    borderRadius: radius.md,
+    alignItems: 'center',
+    justifyContent: 'center',
+    ...shadows.primary,
+  },
+  fullButtonText: {
+    ...typography.button,
+    color: '#FFFFFF',
+    fontSize: 16,
+    fontWeight: '800',
   },
 });

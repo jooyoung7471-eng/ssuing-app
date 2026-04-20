@@ -14,6 +14,7 @@ import { router, useLocalSearchParams } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { colors } from '../constants/colors';
 import { typography } from '../constants/typography';
+import { spacing, radius, shadows } from '../constants/spacing';
 import {
   enablePushNotifications,
   registerForPushNotifications,
@@ -35,105 +36,105 @@ interface TermItem {
 const TERMS: TermItem[] = [
   {
     id: 'service',
-    label: '이용약관 동의',
+    label: '\uC774\uC6A9\uC57D\uAD00',
     required: true,
-    content: `쓰잉 이용약관
+    content: `\uC4F0\uC789 \uC774\uC6A9\uC57D\uAD00
 
-제1조 (목적)
-이 약관은 쓰잉(이하 "서비스")의 이용 조건과 절차, 이용자와 서비스 제공자의 권리, 의무 및 책임사항을 규정함을 목적으로 합니다.
+\uC81C1\uC870 (\uBAA9\uC801)
+\uC774 \uC57D\uAD00\uC740 \uC4F0\uC789(\uC774\uD558 "\uC11C\uBE44\uC2A4")\uC758 \uC774\uC6A9 \uC870\uAC74\uACFC \uC808\uCC28, \uC774\uC6A9\uC790\uC640 \uC11C\uBE44\uC2A4 \uC81C\uACF5\uC790\uC758 \uAD8C\uB9AC, \uC758\uBB34 \uBC0F \uCC45\uC784\uC0AC\uD56D\uC744 \uADDC\uC815\uD568\uC744 \uBAA9\uC801\uC73C\uB85C \uD569\uB2C8\uB2E4.
 
-제2조 (서비스 이용)
-1. 서비스는 영어 작문 학습을 위한 모바일 앱입니다.
-2. 이용자는 매일 제공되는 한국어 문장을 영어로 작문하고, AI 기반 교정을 받을 수 있습니다.
-3. 서비스는 학습 기록, 스트릭, 업적 등의 게이미피케이션 기능을 제공합니다.
+\uC81C2\uC870 (\uC11C\uBE44\uC2A4 \uC774\uC6A9)
+1. \uC11C\uBE44\uC2A4\uB294 \uC601\uC5B4 \uC791\uBB38 \uD559\uC2B5\uC744 \uC704\uD55C \uBAA8\uBC14\uC77C \uC571\uC785\uB2C8\uB2E4.
+2. \uC774\uC6A9\uC790\uB294 \uB9E4\uC77C \uC81C\uACF5\uB418\uB294 \uD55C\uAD6D\uC5B4 \uBB38\uC7A5\uC744 \uC601\uC5B4\uB85C \uC791\uBB38\uD558\uACE0, AI \uAE30\uBC18 \uAD50\uC815\uC744 \uBC1B\uC744 \uC218 \uC788\uC2B5\uB2C8\uB2E4.
+3. \uC11C\uBE44\uC2A4\uB294 \uD559\uC2B5 \uAE30\uB85D, \uC2A4\uD2B8\uB9AD, \uC5C5\uC801 \uB4F1\uC758 \uAC8C\uC774\uBBF8\uD53C\uCF00\uC774\uC158 \uAE30\uB2A5\uC744 \uC81C\uACF5\uD569\uB2C8\uB2E4.
 
-제3조 (금지 행위)
-1. 서비스를 악용하거나 비정상적인 방법으로 이용하는 행위
-2. 타인의 정보를 도용하는 행위
-3. 서비스의 안정적 운영을 방해하는 행위
+\uC81C3\uC870 (\uAE08\uC9C0 \uD589\uC704)
+1. \uC11C\uBE44\uC2A4\uB97C \uC545\uC6A9\uD558\uAC70\uB098 \uBE44\uC815\uC0C1\uC801\uC778 \uBC29\uBC95\uC73C\uB85C \uC774\uC6A9\uD558\uB294 \uD589\uC704
+2. \uD0C0\uC778\uC758 \uC815\uBCF4\uB97C \uB3C4\uC6A9\uD558\uB294 \uD589\uC704
+3. \uC11C\uBE44\uC2A4\uC758 \uC548\uC815\uC801 \uC6B4\uC601\uC744 \uBC29\uD574\uD558\uB294 \uD589\uC704
 
-제4조 (면책 조항)
-1. AI 교정 결과는 참고용이며, 완벽한 정확성을 보장하지 않습니다.
-2. 서비스 이용 중 발생한 학습 결과에 대해 서비스 제공자는 책임을 지지 않습니다.
-3. 천재지변, 서버 장애 등 불가항력에 의한 서비스 중단에 대해 책임을 지지 않습니다.`,
+\uC81C4\uC870 (\uBA74\uCC45 \uC870\uD56D)
+1. AI \uAD50\uC815 \uACB0\uACFC\uB294 \uCC38\uACE0\uC6A9\uC774\uBA70, \uC644\uBCBD\uD55C \uC815\uD655\uC131\uC744 \uBCF4\uC7A5\uD558\uC9C0 \uC54A\uC2B5\uB2C8\uB2E4.
+2. \uC11C\uBE44\uC2A4 \uC774\uC6A9 \uC911 \uBC1C\uC0DD\uD55C \uD559\uC2B5 \uACB0\uACFC\uC5D0 \uB300\uD574 \uC11C\uBE44\uC2A4 \uC81C\uACF5\uC790\uB294 \uCC45\uC784\uC744 \uC9C0\uC9C0 \uC54A\uC2B5\uB2C8\uB2E4.
+3. \uCC9C\uC7AC\uC9C0\uBCC0, \uC11C\uBC84 \uC7A5\uC560 \uB4F1 \uBD88\uAC00\uD56D\uB825\uC5D0 \uC758\uD55C \uC11C\uBE44\uC2A4 \uC911\uB2E8\uC5D0 \uB300\uD574 \uCC45\uC784\uC744 \uC9C0\uC9C0 \uC54A\uC2B5\uB2C8\uB2E4.`,
   },
   {
     id: 'privacy',
-    label: '개인정보 수집 및 이용 동의',
+    label: '\uAC1C\uC778\uC815\uBCF4\uCC98\uB9AC\uBC29\uCE68',
     required: true,
-    content: `개인정보 수집 및 이용 동의
+    content: `\uAC1C\uC778\uC815\uBCF4 \uC218\uC9D1 \uBC0F \uC774\uC6A9 \uB3D9\uC758
 
-1. 수집하는 개인정보 항목
-- 소셜 로그인: 이메일 주소, 이름 (선택)
-- 서비스 이용: 작문 내용, 교정 결과, 학습 기록, 스트릭 정보
-- 기기 정보: 기기 식별자, 앱 버전, OS 정보
+1. \uC218\uC9D1\uD558\uB294 \uAC1C\uC778\uC815\uBCF4 \uD56D\uBAA9
+- \uC18C\uC15C \uB85C\uADF8\uC778: \uC774\uBA54\uC77C \uC8FC\uC18C, \uC774\uB984 (\uC120\uD0DD)
+- \uC11C\uBE44\uC2A4 \uC774\uC6A9: \uC791\uBB38 \uB0B4\uC6A9, \uAD50\uC815 \uACB0\uACFC, \uD559\uC2B5 \uAE30\uB85D, \uC2A4\uD2B8\uB9AD \uC815\uBCF4
+- \uAE30\uAE30 \uC815\uBCF4: \uAE30\uAE30 \uC2DD\uBCC4\uC790, \uC571 \uBC84\uC804, OS \uC815\uBCF4
 
-2. 수집 및 이용 목적
-- 서비스 제공 및 회원 관리
-- 학습 진도 관리 및 통계 제공
-- AI 기반 영어 작문 교정 서비스 제공
-- 서비스 개선 및 새로운 기능 개발
+2. \uC218\uC9D1 \uBC0F \uC774\uC6A9 \uBAA9\uC801
+- \uC11C\uBE44\uC2A4 \uC81C\uACF5 \uBC0F \uD68C\uC6D0 \uAD00\uB9AC
+- \uD559\uC2B5 \uC9C4\uB3C4 \uAD00\uB9AC \uBC0F \uD1B5\uACC4 \uC81C\uACF5
+- AI \uAE30\uBC18 \uC601\uC5B4 \uC791\uBB38 \uAD50\uC815 \uC11C\uBE44\uC2A4 \uC81C\uACF5
+- \uC11C\uBE44\uC2A4 \uAC1C\uC120 \uBC0F \uC0C8\uB85C\uC6B4 \uAE30\uB2A5 \uAC1C\uBC1C
 
-3. 보관 기간
-- 회원 탈퇴 시까지 보관 후 즉시 파기
-- 단, 관련 법령에 따라 보관이 필요한 경우 해당 기간 동안 보관
+3. \uBCF4\uAD00 \uAE30\uAC04
+- \uD68C\uC6D0 \uD0C8\uD1F4 \uC2DC\uAE4C\uC9C0 \uBCF4\uAD00 \uD6C4 \uC989\uC2DC \uD30C\uAE30
+- \uB2E8, \uAD00\uB828 \uBC95\uB839\uC5D0 \uB530\uB77C \uBCF4\uAD00\uC774 \uD544\uC694\uD55C \uACBD\uC6B0 \uD574\uB2F9 \uAE30\uAC04 \uB3D9\uC548 \uBCF4\uAD00
 
-4. 개인정보의 파기
-- 보관 기간 경과 또는 처리 목적 달성 시 즉시 파기
-- 전자적 파일 형태: 복구 불가능한 방법으로 영구 삭제`,
+4. \uAC1C\uC778\uC815\uBCF4\uC758 \uD30C\uAE30
+- \uBCF4\uAD00 \uAE30\uAC04 \uACBD\uACFC \uB610\uB294 \uCC98\uB9AC \uBAA9\uC801 \uB2EC\uC131 \uC2DC \uC989\uC2DC \uD30C\uAE30
+- \uC804\uC790\uC801 \uD30C\uC77C \uD615\uD0DC: \uBCF5\uAD6C \uBD88\uAC00\uB2A5\uD55C \uBC29\uBC95\uC73C\uB85C \uC601\uAD6C \uC0AD\uC81C`,
   },
   {
     id: 'thirdparty',
-    label: '제3자 정보 제공 동의',
+    label: '\uB9CC 14\uC138 \uC774\uC0C1\uC785\uB2C8\uB2E4',
     required: true,
-    content: `제3자 정보 제공 동의
+    content: `\uC81C3\uC790 \uC815\uBCF4 \uC81C\uACF5 \uB3D9\uC758
 
-쓰잉은 AI 기반 영어 작문 교정 서비스를 제공하기 위해 아래와 같이 개인정보를 제3자에게 제공합니다.
+\uC4F0\uC789\uC740 AI \uAE30\uBC18 \uC601\uC5B4 \uC791\uBB38 \uAD50\uC815 \uC11C\uBE44\uC2A4\uB97C \uC81C\uACF5\uD558\uAE30 \uC704\uD574 \uC544\uB798\uC640 \uAC19\uC774 \uAC1C\uC778\uC815\uBCF4\uB97C \uC81C3\uC790\uC5D0\uAC8C \uC81C\uACF5\uD569\uB2C8\uB2E4.
 
-1. 제공받는 자: Anthropic (Claude AI)
-2. 제공 목적: 영어 작문 교정 및 피드백 생성
-3. 제공 항목: 이용자가 입력한 영어 작문 내용
-4. 보유 기간: 교정 처리 완료 후 즉시 파기
+1. \uC81C\uACF5\uBC1B\uB294 \uC790: Anthropic (Claude AI)
+2. \uC81C\uACF5 \uBAA9\uC801: \uC601\uC5B4 \uC791\uBB38 \uAD50\uC815 \uBC0F \uD53C\uB4DC\uBC31 \uC0DD\uC131
+3. \uC81C\uACF5 \uD56D\uBAA9: \uC774\uC6A9\uC790\uAC00 \uC785\uB825\uD55C \uC601\uC5B4 \uC791\uBB38 \uB0B4\uC6A9
+4. \uBCF4\uC720 \uAE30\uAC04: \uAD50\uC815 \uCC98\uB9AC \uC644\uB8CC \uD6C4 \uC989\uC2DC \uD30C\uAE30
 
-* 작문 내용은 AI 교정을 위해 Anthropic(Claude)에 전송됩니다.
-* Anthropic의 개인정보 처리방침에 따라 데이터가 처리됩니다.
-* 이용자의 이메일, 이름 등 개인 식별 정보는 전송되지 않습니다.`,
+* \uC791\uBB38 \uB0B4\uC6A9\uC740 AI \uAD50\uC815\uC744 \uC704\uD574 Anthropic(Claude)\uC5D0 \uC804\uC1A1\uB429\uB2C8\uB2E4.
+* Anthropic\uC758 \uAC1C\uC778\uC815\uBCF4 \uCC98\uB9AC\uBC29\uCE68\uC5D0 \uB530\uB77C \uB370\uC774\uD130\uAC00 \uCC98\uB9AC\uB429\uB2C8\uB2E4.
+* \uC774\uC6A9\uC790\uC758 \uC774\uBA54\uC77C, \uC774\uB984 \uB4F1 \uAC1C\uC778 \uC2DD\uBCC4 \uC815\uBCF4\uB294 \uC804\uC1A1\uB418\uC9C0 \uC54A\uC2B5\uB2C8\uB2E4.`,
   },
   {
     id: 'marketing',
-    label: '마케팅 정보 수신 동의',
+    label: '\uB9C8\uCF00\uD305 \uC815\uBCF4 \uC218\uC2E0',
     required: false,
-    content: `마케팅 정보 수신 동의 (선택)
+    content: `\uB9C8\uCF00\uD305 \uC815\uBCF4 \uC218\uC2E0 \uB3D9\uC758 (\uC120\uD0DD)
 
-1. 수신 내용
-- 새로운 학습 콘텐츠 업데이트 알림
-- 이벤트 및 프로모션 안내
-- 서비스 개선 소식
+1. \uC218\uC2E0 \uB0B4\uC6A9
+- \uC0C8\uB85C\uC6B4 \uD559\uC2B5 \uCF58\uD150\uCE20 \uC5C5\uB370\uC774\uD2B8 \uC54C\uB9BC
+- \uC774\uBCA4\uD2B8 \uBC0F \uD504\uB85C\uBAA8\uC158 \uC548\uB0B4
+- \uC11C\uBE44\uC2A4 \uAC1C\uC120 \uC18C\uC2DD
 
-2. 수신 방법
-- 푸시 알림, 이메일
+2. \uC218\uC2E0 \uBC29\uBC95
+- \uD478\uC2DC \uC54C\uB9BC, \uC774\uBA54\uC77C
 
-3. 수신 거부
-- 설정 화면에서 언제든지 수신을 거부할 수 있습니다.
-- 수신 거부 시 마케팅 관련 알림이 더 이상 발송되지 않습니다.`,
+3. \uC218\uC2E0 \uAC70\uBD80
+- \uC124\uC815 \uD654\uBA74\uC5D0\uC11C \uC5B8\uC81C\uB4E0\uC9C0 \uC218\uC2E0\uC744 \uAC70\uBD80\uD560 \uC218 \uC788\uC2B5\uB2C8\uB2E4.
+- \uC218\uC2E0 \uAC70\uBD80 \uC2DC \uB9C8\uCF00\uD305 \uAD00\uB828 \uC54C\uB9BC\uC774 \uB354 \uC774\uC0C1 \uBC1C\uC1A1\uB418\uC9C0 \uC54A\uC2B5\uB2C8\uB2E4.`,
   },
   {
     id: 'push',
-    label: '푸시 알림 수신 동의',
+    label: '\uD478\uC2DC \uC54C\uB9BC \uC218\uC2E0',
     required: false,
-    content: `푸시 알림 수신 동의 (선택)
+    content: `\uD478\uC2DC \uC54C\uB9BC \uC218\uC2E0 \uB3D9\uC758 (\uC120\uD0DD)
 
-1. 알림 내용
-- 매일 학습 리마인더 (오전 9시)
-- 스트릭 유지 알림 (오후 8시, 당일 학습 미완료 시)
-- 주간 리포트 알림
+1. \uC54C\uB9BC \uB0B4\uC6A9
+- \uB9E4\uC77C \uD559\uC2B5 \uB9AC\uB9C8\uC778\uB354 (\uC624\uC804 9\uC2DC)
+- \uC2A4\uD2B8\uB9AD \uC720\uC9C0 \uC54C\uB9BC (\uC624\uD6C4 8\uC2DC, \uB2F9\uC77C \uD559\uC2B5 \uBBF8\uC644\uB8CC \uC2DC)
+- \uC8FC\uAC04 \uB9AC\uD3EC\uD2B8 \uC54C\uB9BC
 
-2. 알림 관리
-- 설정 화면에서 언제든지 알림을 끄거나 시간을 변경할 수 있습니다.
+2. \uC54C\uB9BC \uAD00\uB9AC
+- \uC124\uC815 \uD654\uBA74\uC5D0\uC11C \uC5B8\uC81C\uB4E0\uC9C0 \uC54C\uB9BC\uC744 \uB044\uAC70\uB098 \uC2DC\uAC04\uC744 \uBCC0\uACBD\uD560 \uC218 \uC788\uC2B5\uB2C8\uB2E4.
 
-3. 권한 요청
-- 동의 시 기기의 알림 권한을 요청합니다.
-- 기기 설정에서도 알림을 관리할 수 있습니다.`,
+3. \uAD8C\uD55C \uC694\uCCAD
+- \uB3D9\uC758 \uC2DC \uAE30\uAE30\uC758 \uC54C\uB9BC \uAD8C\uD55C\uC744 \uC694\uCCAD\uD569\uB2C8\uB2E4.
+- \uAE30\uAE30 \uC124\uC815\uC5D0\uC11C\uB3C4 \uC54C\uB9BC\uC744 \uAD00\uB9AC\uD560 \uC218 \uC788\uC2B5\uB2C8\uB2E4.`,
   },
 ];
 
@@ -189,58 +190,75 @@ export default function TermsScreen() {
       >
         {/* Header */}
         <View style={styles.header}>
-          <Text style={styles.title}>서비스 이용을 위해{'\n'}약관에 동의해주세요</Text>
+          <TouchableOpacity
+            style={styles.backButton}
+            onPress={() => router.back()}
+            hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+          >
+            <Ionicons name="arrow-back" size={24} color={colors.text.primary} />
+          </TouchableOpacity>
+          <Text style={styles.headerTitle}>{'\uC2DC\uC791\uD558\uAE30 \uC804\uC5D0'}</Text>
+          <Text style={styles.headerSubtitle}>{'\uC57D\uAD00\uC744 \uD655\uC778\uD558\uACE0 \uB3D9\uC758\uD574\uC8FC\uC138\uC694.'}</Text>
         </View>
 
-        {/* All agree */}
+        {/* All agree card */}
         <TouchableOpacity
-          style={styles.allAgreeRow}
+          style={styles.allAgreeCard}
           onPress={toggleAll}
           activeOpacity={0.7}
         >
           <View style={[styles.checkbox, allChecked && styles.checkboxChecked]}>
             {allChecked && <Ionicons name="checkmark" size={16} color="#FFFFFF" />}
           </View>
-          <Text style={styles.allAgreeText}>전체 동의</Text>
+          <View style={styles.allAgreeTextWrap}>
+            <Text style={styles.allAgreeText}>{'\uC804\uCCB4 \uB3D9\uC758'}</Text>
+            <Text style={styles.allAgreeSubtext}>{'\uC120\uD0DD \uD56D\uBAA9\uC744 \uD3EC\uD568\uD55C \uBAA8\uB4E0 \uC57D\uAD00'}</Text>
+          </View>
         </TouchableOpacity>
 
-        <View style={styles.separator} />
-
         {/* Individual items */}
-        {TERMS.map((term) => (
-          <View key={term.id} style={styles.termRow}>
-            <TouchableOpacity
-              style={styles.termLeft}
-              onPress={() => toggleItem(term.id)}
-              activeOpacity={0.7}
+        <View style={styles.termsList}>
+          {TERMS.map((term, index) => (
+            <View
+              key={term.id}
+              style={[
+                styles.termRow,
+                index > 0 && styles.termRowBorder,
+              ]}
             >
-              <View
-                style={[styles.checkbox, checked[term.id] && styles.checkboxChecked]}
+              <TouchableOpacity
+                style={styles.termLeft}
+                onPress={() => toggleItem(term.id)}
+                activeOpacity={0.7}
               >
-                {checked[term.id] && (
-                  <Ionicons name="checkmark" size={16} color="#FFFFFF" />
-                )}
-              </View>
-              <View style={styles.termLabelWrap}>
-                <Text
-                  style={[
-                    styles.termTag,
-                    term.required ? styles.tagRequired : styles.tagOptional,
-                  ]}
+                <View
+                  style={[styles.checkbox, checked[term.id] && styles.checkboxChecked]}
                 >
-                  {term.required ? '필수' : '선택'}
-                </Text>
-                <Text style={styles.termLabel}>{term.label}</Text>
-              </View>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => setModalContent(term)}
-              hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
-            >
-              <Ionicons name="chevron-forward" size={20} color={colors.text.hint} />
-            </TouchableOpacity>
-          </View>
-        ))}
+                  {checked[term.id] && (
+                    <Ionicons name="checkmark" size={16} color="#FFFFFF" />
+                  )}
+                </View>
+                <View style={styles.termLabelWrap}>
+                  <Text
+                    style={[
+                      styles.termTag,
+                      term.required ? styles.tagRequired : styles.tagOptional,
+                    ]}
+                  >
+                    {term.required ? '\uD544\uC218' : '\uC120\uD0DD'}
+                  </Text>
+                  <Text style={styles.termLabel}>{term.label}</Text>
+                </View>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => setModalContent(term)}
+                hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+              >
+                <Text style={styles.viewLink}>{'\uBCF4\uAE30'}</Text>
+              </TouchableOpacity>
+            </View>
+          ))}
+        </View>
       </ScrollView>
 
       {/* Bottom button */}
@@ -257,7 +275,7 @@ export default function TermsScreen() {
               !allRequiredChecked && styles.agreeButtonTextDisabled,
             ]}
           >
-            동의하고 계속하기
+            {'\uB3D9\uC758\uD558\uACE0 \uC2DC\uC791\uD558\uAE30'}
           </Text>
         </TouchableOpacity>
       </View>
@@ -295,8 +313,6 @@ export default function TermsScreen() {
 
 // --- Styles ---
 
-const BRAND_PURPLE = '#4F46E5';
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -306,47 +322,69 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   scrollContent: {
-    paddingHorizontal: 24,
-    paddingTop: 32,
-    paddingBottom: 16,
+    paddingHorizontal: spacing.xl,
+    paddingTop: spacing.md,
+    paddingBottom: spacing.md,
   },
   // Header
   header: {
-    marginBottom: 32,
+    marginBottom: spacing.xl,
   },
-  title: {
-    fontSize: 24,
-    fontWeight: '700',
+  backButton: {
+    marginBottom: spacing.md,
+    width: 40,
+    height: 40,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  headerTitle: {
+    ...typography.h1,
     color: colors.text.primary,
-    lineHeight: 34,
+    marginBottom: 6,
   },
-  // All agree row
-  allAgreeRow: {
+  headerSubtitle: {
+    ...typography.body,
+    fontSize: 14,
+    color: colors.text.secondary,
+  },
+  // All agree card
+  allAgreeCard: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#F5F5F7',
-    borderRadius: 14,
+    gap: 14,
     padding: 16,
-    marginBottom: 16,
+    paddingHorizontal: 18,
+    borderRadius: radius.md,
+    backgroundColor: colors.primaryLight,
+    borderWidth: 1.5,
+    borderColor: colors.primary + '30',
+    marginBottom: spacing.md,
+  },
+  allAgreeTextWrap: {
+    flex: 1,
   },
   allAgreeText: {
     ...typography.bodyBold,
     color: colors.text.primary,
-    fontSize: 17,
-    marginLeft: 12,
   },
-  separator: {
-    height: 1,
-    backgroundColor: colors.border,
-    marginBottom: 8,
+  allAgreeSubtext: {
+    ...typography.caption,
+    color: colors.text.secondary,
+    marginTop: 2,
   },
-  // Term row
+  // Term list
+  termsList: {
+    paddingHorizontal: spacing.xxs,
+  },
   termRow: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingVertical: 14,
-    paddingHorizontal: 4,
+  },
+  termRowBorder: {
+    borderTopWidth: 1,
+    borderTopColor: colors.border,
   },
   termLeft: {
     flex: 1,
@@ -356,71 +394,71 @@ const styles = StyleSheet.create({
   termLabelWrap: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginLeft: 12,
-    gap: 8,
+    marginLeft: spacing.sm,
+    gap: 6,
   },
   termTag: {
     fontSize: 12,
-    fontWeight: '600',
-    paddingHorizontal: 6,
-    paddingVertical: 2,
-    borderRadius: 4,
-    overflow: 'hidden',
+    fontWeight: '700',
+    marginRight: 6,
   },
   tagRequired: {
-    backgroundColor: '#EEF2FF',
-    color: BRAND_PURPLE,
+    color: colors.error,
   },
   tagOptional: {
-    backgroundColor: '#F3F4F6',
-    color: colors.text.hint,
+    color: colors.text.secondary,
   },
   termLabel: {
     ...typography.body,
     color: colors.text.primary,
-    fontSize: 15,
+    fontSize: 14,
+  },
+  viewLink: {
+    fontSize: 12,
+    fontWeight: '600',
+    color: colors.primary,
   },
   // Checkbox
   checkbox: {
     width: 24,
     height: 24,
-    borderRadius: 12,
+    borderRadius: radius.xs,
     borderWidth: 2,
-    borderColor: '#D1D5DB',
+    borderColor: colors.disabled,
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#FFFFFF',
   },
   checkboxChecked: {
-    backgroundColor: BRAND_PURPLE,
-    borderColor: BRAND_PURPLE,
+    backgroundColor: colors.primary,
+    borderColor: colors.primary,
   },
   // Bottom
   bottomArea: {
-    paddingHorizontal: 24,
-    paddingTop: 12,
-    paddingBottom: Platform.OS === 'web' ? 24 : 8,
+    paddingHorizontal: spacing.xl,
+    paddingTop: spacing.sm,
+    paddingBottom: Platform.OS === 'web' ? spacing.xl : spacing.xs,
     backgroundColor: colors.background,
-    borderTopWidth: 1,
-    borderTopColor: colors.border,
   },
   agreeButton: {
-    backgroundColor: BRAND_PURPLE,
-    borderRadius: 14,
-    height: 54,
+    backgroundColor: colors.primary,
+    borderRadius: radius.md,
+    height: 50,
     alignItems: 'center',
     justifyContent: 'center',
+    ...shadows.primary,
   },
   agreeButtonDisabled: {
-    backgroundColor: '#D1D5DB',
+    backgroundColor: colors.disabled,
+    shadowOpacity: 0,
+    elevation: 0,
   },
   agreeButtonText: {
     ...typography.button,
     color: '#FFFFFF',
-    fontSize: 17,
   },
   agreeButtonTextDisabled: {
-    color: '#9CA3AF',
+    color: colors.text.hint,
   },
   // Modal
   modalContainer: {
@@ -431,8 +469,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: 20,
-    paddingVertical: 16,
+    paddingHorizontal: spacing.lg,
+    paddingVertical: spacing.md,
     borderBottomWidth: 1,
     borderBottomColor: colors.border,
   },
@@ -444,7 +482,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   modalScrollContent: {
-    padding: 20,
+    padding: spacing.lg,
   },
   modalBody: {
     ...typography.body,

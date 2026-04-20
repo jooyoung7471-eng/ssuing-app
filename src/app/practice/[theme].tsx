@@ -15,7 +15,15 @@ import { useDailySentences } from '../../hooks/useDailySentences';
 import { useCorrection } from '../../hooks/useCorrection';
 import { usePracticeStore } from '../../stores/practiceStore';
 import { colors } from '../../constants/colors';
+import { typography } from '../../constants/typography';
+import { spacing, radius, shadows } from '../../constants/spacing';
 import type { Theme } from '../../types';
+
+const THEME_GRADIENTS: Record<string, [string, string]> = {
+  daily: [colors.primary, colors.primaryDark],
+  travel: [colors.theme.travel, '#065F46'],
+  biz: [colors.secondary, colors.secondaryDark],
+};
 
 export default function PracticeScreen() {
   const { theme } = useLocalSearchParams<{ theme: Theme }>();
@@ -50,9 +58,7 @@ export default function PracticeScreen() {
 
   const themeTitle = theme === 'daily' ? '일상 영어' : theme === 'travel' ? '여행 영어' : '비즈니스 영어';
   const themeEmoji = theme === 'daily' ? '\u2615' : theme === 'travel' ? '\u{2708}\u{FE0F}' : '\u{1F4BC}';
-
-  const today = new Date();
-  const dateStr = `${today.getFullYear()}. ${today.getMonth() + 1}. ${today.getDate()}`;
+  const gradientColors = THEME_GRADIENTS[theme || 'daily'] || THEME_GRADIENTS.daily;
 
   // [Fix 1] Only reset store when switching themes, preserve on re-entry
   useEffect(() => {
@@ -88,11 +94,9 @@ export default function PracticeScreen() {
     if (currentSentence) {
       const existingCorrection = corrections[currentSentence.id];
       if (existingCorrection) {
-        // Already corrected — show the submitted writing
         setLocalDraft(existingCorrection.userWriting);
         draftRef.current = existingCorrection.userWriting;
       } else {
-        // Not yet corrected — show saved draft or empty
         const savedDraft = drafts[currentSentence.id] || '';
         setLocalDraft(savedDraft);
         draftRef.current = savedDraft;
@@ -121,7 +125,7 @@ export default function PracticeScreen() {
   const handleSubmit = async () => {
     if (!currentSentence) return;
     if (submittingRef.current) return;
-    if (corrections[currentSentence.id]) return; // already corrected
+    if (corrections[currentSentence.id]) return;
     const writing = draftRef.current;
     if (writing.length < 10) return;
 
@@ -132,7 +136,6 @@ export default function PracticeScreen() {
     if (correctionResult) {
       setCorrection(currentSentence.id, correctionResult);
 
-      // 게이미피케이션 피드백
       if (correctionResult.xpEarned) {
         setXpEarned(correctionResult.xpEarned);
         setXpLevelUp(!!correctionResult.levelUp);
@@ -197,7 +200,6 @@ export default function PracticeScreen() {
     setPendingAchievements((prev) => (prev || []).slice(1));
   };
 
-  // 다음 업적이 남아 있으면 다시 표시
   useEffect(() => {
     if (!showAchievement && pendingAchievements.length > 0) {
       setShowAchievement(true);
@@ -211,7 +213,6 @@ export default function PracticeScreen() {
 
   const totalXpEarned = correctionValues.reduce((sum, c) => sum + (c.xpEarned || 0), 0);
 
-  // 최신 레벨 정보: 가장 마지막 교정 결과에서 추출
   const latestCorrection = correctionValues.find((c) => c.newLevel != null);
   const currentLevel = latestCorrection?.newLevel;
 
@@ -233,33 +234,44 @@ export default function PracticeScreen() {
 
   return (
     <View style={styles.container}>
-      {/* Header */}
+      {/* Header with gradient */}
       <LinearGradient
-        colors={theme === 'daily' ? ['#1E3A5F', '#2563EB', '#5B9CF6'] : theme === 'travel' ? ['#065F46', '#10B981', '#34D399'] : ['#3B1F6E', '#7C4DFF', '#B388FF']}
+        colors={gradientColors}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
         style={styles.gradientHeader}
       >
+        {/* Decorative circles */}
         <View style={styles.decoCircle1} />
         <View style={styles.decoCircle2} />
-        <View style={styles.decoCircle3} />
 
         <SafeAreaView edges={['top']} style={styles.topBar}>
-          <Text style={styles.backButton} onPress={() => router.back()} hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}>{'\u2190'}</Text>
-          <Text style={styles.pageCounter}>{currentIndex + 1} / {safeSentences.length}</Text>
-          <View style={{ width: 30 }} />
-        </SafeAreaView>
+          <TouchableOpacity
+            style={styles.backButton}
+            onPress={() => router.back()}
+            activeOpacity={0.7}
+            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+          >
+            <Text style={styles.backButtonText}>{'\u2190'}</Text>
+          </TouchableOpacity>
 
-        <View style={styles.headerContent}>
-          <Text style={styles.headerEmoji}>{themeEmoji}</Text>
-          <Text style={styles.headerTitle}>{themeTitle}</Text>
-          <View style={styles.dateBadge}>
-            <Text style={styles.dateText}>{dateStr}</Text>
+          <View style={styles.headerCenter}>
+            <Text style={styles.headerTitle}>
+              {themeEmoji} {themeTitle}
+            </Text>
+            <Text style={styles.headerSubtitle}>
+              {currentIndex + 1} / {safeSentences.length} 문장
+            </Text>
           </View>
-        </View>
+
+          {/* XP badge */}
+          <View style={styles.xpBadge}>
+            <Text style={styles.xpBadgeText}>+80 XP</Text>
+          </View>
+        </SafeAreaView>
       </LinearGradient>
 
-      {/* Content */}
+      {/* Content wrapper */}
       <View style={styles.contentWrapper}>
         <ScrollView
           contentContainerStyle={styles.scroll}
@@ -278,7 +290,7 @@ export default function PracticeScreen() {
               <View style={styles.inputSection}>
                 {isCompleted && (
                   <View style={styles.completedBadge}>
-                    <Ionicons name="checkmark-circle" size={14} color="#16A34A" />
+                    <Ionicons name="checkmark-circle" size={14} color={colors.success} />
                     <Text style={styles.completedText}>작문 완료</Text>
                   </View>
                 )}
@@ -292,7 +304,6 @@ export default function PracticeScreen() {
                 />
               </View>
 
-              {/* Show correction result — from store (persisted) or from current submission */}
               {(currentCorrection || correctionLoading || correctionError) && (
                 <View style={styles.resultSection}>
                   <CorrectionResultView
@@ -306,7 +317,7 @@ export default function PracticeScreen() {
             </View>
           )}
 
-          {/* Dots */}
+          {/* Progress dots */}
           <View style={styles.dotsContainer}>
             {safeSentences.map((_, i) => {
               const sentenceId = safeSentences[i]?.id;
@@ -323,26 +334,28 @@ export default function PracticeScreen() {
             })}
           </View>
 
-          {/* Navigation */}
+          {/* Navigation buttons */}
           <View style={styles.navRow}>
             <TouchableOpacity
               onPress={handlePrev}
               disabled={!canGoPrev}
-              style={[styles.navButton, !canGoPrev && styles.navButtonDisabled]}
+              style={[styles.navButton, styles.navButtonSecondary, !canGoPrev && styles.navButtonDisabled]}
               activeOpacity={0.7}
             >
-              <Ionicons name="chevron-back" size={20} color={canGoPrev ? '#2563EB' : '#D1D5DB'} />
-              <Text style={[styles.navText, !canGoPrev && styles.navTextDisabled]}>이전</Text>
+              <Ionicons name="chevron-back" size={18} color={canGoPrev ? colors.text.primary : colors.disabled} />
+              <Text style={[styles.navText, !canGoPrev && styles.navTextDisabled]}>다시 쓰기</Text>
             </TouchableOpacity>
 
             <TouchableOpacity
               onPress={handleNext}
               disabled={!canGoNext}
-              style={[styles.navButton, !canGoNext && styles.navButtonDisabled]}
+              style={[styles.navButton, styles.navButtonPrimary, !canGoNext && styles.navButtonDisabled]}
               activeOpacity={0.7}
             >
-              <Text style={[styles.navText, !canGoNext && styles.navTextDisabled]}>다음</Text>
-              <Ionicons name="chevron-forward" size={20} color={canGoNext ? '#2563EB' : '#D1D5DB'} />
+              <Text style={[styles.navTextPrimary, !canGoNext && styles.navTextDisabled]}>
+                다음 문장
+              </Text>
+              <Ionicons name="chevron-forward" size={18} color={canGoNext ? colors.text.inverse : colors.disabled} />
             </TouchableOpacity>
           </View>
         </ScrollView>
@@ -387,119 +400,113 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: colors.background,
   },
+
+  // --- Header ---
   gradientHeader: {
-    height: 220,
+    paddingBottom: spacing.lg,
+    borderBottomLeftRadius: radius.xxl,
+    borderBottomRightRadius: radius.xxl,
     overflow: 'hidden',
   },
   decoCircle1: {
     position: 'absolute',
-    width: 200,
-    height: 200,
-    borderRadius: 100,
-    backgroundColor: 'rgba(255,255,255,0.06)',
-    top: -60,
-    right: -40,
-  },
-  decoCircle2: {
-    position: 'absolute',
     width: 120,
     height: 120,
     borderRadius: 60,
-    backgroundColor: 'rgba(255,255,255,0.04)',
-    top: 80,
-    left: -30,
+    backgroundColor: 'rgba(255,255,255,0.1)',
+    top: 30,
+    right: -30,
   },
-  decoCircle3: {
+  decoCircle2: {
     position: 'absolute',
-    width: 80,
-    height: 80,
-    borderRadius: 40,
+    width: 40,
+    height: 40,
+    borderRadius: 20,
     backgroundColor: 'rgba(255,255,255,0.08)',
-    bottom: 20,
-    right: 60,
+    top: 80,
+    right: 50,
   },
   topBar: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
     alignItems: 'center',
-    paddingHorizontal: 20,
-    paddingTop: 8,
+    paddingHorizontal: spacing.screenPadding,
+    gap: spacing.sm,
   },
   backButton: {
-    fontSize: 24,
-    color: '#FFFFFF',
-    width: 30,
-  },
-  pageCounter: {
-    fontSize: 15,
-    fontWeight: '600',
-    color: 'rgba(255,255,255,0.8)',
-  },
-  headerContent: {
+    width: 36,
+    height: 36,
+    borderRadius: 10,
+    backgroundColor: 'rgba(255,255,255,0.2)',
     alignItems: 'center',
-    paddingTop: 12,
+    justifyContent: 'center',
   },
-  headerEmoji: {
-    fontSize: 36,
-    marginBottom: 8,
+  backButtonText: {
+    fontSize: 18,
+    color: colors.text.inverse,
+    fontWeight: '600',
+  },
+  headerCenter: {
+    flex: 1,
   },
   headerTitle: {
-    fontSize: 22,
-    fontWeight: '700',
-    color: '#FFFFFF',
-    marginBottom: 10,
+    fontSize: 16,
+    fontWeight: '800',
+    color: colors.text.inverse,
   },
-  dateBadge: {
-    backgroundColor: 'rgba(255,255,255,0.2)',
-    borderRadius: 16,
-    paddingHorizontal: 14,
-    paddingVertical: 5,
-  },
-  dateText: {
-    fontSize: 13,
+  headerSubtitle: {
+    fontSize: 11,
     fontWeight: '500',
-    color: '#FFFFFF',
+    color: 'rgba(255,255,255,0.85)',
+    marginTop: 2,
   },
+  xpBadge: {
+    paddingHorizontal: spacing.sm,
+    paddingVertical: spacing.xxs + 2,
+    borderRadius: radius.pill,
+    backgroundColor: 'rgba(255,255,255,0.2)',
+  },
+  xpBadgeText: {
+    fontSize: 11,
+    fontWeight: '700',
+    color: colors.text.inverse,
+    letterSpacing: 0.5,
+  },
+
+  // --- Content ---
   contentWrapper: {
     flex: 1,
-    marginTop: -24,
     backgroundColor: colors.background,
-    borderTopLeftRadius: 24,
-    borderTopRightRadius: 24,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: -4 },
-    shadowOpacity: 0.08,
-    shadowRadius: 12,
-    elevation: 8,
   },
   scroll: {
-    paddingTop: 28,
-    paddingBottom: 40,
+    paddingTop: spacing.xl,
+    paddingBottom: spacing.xxxl,
   },
   inputSection: {
-    paddingHorizontal: 20,
-    marginTop: 20,
+    paddingHorizontal: spacing.screenPadding,
+    marginTop: spacing.lg,
   },
   completedBadge: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 4,
-    marginBottom: 8,
+    gap: spacing.xxs,
+    marginBottom: spacing.xs,
   },
   completedText: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#16A34A',
+    color: colors.success,
   },
   resultSection: {
-    paddingHorizontal: 20,
-    marginTop: 20,
+    paddingHorizontal: spacing.screenPadding,
+    marginTop: spacing.lg,
   },
+
+  // --- Dots ---
   dotsContainer: {
     flexDirection: 'row',
     justifyContent: 'center',
-    gap: 8,
-    marginTop: 28,
+    gap: spacing.xs,
+    marginTop: spacing.xxl,
   },
   dot: {
     width: 8,
@@ -507,45 +514,66 @@ const styles = StyleSheet.create({
     borderRadius: 4,
   },
   dotActive: {
-    backgroundColor: '#2563EB',
+    backgroundColor: colors.primary,
     width: 20,
   },
   dotCompleted: {
-    backgroundColor: '#16A34A',
+    backgroundColor: colors.success,
   },
   dotInactive: {
-    backgroundColor: '#D1D5DB',
+    backgroundColor: colors.disabled,
   },
+
+  // --- Navigation ---
   navRow: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    paddingHorizontal: 20,
-    marginTop: 24,
-    paddingBottom: 32,
+    paddingHorizontal: spacing.screenPadding,
+    marginTop: spacing.lg,
+    paddingBottom: spacing.xxl,
+    gap: spacing.xs,
   },
   navButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 4,
-    paddingVertical: 10,
-    paddingHorizontal: 16,
-    borderRadius: 10,
-    backgroundColor: '#EFF6FF',
+    justifyContent: 'center',
+    gap: spacing.xxs,
+    paddingVertical: spacing.sm,
+    borderRadius: radius.sm,
+    height: 48,
+  },
+  navButtonSecondary: {
+    flex: 1,
+    backgroundColor: colors.surfaceAlt,
+    borderWidth: 1,
+    borderColor: colors.border,
+  },
+  navButtonPrimary: {
+    flex: 2,
+    backgroundColor: colors.primary,
+    ...shadows.primary,
   },
   navButtonDisabled: {
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.surfaceAlt,
+    borderWidth: 1,
+    borderColor: colors.border,
+    shadowOpacity: 0,
+    elevation: 0,
   },
   navText: {
+    fontSize: 13,
+    fontWeight: '700',
+    color: colors.text.primary,
+  },
+  navTextPrimary: {
     fontSize: 14,
-    fontWeight: '600',
-    color: '#2563EB',
+    fontWeight: '800',
+    color: colors.text.inverse,
   },
   navTextDisabled: {
-    color: '#D1D5DB',
+    color: colors.disabled,
   },
   statusText: {
-    fontSize: 16,
-    fontWeight: '400',
+    ...typography.body,
     color: colors.text.secondary,
-  },
+  } as any,
 });

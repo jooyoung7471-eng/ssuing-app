@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   StyleSheet,
   Text,
@@ -8,8 +8,11 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import { colors } from '../constants/colors';
+import { typography } from '../constants/typography';
+import { spacing, radius, shadows } from '../constants/spacing';
 
 const MIN_CHARS = 10;
+const MAX_CHARS = 120;
 
 interface WritingInputProps {
   value: string;
@@ -26,29 +29,43 @@ export default function WritingInput({
   loading,
   disabled,
 }: WritingInputProps) {
+  const [isFocused, setIsFocused] = useState(false);
   const canSubmit = value.length >= MIN_CHARS && !loading && !disabled;
 
   return (
     <View style={styles.container}>
-      <View style={styles.inputCard}>
+      {/* Label */}
+      <Text style={styles.sectionLabel}>MY ENGLISH</Text>
+
+      {/* Input card */}
+      <View style={[
+        styles.inputCard,
+        isFocused && styles.inputCardFocused,
+        disabled && styles.inputCardDisabled,
+      ]}>
         <TextInput
-          style={styles.input}
+          style={[styles.input, disabled && styles.inputDisabled]}
           multiline
-          placeholder="영어로 작문해 보세요..."
+          placeholder="영어로 작문해보세요..."
           placeholderTextColor={colors.text.hint}
           value={value}
           onChangeText={onChangeText}
           editable={!disabled}
           textAlignVertical="top"
-          submitBehavior="submit"
           onSubmitEditing={() => { if (canSubmit) onSubmit(); }}
           returnKeyType="done"
+          onFocus={() => setIsFocused(true)}
+          onBlur={() => setIsFocused(false)}
         />
       </View>
 
+      {/* Footer: char count + submit button */}
       <View style={styles.footer}>
-        <Text style={[styles.charCount, value.length >= MIN_CHARS && styles.charCountReady]}>
-          {value.length}자
+        <Text style={[
+          styles.charCount,
+          value.length >= MIN_CHARS && styles.charCountReady,
+        ]}>
+          {value.length} / {MAX_CHARS}
         </Text>
         <TouchableOpacity
           style={[styles.submitButton, canSubmit && styles.submitButtonActive]}
@@ -60,7 +77,7 @@ export default function WritingInput({
             <ActivityIndicator size="small" color="#FFFFFF" />
           ) : (
             <Text style={[styles.submitText, canSubmit && styles.submitTextActive]}>
-              작문 완료
+              {disabled ? '작문 완료' : '제출하기'}
             </Text>
           )}
         </TouchableOpacity>
@@ -73,55 +90,66 @@ const styles = StyleSheet.create({
   container: {
     width: '100%',
   },
+  sectionLabel: {
+    ...typography.label,
+    color: colors.text.secondary,
+    marginBottom: spacing.xs,
+  } as any,
   inputCard: {
-    backgroundColor: '#EFF6FF',
-    borderRadius: 12,
-    borderLeftWidth: 3,
-    borderLeftColor: '#2563EB',
-    padding: 16,
+    backgroundColor: colors.surfaceAlt,
+    borderRadius: radius.sm,
+    borderWidth: 2,
+    borderColor: 'transparent',
+    padding: spacing.md,
+  },
+  inputCardFocused: {
+    borderColor: colors.primary,
+    backgroundColor: colors.card,
+    ...shadows.sm,
+  },
+  inputCardDisabled: {
+    opacity: 0.7,
+    backgroundColor: colors.surfaceAlt,
   },
   input: {
     fontSize: 16,
-    fontWeight: '400',
+    fontWeight: '500',
     color: colors.text.primary,
     minHeight: 80,
     maxHeight: 150,
     lineHeight: 24,
   },
+  inputDisabled: {
+    color: colors.text.secondary,
+  },
   footer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginTop: 12,
+    marginTop: spacing.sm,
   },
   charCount: {
-    fontSize: 13,
-    fontWeight: '400',
+    ...typography.bodySmall,
     color: colors.text.hint,
-  },
+  } as any,
   charCountReady: {
     color: colors.success,
   },
   submitButton: {
     backgroundColor: colors.disabled,
-    borderRadius: 12,
-    paddingHorizontal: 24,
-    paddingVertical: 12,
+    borderRadius: radius.sm,
+    paddingHorizontal: spacing.xl,
+    paddingVertical: spacing.sm,
   },
   submitButtonActive: {
-    backgroundColor: '#2563EB',
-    shadowColor: '#2563EB',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 8,
-    elevation: 3,
+    backgroundColor: colors.primary,
+    ...shadows.primary,
   },
   submitText: {
-    fontSize: 14,
-    fontWeight: '600',
+    ...typography.button,
     color: colors.text.hint,
-  },
+  } as any,
   submitTextActive: {
-    color: '#FFFFFF',
+    color: colors.text.inverse,
   },
 });

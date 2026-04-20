@@ -5,11 +5,19 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withTiming,
+  Easing,
+} from 'react-native-reanimated';
 import ThemeCard from '../../components/ThemeCard';
 import { useDailySentences } from '../../hooks/useDailySentences';
 import { useGamification } from '../../hooks/useGamification';
 import api from '../../services/api';
 import { colors } from '../../constants/colors';
+import { typography } from '../../constants/typography';
+import { spacing, radius, shadows } from '../../constants/spacing';
 import type { Theme, LearningStats, Difficulty } from '../../types';
 
 const DIFFICULTY_KEY = 'engwrite_difficulty';
@@ -24,6 +32,13 @@ export default function HomeScreen() {
   const [difficulty, setDifficulty] = useState<Difficulty>('beginner');
   const { stats: gamification, achievements, refetch: refetchGamification } = useGamification();
 
+  // XP progress bar animation
+  const xpBarWidth = useSharedValue(0);
+
+  const animatedXpStyle = useAnimatedStyle(() => ({
+    width: `${xpBarWidth.value}%`,
+  }));
+
   const loadData = async (diff?: Difficulty) => {
     const d = diff ?? difficulty;
     await Promise.all([
@@ -36,13 +51,29 @@ export default function HomeScreen() {
   };
 
   useEffect(() => {
-    // 저장된 난이도 복원
+    // Restore saved difficulty
     AsyncStorage.getItem(DIFFICULTY_KEY).then((saved) => {
       const d = (saved === 'intermediate' ? 'intermediate' : 'beginner') as Difficulty;
       setDifficulty(d);
       loadData(d);
     });
   }, []);
+
+  // Animate XP bar when gamification data loads
+  useEffect(() => {
+    if (gamification.xpProgress > 0) {
+      xpBarWidth.value = 0;
+      const targetPct = Math.min(gamification.xpProgress * 100, 100);
+      // Small delay then animate
+      const timeout = setTimeout(() => {
+        xpBarWidth.value = withTiming(targetPct, {
+          duration: 1200,
+          easing: Easing.bezier(0.4, 0, 0.2, 1),
+        });
+      }, 200);
+      return () => clearTimeout(timeout);
+    }
+  }, [gamification.xpProgress]);
 
   const handleDifficultyChange = async (d: Difficulty) => {
     setDifficulty(d);
@@ -69,110 +100,141 @@ export default function HomeScreen() {
     .sort((a, b) => new Date(b.unlockedAt!).getTime() - new Date(a.unlockedAt!).getTime())
     .slice(0, 3);
 
+  const totalThemes = 3;
+  const completedThemes = [dailyCompleted, bizCompleted, travelCompleted].filter(
+    (c, i) => c >= ((i === 0 ? dailySentences : i === 1 ? bizSentences : travelSentences) || []).length && ((i === 0 ? dailySentences : i === 1 ? bizSentences : travelSentences) || []).length > 0
+  ).length;
+  const remainingThemes = totalThemes - completedThemes;
+
+  // Date formatting
+  const now = new Date();
+  const weekdays = ['\uC77C\uC694\uC77C', '\uC6D4\uC694\uC77C', '\uD654\uC694\uC77C', '\uC218\uC694\uC77C', '\uBAA9\uC694\uC77C', '\uAE08\uC694\uC77C', '\uD1A0\uC694\uC77C'];
+  const dateCaption = `${now.getMonth() + 1}\uC6D4 ${now.getDate()}\uC77C ${weekdays[now.getDay()]}`;
+
+  const xpToNext = gamification.xpForNextLevel - gamification.totalXp;
+
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
       <ScrollView
         contentContainerStyle={styles.scroll}
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
       >
-        {/* Header */}
+        {/* Header: date + greeting + streak + settings */}
         <View style={styles.header}>
-          <Text style={styles.logo}>쓰잉</Text>
-          {gamification.streakDays > 0 && (
-            <View style={styles.streakBadge}>
-              <Text style={styles.streakText}>
-                {'\u{1F525}'} {gamification.streakDays}일 연속
-              </Text>
-            </View>
-          )}
+          <View style={styles.headerLeft}>
+            <Text style={styles.dateCaption}>{dateCaption}</Text>
+            <Text style={styles.greeting}>{'\uC548\uB155\uD558\uC138\uC694, \uC4F0\uC789\uB2D8'} {'\u{1F44B}'}</Text>
+          </View>
+          <View style={styles.headerRight}>
+            {gamification.streakDays > 0 && (
+              <View style={styles.streakBadge}>
+                <Text style={styles.streakEmoji}>{'\u{1F525}'}</Text>
+                <Text style={styles.streakText}>{gamification.streakDays}\uC77C</Text>
+              </View>
+            )}
+            <TouchableOpacity
+              style={styles.settingsButton}
+              onPress={() => router.push('/(tabs)/settings')}
+              activeOpacity={0.7}
+            >
+              <Ionicons name="settings-outline" size={18} color={colors.text.secondary} />
+            </TouchableOpacity>
+          </View>
         </View>
 
-        {/* Profile / Level Card */}
+        {/* Hero XP Card */}
         <LinearGradient
-          colors={[colors.primary, colors.primaryLight]}
+          colors={[colors.primary, colors.primaryDark]}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
-          style={styles.profileCard}
+          style={styles.heroCard}
         >
-          <View style={styles.profileTop}>
-            <View style={styles.levelBadge}>
-              <Text style={styles.levelText}>Lv.{gamification.level}</Text>
-            </View>
-            <View style={styles.profileStats}>
-              <View style={styles.profileStat}>
-                <Text style={styles.profileStatValue}>{gamification.totalSentences}</Text>
-                <Text style={styles.profileStatLabel}>완료 문장</Text>
-              </View>
-              <View style={styles.profileStatDivider} />
-              <View style={styles.profileStat}>
-                <Text style={styles.profileStatValue}>{gamification.totalPerfect}</Text>
-                <Text style={styles.profileStatLabel}>만점</Text>
-              </View>
-              <View style={styles.profileStatDivider} />
-              <View style={styles.profileStat}>
-                <Text style={styles.profileStatValue}>{gamification.longestStreak}</Text>
-                <Text style={styles.profileStatLabel}>최장 연속</Text>
-              </View>
-            </View>
-          </View>
+          {/* Decorative circle */}
+          <View style={styles.heroDecor} />
 
-          {/* XP Progress Bar */}
-          <View style={styles.xpSection}>
-            <View style={styles.xpLabelRow}>
-              <Text style={styles.xpLabel}>XP</Text>
-              <Text style={styles.xpLabel}>
-                {gamification.totalXp} / {gamification.xpForNextLevel}
+          <View style={styles.heroContent}>
+            {/* Top row: LEVEL + next level info */}
+            <View style={styles.heroTopRow}>
+              <View style={styles.levelBadge}>
+                <Text style={styles.levelText}>LEVEL {gamification.level}</Text>
+              </View>
+              <Text style={styles.nextLevelText}>
+                {'\uB2E4\uC74C \uB808\uBCA8\uAE4C\uC9C0'} {xpToNext > 0 ? xpToNext : 0} XP
               </Text>
             </View>
+
+            {/* XP display */}
+            <Text style={styles.xpDisplay}>
+              {gamification.totalXp}{' '}
+              <Text style={styles.xpTotal}>/ {gamification.xpForNextLevel} XP</Text>
+            </Text>
+
+            {/* Progress bar */}
             <View style={styles.xpBarBg}>
-              <View
-                style={[
-                  styles.xpBarFill,
-                  { width: `${Math.min(gamification.xpProgress * 100, 100)}%` },
-                ]}
-              />
+              <Animated.View style={[styles.xpBarFill, animatedXpStyle]} />
+            </View>
+
+            {/* 3 stats */}
+            <View style={styles.heroStats}>
+              <View style={styles.heroStat}>
+                <Text style={styles.heroStatValue}>{gamification.totalSentences}</Text>
+                <Text style={styles.heroStatLabel}>{'\uC644\uB8CC'}</Text>
+              </View>
+              <View style={styles.heroStatDivider} />
+              <View style={styles.heroStat}>
+                <Text style={styles.heroStatValue}>{gamification.streakDays}\uC77C</Text>
+                <Text style={styles.heroStatLabel}>{'\uC5F0\uC18D'}</Text>
+              </View>
+              <View style={styles.heroStatDivider} />
+              <View style={styles.heroStat}>
+                <Text style={styles.heroStatValue}>{gamification.longestStreak}\uC77C</Text>
+                <Text style={styles.heroStatLabel}>{'\uCD5C\uC7A5'}</Text>
+              </View>
             </View>
           </View>
         </LinearGradient>
 
-        <Text style={styles.subtitle}>오늘의 학습을 시작하세요</Text>
-
-        {/* Difficulty Selector */}
-        <View style={styles.difficultyContainer}>
-          <TouchableOpacity
-            style={[
-              styles.difficultyButton,
-              difficulty === 'beginner' && styles.difficultyButtonActive,
-            ]}
-            onPress={() => handleDifficultyChange('beginner')}
-            activeOpacity={0.8}
-          >
-            <Text
+        {/* Difficulty Segment + completion info */}
+        <View style={styles.difficultyRow}>
+          <View style={styles.difficultyContainer}>
+            <TouchableOpacity
               style={[
-                styles.difficultyText,
-                difficulty === 'beginner' && styles.difficultyTextActive,
+                styles.difficultyButton,
+                difficulty === 'beginner' && styles.difficultyButtonActive,
               ]}
+              onPress={() => handleDifficultyChange('beginner')}
+              activeOpacity={0.8}
             >
-              초급 Beginner
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[
-              styles.difficultyButton,
-              difficulty === 'intermediate' && styles.difficultyButtonActive,
-            ]}
-            onPress={() => handleDifficultyChange('intermediate')}
-            activeOpacity={0.8}
-          >
-            <Text
+              <Text
+                style={[
+                  styles.difficultyText,
+                  difficulty === 'beginner' && styles.difficultyTextActive,
+                ]}
+              >
+                {'\uCD08\uAE09'}
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
               style={[
-                styles.difficultyText,
-                difficulty === 'intermediate' && styles.difficultyTextActive,
+                styles.difficultyButton,
+                difficulty === 'intermediate' && styles.difficultyButtonActive,
               ]}
+              onPress={() => handleDifficultyChange('intermediate')}
+              activeOpacity={0.8}
             >
-              중급 Intermediate
-            </Text>
-          </TouchableOpacity>
+              <Text
+                style={[
+                  styles.difficultyText,
+                  difficulty === 'intermediate' && styles.difficultyTextActive,
+                ]}
+              >
+                {'\uC911\uAE09'}
+              </Text>
+            </TouchableOpacity>
+          </View>
+          <Text style={styles.completionInfo}>
+            {completedThemes}\uAC1C \uC644\uB8CC {'\u00B7'} {remainingThemes}\uAC1C \uB0A8\uC74C
+          </Text>
         </View>
 
         {/* Theme Cards */}
@@ -200,86 +262,64 @@ export default function HomeScreen() {
           />
         </View>
 
-        {/* Quick Access Cards */}
-        <Text style={styles.sectionTitle}>빠른 접근</Text>
-
-        {/* Review Card */}
-        <TouchableOpacity
-          style={styles.quickCard}
-          onPress={() => router.push('/review')}
-          activeOpacity={0.8}
-        >
-          <View style={styles.quickLeft}>
-            <View style={[styles.quickIcon, { backgroundColor: colors.errorLight }]}>
-              <Text style={styles.quickEmoji}>{'\u{1F4DD}'}</Text>
+        {/* Quick Access Bar */}
+        <View style={styles.quickAccessBar}>
+          <TouchableOpacity
+            style={styles.quickItem}
+            onPress={() => router.push('/review')}
+            activeOpacity={0.7}
+          >
+            <View style={styles.quickIconWrap}>
+              <Text style={styles.quickEmoji}>{'\u{1F4DA}'}</Text>
+              {(stats?.totalCorrections ?? 0) > 0 && (
+                <View style={styles.quickBadge}>
+                  <Text style={styles.quickBadgeText}>
+                    {Math.min(stats?.totalCorrections ?? 0, 99)}
+                  </Text>
+                </View>
+              )}
             </View>
-            <View>
-              <Text style={styles.quickTitle}>오답 복습</Text>
-              <Text style={styles.quickDesc}>점수 낮은 문장 다시 도전</Text>
-            </View>
-          </View>
-          <Ionicons name="chevron-forward" size={18} color={colors.text.hint} />
-        </TouchableOpacity>
+            <Text style={styles.quickLabel}>{'\uBCF5\uC2B5'}</Text>
+          </TouchableOpacity>
 
-        {/* Weekly Report Card */}
-        <TouchableOpacity
-          style={styles.quickCard}
-          onPress={() => router.push('/weekly')}
-          activeOpacity={0.8}
-        >
-          <View style={styles.quickLeft}>
-            <View style={[styles.quickIcon, { backgroundColor: '#EFF6FF' }]}>
+          <TouchableOpacity
+            style={styles.quickItem}
+            onPress={() => router.push('/weekly')}
+            activeOpacity={0.7}
+          >
+            <View style={styles.quickIconWrap}>
               <Text style={styles.quickEmoji}>{'\u{1F4CA}'}</Text>
             </View>
-            <View>
-              <Text style={styles.quickTitle}>주간 리포트</Text>
-              <Text style={styles.quickDesc}>이번 주 학습 요약 보기</Text>
-            </View>
-          </View>
-          <Ionicons name="chevron-forward" size={18} color={colors.text.hint} />
-        </TouchableOpacity>
+            <Text style={styles.quickLabel}>{'\uB9AC\uD3EC\uD2B8'}</Text>
+          </TouchableOpacity>
 
-        {/* Achievements Card */}
-        <TouchableOpacity
-          style={styles.quickCard}
-          onPress={() => router.push('/achievements')}
-          activeOpacity={0.8}
-        >
-          <View style={styles.quickLeft}>
-            <View style={[styles.quickIcon, { backgroundColor: colors.warningLight }]}>
+          <TouchableOpacity
+            style={styles.quickItem}
+            onPress={() => router.push('/achievements')}
+            activeOpacity={0.7}
+          >
+            <View style={styles.quickIconWrap}>
               <Text style={styles.quickEmoji}>{'\u{1F3C6}'}</Text>
+              {recentAchievements.length > 0 && (
+                <View style={styles.quickBadge}>
+                  <Text style={styles.quickBadgeText}>{recentAchievements.length}</Text>
+                </View>
+              )}
             </View>
-            <View>
-              <Text style={styles.quickTitle}>업적</Text>
-              <Text style={styles.quickDesc}>
-                {recentAchievements.length > 0
-                  ? recentAchievements.map((a) => a.emoji).join(' ') + ' 최근 달성'
-                  : '업적을 달성해 보세요'}
-              </Text>
-            </View>
-          </View>
-          <Ionicons name="chevron-forward" size={18} color={colors.text.hint} />
-        </TouchableOpacity>
+            <Text style={styles.quickLabel}>{'\uC5C5\uC801'}</Text>
+          </TouchableOpacity>
 
-        {/* History Card (existing) */}
-        <TouchableOpacity
-          style={styles.quickCard}
-          onPress={() => router.push('/(tabs)/history')}
-          activeOpacity={0.8}
-        >
-          <View style={styles.quickLeft}>
-            <View style={[styles.quickIcon, { backgroundColor: '#F5F3FF' }]}>
-              <Text style={styles.quickEmoji}>{'\u{1F4CB}'}</Text>
+          <TouchableOpacity
+            style={styles.quickItem}
+            onPress={() => router.push('/(tabs)/history')}
+            activeOpacity={0.7}
+          >
+            <View style={styles.quickIconWrap}>
+              <Text style={styles.quickEmoji}>{'\u{1F4D6}'}</Text>
             </View>
-            <View>
-              <Text style={styles.quickTitle}>학습 기록</Text>
-              <Text style={styles.quickDesc}>
-                총 {stats?.totalCorrections ?? 0}문장 | 평균 {stats?.averageScore?.toFixed(1) ?? '0.0'}점
-              </Text>
-            </View>
-          </View>
-          <Ionicons name="chevron-forward" size={18} color={colors.text.hint} />
-        </TouchableOpacity>
+            <Text style={styles.quickLabel}>{'\uAE30\uB85D'}</Text>
+          </TouchableOpacity>
+        </View>
       </ScrollView>
     </SafeAreaView>
   );
@@ -291,191 +331,242 @@ const styles = StyleSheet.create({
     backgroundColor: colors.background,
   },
   scroll: {
-    padding: 20,
+    padding: spacing.screenPadding,
+    paddingBottom: 40,
   },
+
+  // Header
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 16,
+    alignItems: 'flex-start',
+    marginBottom: spacing.md,
   },
-  logo: {
-    fontSize: 28,
-    fontWeight: '700',
+  headerLeft: {
+    flex: 1,
+  },
+  dateCaption: {
+    ...typography.caption,
+    color: colors.text.secondary,
+    marginBottom: 2,
+  },
+  greeting: {
+    fontSize: 20,
+    fontWeight: '800',
+    letterSpacing: -0.5,
     color: colors.text.primary,
+  },
+  headerRight: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
   },
   streakBadge: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: colors.warningLight,
-    borderRadius: 16,
+    gap: 6,
     paddingHorizontal: 12,
-    paddingVertical: 6,
+    paddingVertical: 7,
+    backgroundColor: '#FFF5E0',
+    borderRadius: radius.pill,
+    borderWidth: 1.5,
+    borderColor: colors.warning + '60',
+  },
+  streakEmoji: {
+    fontSize: 15,
   },
   streakText: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: colors.warning,
+    fontWeight: '800',
+    color: '#C2680D',
+    fontSize: 13,
+  },
+  settingsButton: {
+    width: 38,
+    height: 38,
+    borderRadius: 19,
+    backgroundColor: colors.surfaceAlt,
+    borderWidth: 1,
+    borderColor: colors.border,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 
-  // Profile Card
-  profileCard: {
-    borderRadius: 16,
-    padding: 20,
-    marginBottom: 24,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.12,
-    shadowRadius: 12,
-    elevation: 4,
+  // Hero XP Card
+  heroCard: {
+    borderRadius: radius.xl,
+    padding: 18,
+    marginBottom: spacing.md,
+    overflow: 'hidden',
+    ...shadows.primary,
   },
-  profileTop: {
+  heroDecor: {
+    position: 'absolute',
+    top: -40,
+    right: -40,
+    width: 160,
+    height: 160,
+    borderRadius: 80,
+    backgroundColor: 'rgba(255,255,255,0.15)',
+  },
+  heroContent: {
+    position: 'relative',
+  },
+  heroTopRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 16,
-  },
-  levelBadge: {
-    backgroundColor: 'rgba(255,255,255,0.25)',
-    borderRadius: 12,
-    paddingHorizontal: 14,
-    paddingVertical: 8,
-    marginRight: 16,
-  },
-  levelText: {
-    fontSize: 18,
-    fontWeight: '800',
-    color: '#FFFFFF',
-  },
-  profileStats: {
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-  },
-  profileStat: {
-    alignItems: 'center',
-  },
-  profileStatValue: {
-    fontSize: 18,
-    fontWeight: '700',
-    color: '#FFFFFF',
-  },
-  profileStatLabel: {
-    fontSize: 11,
-    fontWeight: '400',
-    color: 'rgba(255,255,255,0.8)',
-    marginTop: 2,
-  },
-  profileStatDivider: {
-    width: 1,
-    height: 28,
-    backgroundColor: 'rgba(255,255,255,0.25)',
-  },
-  xpSection: {},
-  xpLabelRow: {
-    flexDirection: 'row',
     justifyContent: 'space-between',
     marginBottom: 6,
   },
-  xpLabel: {
-    fontSize: 12,
+  levelBadge: {
+    backgroundColor: 'rgba(255,255,255,0.2)',
+    paddingHorizontal: 10,
+    paddingVertical: 3,
+    borderRadius: radius.pill,
+  },
+  levelText: {
+    fontSize: 11,
+    fontWeight: '700',
+    color: '#FFFFFF',
+    letterSpacing: 0.5,
+  },
+  nextLevelText: {
+    fontSize: 11,
     fontWeight: '600',
-    color: 'rgba(255,255,255,0.9)',
+    color: 'rgba(255,255,255,0.85)',
+  },
+  xpDisplay: {
+    fontSize: 28,
+    fontWeight: '800',
+    color: '#FFFFFF',
+    letterSpacing: -0.8,
+    marginBottom: 12,
+  },
+  xpTotal: {
+    fontSize: 15,
+    fontWeight: '500',
+    opacity: 0.75,
   },
   xpBarBg: {
     height: 8,
-    backgroundColor: 'rgba(255,255,255,0.25)',
-    borderRadius: 4,
+    backgroundColor: 'rgba(0,0,0,0.2)',
+    borderRadius: radius.pill,
     overflow: 'hidden',
+    marginBottom: 12,
   },
   xpBarFill: {
     height: '100%',
     backgroundColor: '#FFFFFF',
-    borderRadius: 4,
+    borderRadius: radius.pill,
   },
-
-  subtitle: {
-    fontSize: 16,
-    fontWeight: '400',
-    color: colors.text.secondary,
-    marginBottom: 16,
-  },
-  difficultyContainer: {
+  heroStats: {
     flexDirection: 'row',
-    backgroundColor: '#F3F4F6',
-    borderRadius: 12,
-    padding: 4,
-    marginBottom: 16,
+    gap: 12,
   },
-  difficultyButton: {
+  heroStat: {
     flex: 1,
-    paddingVertical: 10,
-    borderRadius: 10,
-    alignItems: 'center',
   },
-  difficultyButtonActive: {
-    backgroundColor: '#2563EB',
-  },
-  difficultyText: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: colors.text.hint,
-  },
-  difficultyTextActive: {
-    color: '#FFFFFF',
-  },
-  cards: {},
-
-  // Section
-  sectionTitle: {
+  heroStatValue: {
     fontSize: 18,
-    fontWeight: '700',
-    color: colors.text.primary,
-    marginTop: 24,
-    marginBottom: 12,
+    fontWeight: '800',
+    color: '#FFFFFF',
+    letterSpacing: -0.3,
+  },
+  heroStatLabel: {
+    fontSize: 10,
+    fontWeight: '500',
+    color: 'rgba(255,255,255,0.75)',
+  },
+  heroStatDivider: {
+    width: 1,
+    backgroundColor: 'rgba(255,255,255,0.25)',
   },
 
-  // Quick Access Cards
-  quickCard: {
+  // Difficulty Segment
+  difficultyRow: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    backgroundColor: colors.card,
-    borderRadius: 16,
+    marginBottom: spacing.sm,
+  },
+  difficultyContainer: {
+    flexDirection: 'row',
+    backgroundColor: colors.surfaceAlt,
+    borderRadius: radius.pill,
+    padding: 4,
     borderWidth: 1,
     borderColor: colors.border,
-    padding: 16,
-    marginBottom: 10,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.04,
-    shadowRadius: 8,
-    elevation: 1,
   },
-  quickLeft: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 12,
-    flex: 1,
-  },
-  quickIcon: {
-    width: 40,
-    height: 40,
-    borderRadius: 12,
-    justifyContent: 'center',
+  difficultyButton: {
+    paddingHorizontal: 18,
+    paddingVertical: 6,
+    borderRadius: radius.pill,
     alignItems: 'center',
   },
-  quickEmoji: {
-    fontSize: 18,
+  difficultyButtonActive: {
+    backgroundColor: '#FFFFFF',
+    ...shadows.sm,
   },
-  quickTitle: {
-    fontSize: 15,
-    fontWeight: '600',
+  difficultyText: {
+    fontSize: 13,
+    fontWeight: '700',
+    color: colors.text.secondary,
+  },
+  difficultyTextActive: {
     color: colors.text.primary,
   },
-  quickDesc: {
+  completionInfo: {
     fontSize: 12,
-    fontWeight: '400',
+    fontWeight: '600',
     color: colors.text.secondary,
-    marginTop: 2,
+  },
+
+  // Theme Cards
+  cards: {
+    marginBottom: spacing.md,
+  },
+
+  // Quick Access Bar
+  quickAccessBar: {
+    flexDirection: 'row',
+    backgroundColor: colors.card,
+    borderWidth: 1,
+    borderColor: colors.border,
+    borderRadius: 18,
+    paddingVertical: 10,
+    paddingHorizontal: 8,
+    ...shadows.sm,
+  },
+  quickItem: {
+    flex: 1,
+    alignItems: 'center',
+    padding: 4,
+  },
+  quickIconWrap: {
+    position: 'relative',
+    marginBottom: 2,
+  },
+  quickEmoji: {
+    fontSize: 20,
+  },
+  quickBadge: {
+    position: 'absolute',
+    top: -4,
+    right: -8,
+    backgroundColor: colors.error,
+    borderRadius: radius.pill,
+    paddingHorizontal: 5,
+    paddingVertical: 1,
+    minWidth: 16,
+    alignItems: 'center',
+  },
+  quickBadgeText: {
+    fontSize: 9,
+    fontWeight: '800',
+    color: '#FFFFFF',
+  },
+  quickLabel: {
+    fontSize: 10,
+    fontWeight: '600',
+    color: colors.text.secondary,
   },
 });

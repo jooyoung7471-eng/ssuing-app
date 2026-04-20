@@ -1,6 +1,8 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { colors } from '../constants/colors';
+import { typography } from '../constants/typography';
+import { spacing, radius } from '../constants/spacing';
 import type { HintWord } from '../types';
 
 interface HintWordsProps {
@@ -8,51 +10,54 @@ interface HintWordsProps {
 }
 
 export default function HintWords({ hints }: HintWordsProps) {
-  // 2-column grid layout like the reference
   const safeHints = hints || [];
-  const rows: HintWord[][] = [];
-  for (let i = 0; i < safeHints.length; i += 2) {
-    rows.push(safeHints.slice(i, i + 2));
-  }
 
   return (
-    <View style={styles.grid}>
-      {rows.map((row, rowIdx) => (
-        <View key={rowIdx} style={styles.row}>
-          {row.map((hint, colIdx) => (
-            <View key={colIdx} style={styles.cell}>
-              <Text style={styles.english}>{hint.english}</Text>
-              <Text style={styles.korean}>{hint.korean}</Text>
-            </View>
-          ))}
-          {row.length === 1 && <View style={styles.cell} />}
-        </View>
-      ))}
+    <View style={styles.container}>
+      <Text style={styles.label}>KEY VOCABULARY</Text>
+      <View style={styles.chipRow}>
+        {safeHints.map((hint, i) => (
+          <View key={i} style={styles.chip}>
+            <Text style={styles.chipEnglish}>{hint.english}</Text>
+            <Text style={styles.chipKorean}>{hint.korean}</Text>
+          </View>
+        ))}
+      </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  grid: {
+  container: {
     width: '100%',
   },
-  row: {
+  label: {
+    ...typography.label,
+    color: colors.text.secondary,
+    marginBottom: spacing.xs,
+  } as any,
+  chipRow: {
     flexDirection: 'row',
-    marginBottom: 8,
+    flexWrap: 'wrap',
+    gap: spacing.xs,
   },
-  cell: {
-    flex: 1,
-    paddingVertical: 4,
+  chip: {
+    backgroundColor: colors.primaryLight,
+    borderRadius: radius.pill,
+    paddingHorizontal: spacing.sm,
+    paddingVertical: spacing.xxs + 2,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing.xxs,
   },
-  english: {
-    fontSize: 15,
+  chipEnglish: {
+    fontSize: 13,
     fontWeight: '700',
-    color: '#1A1A2E',
-    marginBottom: 2,
+    color: colors.primary,
   },
-  korean: {
-    fontSize: 12,
-    fontWeight: '400',
+  chipKorean: {
+    fontSize: 11,
+    fontWeight: '500',
     color: colors.text.secondary,
   },
 });

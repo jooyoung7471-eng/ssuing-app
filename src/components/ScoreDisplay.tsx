@@ -7,6 +7,8 @@ import Animated, {
   Easing,
 } from 'react-native-reanimated';
 import { colors, getScoreColor } from '../constants/colors';
+import { typography } from '../constants/typography';
+import { spacing, radius } from '../constants/spacing';
 
 interface ScoreDisplayProps {
   score: number;
@@ -18,7 +20,7 @@ export default function ScoreDisplay({ score, maxScore = 10 }: ScoreDisplayProps
 
   useEffect(() => {
     animatedWidth.value = withTiming((score / maxScore) * 100, {
-      duration: 600,
+      duration: 800,
       easing: Easing.out(Easing.cubic),
     });
   }, [score, maxScore, animatedWidth]);
@@ -30,17 +32,25 @@ export default function ScoreDisplay({ score, maxScore = 10 }: ScoreDisplayProps
     backgroundColor: scoreColor,
   }));
 
+  const getMessage = () => {
+    if (score >= 8) return '훌륭해요!';
+    if (score >= 5) return '좋은 시도예요!';
+    return '다시 도전해봐요!';
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.scoreRow}>
-        <Text style={[styles.score, { color: scoreColor }]}>{Math.round(score * 10) / 10}</Text>
+        <Text style={[styles.score, { color: scoreColor }]}>
+          {Math.round(score * 10) / 10}
+        </Text>
         <Text style={styles.maxScore}>/{maxScore}</Text>
       </View>
       <View style={styles.barBg}>
         <Animated.View style={[styles.barFill, barStyle]} />
       </View>
-      <Text style={[styles.label, { color: scoreColor }]}>
-        {score >= 8 ? '훌륭해요!' : score >= 5 ? '좋은 시도예요!' : '다시 도전해봐요!'}
+      <Text style={[styles.message, { color: scoreColor }]}>
+        {getMessage()}
       </Text>
     </View>
   );
@@ -49,36 +59,35 @@ export default function ScoreDisplay({ score, maxScore = 10 }: ScoreDisplayProps
 const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
-    paddingVertical: 16,
+    paddingVertical: spacing.md,
   },
   scoreRow: {
     flexDirection: 'row',
     alignItems: 'baseline',
   },
   score: {
-    fontSize: 24,
-    fontWeight: '700',
-  },
+    ...typography.score,
+  } as any,
   maxScore: {
-    fontSize: 16,
-    fontWeight: '400',
+    fontSize: 20,
+    fontWeight: '500',
     color: colors.text.hint,
   },
   barBg: {
     width: '80%',
-    height: 6,
+    height: 8,
     backgroundColor: colors.border,
-    borderRadius: 3,
-    marginTop: 8,
+    borderRadius: radius.xs,
+    marginTop: spacing.xs,
     overflow: 'hidden',
   },
   barFill: {
-    height: 6,
-    borderRadius: 3,
+    height: 8,
+    borderRadius: radius.xs,
   },
-  label: {
-    fontSize: 16,
-    fontWeight: '600',
-    marginTop: 12,
-  },
+  message: {
+    ...typography.body,
+    fontWeight: '700',
+    marginTop: spacing.sm,
+  } as any,
 });
