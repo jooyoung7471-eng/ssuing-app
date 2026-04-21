@@ -28,7 +28,7 @@ function useProtectedRoute(onboardingDone: boolean | null, termsAgreed: boolean 
     const inTermsScreen = segments[0] === 'terms';
     const isAuthenticated = !!token || isGuest;
 
-    if (!onboardingDone && !inOnboarding) {
+    if (!onboardingDone && !inOnboarding && !inAuthScreen && !inTermsScreen) {
       router.replace('/onboarding');
       return;
     }

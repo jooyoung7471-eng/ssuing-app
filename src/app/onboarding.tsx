@@ -110,13 +110,14 @@ export default function OnboardingScreen() {
             />
           ))}
         </View>
-        {!isLastPage ? (
-          <TouchableOpacity onPress={completeOnboarding} hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}>
-            <Text style={styles.skipText}>건너뛰기</Text>
-          </TouchableOpacity>
-        ) : (
-          <View style={{ width: 60 }} />
-        )}
+        <TouchableOpacity
+          onPress={!isLastPage ? completeOnboarding : undefined}
+          hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+          style={{ opacity: isLastPage ? 0 : 1 }}
+          disabled={isLastPage}
+        >
+          <Text style={styles.skipText}>건너뛰기</Text>
+        </TouchableOpacity>
       </View>
 
       {/* Hero illustration card */}
