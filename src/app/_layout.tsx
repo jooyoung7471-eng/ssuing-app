@@ -15,10 +15,27 @@ const Wrapper = isWeb ? View : GestureHandlerRootView;
 
 SplashScreen.preventAutoHideAsync();
 
-function useProtectedRoute(onboardingDone: boolean | null, termsAgreed: boolean | null) {
+function useProtectedRoute(
+  onboardingDone: boolean | null,
+  termsAgreed: boolean | null,
+  refreshFlags: () => void,
+) {
   const { token, isGuest, isReady } = useAuthStore();
   const segments = useSegments();
   const router = useRouter();
+
+  // 현재 최상위 세그먼트를 문자열로 변환해 안정적인 의존성으로 사용.
+  // segments 배열 참조는 매 렌더마다 바뀔 수 있으므로 segments[0] 문자열로 비교한다.
+  const currentSegment = segments[0] ?? '';
+
+  // 세그먼트가 변경될 때마다 AsyncStorage에서 플래그를 다시 읽는다.
+  // onboarding.tsx, auth.tsx, terms.tsx가 AsyncStorage를 직접 변경한 뒤
+  // router.replace()로 화면을 전환하면, 세그먼트 변경이 이 effect를 트리거한다.
+  // refreshFlags는 비동기로 state를 갱신하고, state 변경이 아래 라우팅 effect를
+  // 다시 실행하므로 최신 플래그 기반으로 올바른 라우팅 결정을 내린다.
+  useEffect(() => {
+    refreshFlags();
+  }, [currentSegment]);
 
   useEffect(() => {
     if (onboardingDone === null || termsAgreed === null || !isReady) return;
@@ -50,20 +67,28 @@ export default function RootLayout() {
   const [onboardingDone, setOnboardingDone] = useState<boolean | null>(null);
   const [termsAgreed, setTermsAgreed] = useState<boolean | null>(null);
 
-  useEffect(() => {
-    loadToken();
+  // AsyncStorage에서 플래그를 다시 읽어 state를 갱신하는 함수.
+  // onboarding.tsx, terms.tsx가 AsyncStorage를 직접 변경한 뒤
+  // router.replace()로 화면이 바뀌면, segments 변경이 useProtectedRoute를
+  // 재실행하고, 이때 refreshFlags로 최신 값을 반영한다.
+  const refreshFlags = () => {
     AsyncStorage.getItem(ONBOARDING_KEY).then((value) => {
       setOnboardingDone(value === 'true');
     });
     AsyncStorage.getItem(TERMS_AGREED_KEY).then((value) => {
       setTermsAgreed(value === 'true');
     });
+  };
+
+  useEffect(() => {
+    loadToken();
+    refreshFlags();
     // 스플래시 1.5초 유지 후 숨김
     const timer = setTimeout(() => SplashScreen.hideAsync(), 1500);
     return () => clearTimeout(timer);
   }, []);
 
-  useProtectedRoute(onboardingDone, termsAgreed);
+  useProtectedRoute(onboardingDone, termsAgreed, refreshFlags);
 
   if (!isReady || onboardingDone === null || termsAgreed === null) {
     const loading = (

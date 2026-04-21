@@ -112,22 +112,25 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   socialLogin: async (provider: SocialProvider, socialToken: string, email?: string | null, name?: string | null) => {
     set({ isLoading: true });
     try {
-      const { data } = await api.post('/auth/social', {
+      const response = await api.post('/auth/social', {
         provider,
         token: socialToken,
         email: email || undefined,
         name: name || undefined,
       });
+      // 서버 응답: { data: { id, email, name, provider, token } }
+      // axios가 response.data로 한 번 벗기므로 result = { data: { ... } }
+      const result = response.data?.data ?? response.data;
       const user: User = {
-        id: data.id,
-        email: data.email,
-        name: data.name,
-        provider: data.provider,
+        id: result.id,
+        email: result.email,
+        name: result.name,
+        provider: result.provider,
       };
-      await tokenStorage.set(data.token);
+      await tokenStorage.set(result.token);
       await tokenStorage.setUser(user);
       await tokenStorage.removeIsGuest();
-      set({ token: data.token, user, isGuest: false, isLoading: false });
+      set({ token: result.token, user, isGuest: false, isLoading: false });
     } catch (error) {
       set({ isLoading: false });
       throw error;
