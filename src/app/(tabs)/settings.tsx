@@ -32,7 +32,7 @@ export default function SettingsScreen() {
     if (value) {
       const success = await enablePushNotifications();
       if (!success && Platform.OS !== 'web') {
-        Alert.alert('\uC54C\uB9BC \uAD8C\uD55C', '\uC124\uC815\uC5D0\uC11C \uC54C\uB9BC \uAD8C\uD55C\uC744 \uD5C8\uC6A9\uD574\uC8FC\uC138\uC694.');
+        Alert.alert('알림 권한', '설정에서 알림 권한을 허용해주세요.');
         return;
       }
       setPushEnabled(true);
@@ -52,12 +52,12 @@ export default function SettingsScreen() {
 
   const handleLogout = () => {
     Alert.alert(
-      '\uB85C\uADF8\uC544\uC6C3',
-      '\uC815\uB9D0 \uB85C\uADF8\uC544\uC6C3 \uD558\uC2DC\uACA0\uC2B5\uB2C8\uAE4C?',
+      '로그아웃',
+      '정말 로그아웃 하시겠습니까?',
       [
-        { text: '\uCDE8\uC18C', style: 'cancel' },
+        { text: '취소', style: 'cancel' },
         {
-          text: '\uB85C\uADF8\uC544\uC6C3',
+          text: '로그아웃',
           style: 'destructive',
           onPress: async () => {
             await logout();
@@ -70,19 +70,19 @@ export default function SettingsScreen() {
 
   const handleDeleteAccount = () => {
     Alert.alert(
-      '\uD68C\uC6D0 \uD0C8\uD1F4',
-      '\uC815\uB9D0 \uD0C8\uD1F4\uD558\uC2DC\uACA0\uC2B5\uB2C8\uAE4C?\n\uBAA8\uB4E0 \uD559\uC2B5 \uAE30\uB85D\uC774 \uC0AD\uC81C\uB429\uB2C8\uB2E4.',
+      '회원 탈퇴',
+      '정말 탈퇴하시겠습니까?\n모든 학습 기록이 삭제됩니다.',
       [
-        { text: '\uCDE8\uC18C', style: 'cancel' },
+        { text: '취소', style: 'cancel' },
         {
-          text: '\uD0C8\uD1F4\uD558\uAE30',
+          text: '탈퇴하기',
           style: 'destructive',
           onPress: async () => {
             try {
               await deleteAccount();
               router.replace('/auth');
             } catch (err: any) {
-              Alert.alert('\uC624\uB958', err?.message || '\uD0C8\uD1F4 \uCC98\uB9AC \uC911 \uC624\uB958\uAC00 \uBC1C\uC0DD\uD588\uC2B5\uB2C8\uB2E4.');
+              Alert.alert('오류', err?.message || '탈퇴 처리 중 오류가 발생했습니다.');
             }
           },
         },
@@ -94,7 +94,7 @@ export default function SettingsScreen() {
     try {
       if (provider === 'apple') {
         if (Platform.OS !== 'ios') {
-          Alert.alert('\uC54C\uB9BC', 'Apple \uB85C\uADF8\uC778\uC740 iOS\uC5D0\uC11C\uB9CC \uC0AC\uC6A9 \uAC00\uB2A5\uD569\uB2C8\uB2E4.');
+          Alert.alert('알림', 'Apple 로그인은 iOS에서만 사용 가능합니다.');
           return;
         }
         const AppleAuthentication = await import('expo-apple-authentication');
@@ -132,7 +132,7 @@ export default function SettingsScreen() {
 
         const params = new URLSearchParams(result.url.split('#')[1] || '');
         const idToken = params.get('id_token');
-        if (!idToken) throw new Error('Google \uD1A0\uD070\uC744 \uBC1B\uC9C0 \uBABB\uD588\uC2B5\uB2C8\uB2E4.');
+        if (!idToken) throw new Error('Google 토큰을 받지 못했습니다.');
 
         const payload = JSON.parse(atob(idToken.split('.')[1]));
         await linkSocialAccount('google', idToken, payload.email, payload.name);
@@ -155,15 +155,15 @@ export default function SettingsScreen() {
 
         const url = new URL(result.url);
         const code = url.searchParams.get('code');
-        if (!code) throw new Error('\uCE74\uCE74\uC624 \uCF54\uB4DC\uB97C \uBC1B\uC9C0 \uBABB\uD588\uC2B5\uB2C8\uB2E4.');
+        if (!code) throw new Error('카카오 코드를 받지 못했습니다.');
 
         await linkSocialAccount('kakao', code);
       }
 
-      Alert.alert('\uC131\uACF5', '\uC18C\uC15C \uACC4\uC815\uC774 \uC5F0\uB3D9\uB418\uC5C8\uC2B5\uB2C8\uB2E4.');
+      Alert.alert('성공', '소셜 계정이 연동되었습니다.');
     } catch (err: any) {
       if (err?.code === 'ERR_REQUEST_CANCELED' || err?.code === 'ERR_CANCELED') return;
-      Alert.alert('\uC624\uB958', err?.message || '\uACC4\uC815 \uC5F0\uB3D9\uC5D0 \uC2E4\uD328\uD588\uC2B5\uB2C8\uB2E4.');
+      Alert.alert('오류', err?.message || '계정 연동에 실패했습니다.');
     }
   };
 
@@ -171,16 +171,16 @@ export default function SettingsScreen() {
 
   const formatHour = (h: number) =>
     h < 12
-      ? `\uC624\uC804 ${h}\uC2DC`
+      ? `오전 ${h}시`
       : h === 12
-        ? '\uC624\uD6C4 12\uC2DC'
-        : `\uC624\uD6C4 ${h - 12}\uC2DC`;
+        ? '오후 12시'
+        : `오후 ${h - 12}시`;
 
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
       <ScrollView contentContainerStyle={styles.content}>
         {/* Title */}
-        <Text style={styles.screenTitle}>{'\uC124\uC815'}</Text>
+        <Text style={styles.screenTitle}>{'설정'}</Text>
 
         {/* User Card */}
         <View style={styles.userCard}>
@@ -193,20 +193,20 @@ export default function SettingsScreen() {
           </View>
           <View style={styles.userInfo}>
             <Text style={styles.userName}>
-              {isGuest ? '\uAC8C\uC2A4\uD2B8' : user?.name || user?.email || '\uC54C \uC218 \uC5C6\uC74C'}
+              {isGuest ? '게스트' : user?.name || user?.email || '알 수 없음'}
             </Text>
             <Text style={styles.userStatus}>
               {isGuest
-                ? '\uB85C\uADF8\uC778\uD558\uBA74 \uD559\uC2B5 \uAE30\uB85D\uC774 \uC800\uC7A5\uB429\uB2C8\uB2E4'
+                ? '로그인하면 학습 기록이 저장됩니다'
                 : user?.provider
-                  ? `${user.provider.charAt(0).toUpperCase() + user.provider.slice(1)} \uACC4\uC815\uC73C\uB85C \uB85C\uADF8\uC778\uB428`
-                  : '\uB85C\uADF8\uC778\uB428'}
+                  ? `${user.provider.charAt(0).toUpperCase() + user.provider.slice(1)} 계정으로 로그인됨`
+                  : '로그인됨'}
             </Text>
           </View>
           {!isGuest && user?.provider && (
             <View style={styles.providerBadge}>
               <Text style={styles.providerBadgeText}>
-                {user.provider === 'kakao' ? '\uCE74\uCE74\uC624' : user.provider === 'apple' ? 'Apple' : 'Google'}
+                {user.provider === 'kakao' ? '카카오' : user.provider === 'apple' ? 'Apple' : 'Google'}
               </Text>
             </View>
           )}
@@ -215,7 +215,7 @@ export default function SettingsScreen() {
         {/* Guest: social account linking */}
         {isGuest && (
           <View style={styles.section}>
-            <Text style={styles.sectionTitle}>{'\uACC4\uC815 \uC5F0\uB3D9'}</Text>
+            <Text style={styles.sectionTitle}>{'계정 연동'}</Text>
             <View style={styles.sectionCard}>
               {showApple && (
                 <TouchableOpacity
@@ -223,7 +223,7 @@ export default function SettingsScreen() {
                   onPress={() => handleLinkAccount('apple')}
                   activeOpacity={0.7}
                 >
-                  <Text style={styles.linkAppleText}>Apple \uACC4\uC815 \uC5F0\uB3D9</Text>
+                  <Text style={styles.linkAppleText}>Apple 계정 연동</Text>
                 </TouchableOpacity>
               )}
               {/* Google/카카오는 추후 지원 예정 */}
@@ -233,11 +233,11 @@ export default function SettingsScreen() {
 
         {/* Notification Section */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>{'\uC54C\uB9BC'}</Text>
+          <Text style={styles.sectionTitle}>{'알림'}</Text>
           <View style={styles.sectionCard}>
             <View style={styles.row}>
               <View style={styles.rowLeft}>
-                <Text style={styles.rowLabel}>{'\uD478\uC2DC \uC54C\uB9BC'}</Text>
+                <Text style={styles.rowLabel}>{'푸시 알림'}</Text>
               </View>
               <Switch
                 value={pushEnabled}
@@ -254,7 +254,7 @@ export default function SettingsScreen() {
                   onPress={() => setShowTimePicker(!showTimePicker)}
                   activeOpacity={0.7}
                 >
-                  <Text style={styles.rowLabel}>{'\uB9AC\uB9C8\uC778\uB354 \uC2DC\uAC04'}</Text>
+                  <Text style={styles.rowLabel}>{'리마인더 시간'}</Text>
                   <View style={styles.timeDisplay}>
                     <Text style={styles.timeText}>{formatHour(reminderHour)}</Text>
                     <Ionicons
@@ -295,28 +295,28 @@ export default function SettingsScreen() {
 
         {/* Info Section */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>{'\uC815\uBCF4'}</Text>
+          <Text style={styles.sectionTitle}>{'정보'}</Text>
           <View style={styles.sectionCard}>
             <TouchableOpacity
               style={styles.row}
               onPress={() => Linking.openURL('https://ssuing-app-production.up.railway.app/privacy')}
               activeOpacity={0.7}
             >
-              <Text style={styles.rowLabel}>{'\uAC1C\uC778\uC815\uBCF4\uCC98\uB9AC\uBC29\uCE68'}</Text>
-              <Text style={styles.rowChevron}>{'\u203A'}</Text>
+              <Text style={styles.rowLabel}>{'개인정보처리방침'}</Text>
+              <Text style={styles.rowChevron}>{'›'}</Text>
             </TouchableOpacity>
             <View style={styles.rowDivider} />
             <TouchableOpacity
               style={styles.row}
-              onPress={() => Linking.openURL('mailto:ssuing.app@gmail.com?subject=[\uC4F0\uC789] \uBB38\uC758')}
+              onPress={() => Linking.openURL('mailto:ssuing.app@gmail.com?subject=[쓰잉] 문의')}
               activeOpacity={0.7}
             >
-              <Text style={styles.rowLabel}>{'\uBB38\uC758\uD558\uAE30'}</Text>
-              <Text style={styles.rowChevron}>{'\u203A'}</Text>
+              <Text style={styles.rowLabel}>{'문의하기'}</Text>
+              <Text style={styles.rowChevron}>{'›'}</Text>
             </TouchableOpacity>
             <View style={styles.rowDivider} />
             <View style={styles.row}>
-              <Text style={styles.rowLabel}>{'\uBC84\uC804'}</Text>
+              <Text style={styles.rowLabel}>{'버전'}</Text>
               <Text style={styles.rowValue}>1.1.0</Text>
             </View>
           </View>
@@ -330,7 +330,7 @@ export default function SettingsScreen() {
             activeOpacity={0.7}
           >
             <Text style={styles.logoutText}>
-              {isGuest ? '\uB85C\uADF8\uC778 \uD654\uBA74\uC73C\uB85C' : '\uB85C\uADF8\uC544\uC6C3'}
+              {isGuest ? '로그인 화면으로' : '로그아웃'}
             </Text>
           </TouchableOpacity>
 
@@ -341,7 +341,7 @@ export default function SettingsScreen() {
               activeOpacity={0.7}
               disabled={isLoading}
             >
-              <Text style={styles.deleteText}>{'\uD68C\uC6D0 \uD0C8\uD1F4'}</Text>
+              <Text style={styles.deleteText}>{'회원 탈퇴'}</Text>
             </TouchableOpacity>
           )}
         </View>

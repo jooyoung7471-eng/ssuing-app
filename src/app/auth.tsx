@@ -56,14 +56,14 @@ export default function AuthScreen() {
       if (err?.code === 'ERR_REQUEST_CANCELED' || err?.code === 'ERR_CANCELED') {
         return;
       }
-      const msg = err?.message || '\uC18C\uC15C \uB85C\uADF8\uC778\uC5D0 \uC2E4\uD328\uD588\uC2B5\uB2C8\uB2E4.';
+      const msg = err?.message || '소셜 로그인에 실패했습니다.';
       setError(msg);
     }
   };
 
   const handleAppleLogin = async () => {
     if (Platform.OS === 'web') {
-      throw new Error('Apple \uB85C\uADF8\uC778\uC740 iOS\uC5D0\uC11C\uB9CC \uC0AC\uC6A9 \uAC00\uB2A5\uD569\uB2C8\uB2E4.');
+      throw new Error('Apple 로그인은 iOS에서만 사용 가능합니다.');
     }
     const AppleAuthentication = await import('expo-apple-authentication');
     const credential = await AppleAuthentication.signInAsync({
@@ -101,7 +101,7 @@ export default function AuthScreen() {
     const result = await WebBrowser.openAuthSessionAsync(authUrl, redirectUri);
 
     if (result.type !== 'success' || !result.url) {
-      const err = new Error('Google \uB85C\uADF8\uC778\uC774 \uCDE8\uC18C\uB418\uC5C8\uC2B5\uB2C8\uB2E4.');
+      const err = new Error('Google 로그인이 취소되었습니다.');
       (err as any).code = 'ERR_REQUEST_CANCELED';
       throw err;
     }
@@ -110,7 +110,7 @@ export default function AuthScreen() {
     const params = new URLSearchParams(result.url.split('#')[1] || '');
     const idToken = params.get('id_token');
     if (!idToken) {
-      throw new Error('Google \uB85C\uADF8\uC778 \uD1A0\uD070\uC744 \uBC1B\uC9C0 \uBABB\uD588\uC2B5\uB2C8\uB2E4.');
+      throw new Error('Google 로그인 토큰을 받지 못했습니다.');
     }
 
     // Decode JWT payload to get email and name (no verification on client)
@@ -136,7 +136,7 @@ export default function AuthScreen() {
     const result = await WebBrowser.openAuthSessionAsync(authUrl, redirectUri);
 
     if (result.type !== 'success' || !result.url) {
-      const err = new Error('\uCE74\uCE74\uC624 \uB85C\uADF8\uC778\uC774 \uCDE8\uC18C\uB418\uC5C8\uC2B5\uB2C8\uB2E4.');
+      const err = new Error('카카오 로그인이 취소되었습니다.');
       (err as any).code = 'ERR_REQUEST_CANCELED';
       throw err;
     }
@@ -145,7 +145,7 @@ export default function AuthScreen() {
     const url = new URL(result.url);
     const code = url.searchParams.get('code');
     if (!code) {
-      throw new Error('\uCE74\uCE74\uC624 \uB85C\uADF8\uC778 \uCF54\uB4DC\uB97C \uBC1B\uC9C0 \uBABB\uD588\uC2B5\uB2C8\uB2E4.');
+      throw new Error('카카오 로그인 코드를 받지 못했습니다.');
     }
 
     // Send the authorization code to our server
@@ -177,10 +177,10 @@ export default function AuthScreen() {
       {/* Logo area (overlaps gradient) */}
       <View style={styles.logoArea}>
         <View style={styles.logoIcon}>
-          <Text style={styles.logoChar}>{'\uC4F0'}</Text>
+          <Text style={styles.logoChar}>{'쓰'}</Text>
         </View>
-        <Text style={styles.logoTitle}>{'\uC4F0\uC789'}</Text>
-        <Text style={styles.tagline}>{'\uB9E4\uC77C\uC758 \uC601\uC5B4 \uC791\uBB38 \uC2B5\uAD00'}</Text>
+        <Text style={styles.logoTitle}>{'쓰잉'}</Text>
+        <Text style={styles.tagline}>{'매일의 영어 작문 습관'}</Text>
       </View>
 
       {/* Bottom social login buttons */}
@@ -195,7 +195,7 @@ export default function AuthScreen() {
         {isLoading ? (
           <View style={styles.loadingContainer}>
             <ActivityIndicator size="large" color={colors.onboarding.purple} />
-            <Text style={styles.loadingText}>{'\uB85C\uADF8\uC778 \uC911...'}</Text>
+            <Text style={styles.loadingText}>{'로그인 중...'}</Text>
           </View>
         ) : (
           <>
@@ -206,14 +206,14 @@ export default function AuthScreen() {
                 onPress={() => handleSocialLogin('apple')}
                 activeOpacity={0.8}
               >
-                <Text style={styles.appleIcon}>{'\uF8FF'}</Text>
-                <Text style={styles.appleButtonText}>Apple{'\uB85C \uACC4\uC18D\uD558\uAE30'}</Text>
+                <Text style={styles.appleIcon}>{''}</Text>
+                <Text style={styles.appleButtonText}>Apple{'로 계속하기'}</Text>
               </TouchableOpacity>
             )}
 
             {/* Guest link */}
             <TouchableOpacity onPress={handleGuest} style={styles.guestButton}>
-              <Text style={styles.guestText}>{'\uAC8C\uC2A4\uD2B8\uB85C \uB458\uB7EC\uBCF4\uAE30'}</Text>
+              <Text style={styles.guestText}>{'게스트로 둘러보기'}</Text>
             </TouchableOpacity>
           </>
         )}

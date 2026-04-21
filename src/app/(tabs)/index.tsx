@@ -108,8 +108,8 @@ export default function HomeScreen() {
 
   // Date formatting
   const now = new Date();
-  const weekdays = ['\uC77C\uC694\uC77C', '\uC6D4\uC694\uC77C', '\uD654\uC694\uC77C', '\uC218\uC694\uC77C', '\uBAA9\uC694\uC77C', '\uAE08\uC694\uC77C', '\uD1A0\uC694\uC77C'];
-  const dateCaption = `${now.getMonth() + 1}\uC6D4 ${now.getDate()}\uC77C ${weekdays[now.getDay()]}`;
+  const weekdays = ['일요일', '월요일', '화요일', '수요일', '목요일', '금요일', '토요일'];
+  const dateCaption = `${now.getMonth() + 1}월 ${now.getDate()}일 ${weekdays[now.getDay()]}`;
 
   const xpToNext = gamification.xpForNextLevel - gamification.totalXp;
 
@@ -123,13 +123,13 @@ export default function HomeScreen() {
         <View style={styles.header}>
           <View style={styles.headerLeft}>
             <Text style={styles.dateCaption}>{dateCaption}</Text>
-            <Text style={styles.greeting}>{'\uC548\uB155\uD558\uC138\uC694, \uC4F0\uC789\uB2D8'} {'\u{1F44B}'}</Text>
+            <Text style={styles.greeting}>{'안녕하세요, 쓰잉님'} {'\u{1F44B}'}</Text>
           </View>
           <View style={styles.headerRight}>
             {gamification.streakDays > 0 && (
               <View style={styles.streakBadge}>
                 <Text style={styles.streakEmoji}>{'\u{1F525}'}</Text>
-                <Text style={styles.streakText}>{gamification.streakDays}\uC77C</Text>
+                <Text style={styles.streakText}>{gamification.streakDays}일</Text>
               </View>
             )}
             <TouchableOpacity
@@ -159,7 +159,7 @@ export default function HomeScreen() {
                 <Text style={styles.levelText}>LEVEL {gamification.level}</Text>
               </View>
               <Text style={styles.nextLevelText}>
-                {'\uB2E4\uC74C \uB808\uBCA8\uAE4C\uC9C0'} {xpToNext > 0 ? xpToNext : 0} XP
+                {'다음 레벨까지'} {xpToNext > 0 ? xpToNext : 0} XP
               </Text>
             </View>
 
@@ -178,17 +178,17 @@ export default function HomeScreen() {
             <View style={styles.heroStats}>
               <View style={styles.heroStat}>
                 <Text style={styles.heroStatValue}>{gamification.totalSentences}</Text>
-                <Text style={styles.heroStatLabel}>{'\uC644\uB8CC'}</Text>
+                <Text style={styles.heroStatLabel}>{'완료'}</Text>
               </View>
               <View style={styles.heroStatDivider} />
               <View style={styles.heroStat}>
-                <Text style={styles.heroStatValue}>{gamification.streakDays}\uC77C</Text>
-                <Text style={styles.heroStatLabel}>{'\uC5F0\uC18D'}</Text>
+                <Text style={styles.heroStatValue}>{gamification.streakDays}일</Text>
+                <Text style={styles.heroStatLabel}>{'연속'}</Text>
               </View>
               <View style={styles.heroStatDivider} />
               <View style={styles.heroStat}>
-                <Text style={styles.heroStatValue}>{gamification.longestStreak}\uC77C</Text>
-                <Text style={styles.heroStatLabel}>{'\uCD5C\uC7A5'}</Text>
+                <Text style={styles.heroStatValue}>{gamification.longestStreak}일</Text>
+                <Text style={styles.heroStatLabel}>{'최장'}</Text>
               </View>
             </View>
           </View>
@@ -211,7 +211,7 @@ export default function HomeScreen() {
                   difficulty === 'beginner' && styles.difficultyTextActive,
                 ]}
               >
-                {'\uCD08\uAE09'}
+                {'초급'}
               </Text>
             </TouchableOpacity>
             <TouchableOpacity
@@ -228,12 +228,12 @@ export default function HomeScreen() {
                   difficulty === 'intermediate' && styles.difficultyTextActive,
                 ]}
               >
-                {'\uC911\uAE09'}
+                {'중급'}
               </Text>
             </TouchableOpacity>
           </View>
           <Text style={styles.completionInfo}>
-            {completedThemes}\uAC1C \uC644\uB8CC {'\u00B7'} {remainingThemes}\uAC1C \uB0A8\uC74C
+            {completedThemes}개 완료 {'\u00B7'} {remainingThemes}개 남음
           </Text>
         </View>
 
@@ -262,62 +262,63 @@ export default function HomeScreen() {
           />
         </View>
 
-        {/* Quick Access Bar */}
-        <View style={styles.quickAccessBar}>
+        {/* Quick Access List */}
+        <View style={styles.quickAccessList}>
           <TouchableOpacity
-            style={styles.quickItem}
+            style={styles.quickListItem}
             onPress={() => router.push('/review')}
             activeOpacity={0.7}
           >
-            <View style={styles.quickIconWrap}>
-              <Text style={styles.quickEmoji}>{'\u{1F4DA}'}</Text>
-              {(stats?.totalCorrections ?? 0) > 0 && (
-                <View style={styles.quickBadge}>
-                  <Text style={styles.quickBadgeText}>
-                    {Math.min(stats?.totalCorrections ?? 0, 99)}
-                  </Text>
-                </View>
-              )}
+            <View style={[styles.quickListIcon, { backgroundColor: colors.primaryLight }]}>
+              <Text style={styles.quickListEmoji}>{'\u{1F4DA}'}</Text>
             </View>
-            <Text style={styles.quickLabel}>{'\uBCF5\uC2B5'}</Text>
+            <View style={styles.quickListContent}>
+              <Text style={styles.quickListTitle}>오답 복습</Text>
+              <Text style={styles.quickListDesc}>틀린 문장을 다시 연습해요</Text>
+            </View>
+            {(stats?.totalCorrections ?? 0) > 0 && (
+              <View style={styles.quickListBadge}>
+                <Text style={styles.quickListBadgeText}>
+                  {Math.min(stats?.totalCorrections ?? 0, 99)}
+                </Text>
+              </View>
+            )}
+            <Text style={styles.quickListChevron}>{'\u203A'}</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
-            style={styles.quickItem}
+            style={styles.quickListItem}
             onPress={() => router.push('/weekly')}
             activeOpacity={0.7}
           >
-            <View style={styles.quickIconWrap}>
-              <Text style={styles.quickEmoji}>{'\u{1F4CA}'}</Text>
+            <View style={[styles.quickListIcon, { backgroundColor: colors.warningLight }]}>
+              <Text style={styles.quickListEmoji}>{'\u{1F4CA}'}</Text>
             </View>
-            <Text style={styles.quickLabel}>{'\uB9AC\uD3EC\uD2B8'}</Text>
+            <View style={styles.quickListContent}>
+              <Text style={styles.quickListTitle}>주간 리포트</Text>
+              <Text style={styles.quickListDesc}>이번 주 학습 통계를 확인해요</Text>
+            </View>
+            <Text style={styles.quickListChevron}>{'\u203A'}</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
-            style={styles.quickItem}
+            style={[styles.quickListItem, { borderBottomWidth: 0 }]}
             onPress={() => router.push('/achievements')}
             activeOpacity={0.7}
           >
-            <View style={styles.quickIconWrap}>
-              <Text style={styles.quickEmoji}>{'\u{1F3C6}'}</Text>
-              {recentAchievements.length > 0 && (
-                <View style={styles.quickBadge}>
-                  <Text style={styles.quickBadgeText}>{recentAchievements.length}</Text>
-                </View>
-              )}
+            <View style={[styles.quickListIcon, { backgroundColor: colors.secondaryLight }]}>
+              <Text style={styles.quickListEmoji}>{'\u{1F3C6}'}</Text>
             </View>
-            <Text style={styles.quickLabel}>{'\uC5C5\uC801'}</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={styles.quickItem}
-            onPress={() => router.push('/(tabs)/history')}
-            activeOpacity={0.7}
-          >
-            <View style={styles.quickIconWrap}>
-              <Text style={styles.quickEmoji}>{'\u{1F4D6}'}</Text>
+            <View style={styles.quickListContent}>
+              <Text style={styles.quickListTitle}>업적</Text>
+              <Text style={styles.quickListDesc}>달성한 업적을 확인해요</Text>
             </View>
-            <Text style={styles.quickLabel}>{'\uAE30\uB85D'}</Text>
+            {recentAchievements.length > 0 && (
+              <View style={styles.quickListBadge}>
+                <Text style={styles.quickListBadgeText}>{recentAchievements.length}</Text>
+              </View>
+            )}
+            <Text style={styles.quickListChevron}>{'\u203A'}</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>
@@ -504,7 +505,9 @@ const styles = StyleSheet.create({
   },
   difficultyButtonActive: {
     backgroundColor: '#FFFFFF',
-    ...shadows.sm,
+    ...shadows.md,
+    shadowOpacity: 0.15,
+    elevation: 3,
   },
   difficultyText: {
     fontSize: 13,
@@ -512,7 +515,8 @@ const styles = StyleSheet.create({
     color: colors.text.secondary,
   },
   difficultyTextActive: {
-    color: colors.text.primary,
+    color: colors.primary,
+    fontWeight: '800',
   },
   completionInfo: {
     fontSize: 12,
@@ -525,48 +529,66 @@ const styles = StyleSheet.create({
     marginBottom: spacing.md,
   },
 
-  // Quick Access Bar
-  quickAccessBar: {
-    flexDirection: 'row',
+  // Quick Access List
+  quickAccessList: {
     backgroundColor: colors.card,
     borderWidth: 1,
     borderColor: colors.border,
     borderRadius: 18,
-    paddingVertical: 10,
-    paddingHorizontal: 8,
+    overflow: 'hidden',
     ...shadows.sm,
   },
-  quickItem: {
-    flex: 1,
+  quickListItem: {
+    flexDirection: 'row',
     alignItems: 'center',
-    padding: 4,
+    paddingHorizontal: 16,
+    paddingVertical: 14,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.border,
+    gap: 12,
   },
-  quickIconWrap: {
-    position: 'relative',
+  quickListIcon: {
+    width: 42,
+    height: 42,
+    borderRadius: 21,
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexShrink: 0,
+  },
+  quickListEmoji: {
+    fontSize: 18,
+  },
+  quickListContent: {
+    flex: 1,
+    minWidth: 0,
+  },
+  quickListTitle: {
+    fontSize: 14,
+    fontWeight: '700',
+    color: colors.text.primary,
     marginBottom: 2,
   },
-  quickEmoji: {
-    fontSize: 20,
+  quickListDesc: {
+    fontSize: 12,
+    fontWeight: '500',
+    color: colors.text.secondary,
   },
-  quickBadge: {
-    position: 'absolute',
-    top: -4,
-    right: -8,
+  quickListBadge: {
     backgroundColor: colors.error,
     borderRadius: radius.pill,
-    paddingHorizontal: 5,
-    paddingVertical: 1,
-    minWidth: 16,
+    paddingHorizontal: 7,
+    paddingVertical: 2,
+    minWidth: 20,
     alignItems: 'center',
   },
-  quickBadgeText: {
-    fontSize: 9,
+  quickListBadgeText: {
+    fontSize: 10,
     fontWeight: '800',
     color: '#FFFFFF',
   },
-  quickLabel: {
-    fontSize: 10,
-    fontWeight: '600',
-    color: colors.text.secondary,
+  quickListChevron: {
+    color: colors.text.hint,
+    fontSize: 20,
+    fontWeight: '300',
   },
 });

@@ -21,11 +21,11 @@ import type { HistoryRecord, Theme } from '../../types';
 function getMonthFilters(): { label: string; value: string | undefined }[] {
   const now = new Date();
   const filters: { label: string; value: string | undefined }[] = [
-    { label: '\uC804\uCCB4', value: undefined },
+    { label: '전체', value: undefined },
   ];
   for (let i = 0; i < 6; i++) {
     const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
-    const label = `${d.getMonth() + 1}\uC6D4`;
+    const label = `${d.getMonth() + 1}월`;
     const value = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
     filters.push({ label, value });
   }
@@ -95,8 +95,8 @@ export default function HistoryScreen() {
     return (
       <View style={styles.emptyContainer}>
         <Ionicons name="document-text-outline" size={48} color={colors.text.hint} />
-        <Text style={styles.emptyText}>{'\uC544\uC9C1 \uD559\uC2B5 \uAE30\uB85D\uC774 \uC5C6\uC2B5\uB2C8\uB2E4'}</Text>
-        <Text style={styles.emptySubtext}>{'\uC791\uBB38\uC744 \uC2DC\uC791\uD574 \uBCF4\uC138\uC694!'}</Text>
+        <Text style={styles.emptyText}>{'아직 학습 기록이 없습니다'}</Text>
+        <Text style={styles.emptySubtext}>{'작문을 시작해 보세요!'}</Text>
       </View>
     );
   };
@@ -105,10 +105,10 @@ export default function HistoryScreen() {
     <SafeAreaView style={styles.container} edges={['top']}>
       {/* Title */}
       <View style={styles.titleSection}>
-        <Text style={styles.screenTitle}>{'\uD559\uC2B5 \uAE30\uB85D'}</Text>
+        <Text style={styles.screenTitle}>{'학습 기록'}</Text>
         {pagination && pagination.total > 0 && (
           <Text style={styles.titleMeta}>
-            <Text style={styles.titleMetaBold}>{pagination.total}\uAC1C</Text> \uBB38\uC7A5
+            <Text style={styles.titleMetaBold}>{pagination.total}개</Text> 문장
           </Text>
         )}
       </View>
@@ -157,7 +157,7 @@ export default function HistoryScreen() {
                 selectedTheme === t && styles.themeChipTextActive,
               ]}
             >
-              {t === undefined ? '\uC804\uCCB4' : t === 'daily' ? '\uC77C\uC0C1' : t === 'travel' ? '\uC5EC\uD589' : '\uBE44\uC988\uB2C8\uC2A4'}
+              {t === undefined ? '전체' : t === 'daily' ? '일상' : t === 'travel' ? '여행' : '비즈니스'}
             </Text>
           </TouchableOpacity>
         ))}

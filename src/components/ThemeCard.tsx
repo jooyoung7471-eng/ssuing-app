@@ -19,22 +19,22 @@ interface ThemeCardProps {
 
 const THEME_INFO: Record<Theme, { title: string; subtitle: string; emoji: string; color: string; softColor: string }> = {
   daily: {
-    title: '\uC77C\uC0C1 \uC601\uC5B4',
-    subtitle: '\uCE74\uD398\uC5D0\uC11C, \uC544\uCE68 \uB8E8\uD2F4',
+    title: '일상 영어',
+    subtitle: '카페에서, 아침 루틴',
     emoji: '\u{1F4DD}',
     color: colors.theme.daily,
     softColor: colors.theme.dailySoft,
   },
   business: {
-    title: '\uBE44\uC988\uB2C8\uC2A4',
-    subtitle: '\uC774\uBA54\uC77C \u00B7 \uD68C\uC758',
+    title: '비즈니스',
+    subtitle: '이메일 · 회의',
     emoji: '\u{1F4BC}',
     color: colors.theme.biz,
     softColor: colors.theme.bizSoft,
   },
   travel: {
-    title: '\uC5EC\uD589 \uC601\uC5B4',
-    subtitle: '\uACF5\uD56D \u00B7 \uD638\uD154',
+    title: '여행 영어',
+    subtitle: '공항 · 호텔',
     emoji: '\u{2708}\u{FE0F}',
     color: colors.theme.travel,
     softColor: colors.theme.travelSoft,
@@ -89,12 +89,12 @@ export default function ThemeCard({ theme, completedCount, totalCount, onPress, 
             <Text style={[styles.title, isDone && styles.titleDone]}>{config.title}</Text>
             {isActive && (
               <View style={[styles.statusBadge, { backgroundColor: config.color + '20' }]}>
-                <Text style={[styles.statusText, { color: config.color }]}>{'\uC9C4\uD589 \uC911'}</Text>
+                <Text style={[styles.statusText, { color: config.color }]}>{'진행 중'}</Text>
               </View>
             )}
             {isDone && (
               <View style={[styles.statusBadge, { backgroundColor: colors.success + '20' }]}>
-                <Text style={[styles.statusText, { color: '#0F7B34' }]}>{'\uC644\uB8CC'}</Text>
+                <Text style={[styles.statusText, { color: '#0F7B34' }]}>{'완료'}</Text>
               </View>
             )}
           </View>
@@ -120,7 +120,7 @@ export default function ThemeCard({ theme, completedCount, totalCount, onPress, 
         {isDone ? (
           <Ionicons name="checkmark" size={20} color={colors.success} />
         ) : (
-          <Text style={styles.chevron}>{'\u203A'}</Text>
+          <Text style={styles.chevron}>{'›'}</Text>
         )}
       </View>
     </TouchableOpacity>

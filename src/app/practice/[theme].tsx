@@ -46,6 +46,8 @@ export default function PracticeScreen() {
     resetForTheme,
   } = store;
 
+  const scrollRef = useRef<ScrollView>(null);
+  const inputSectionRef = useRef<View>(null);
   const [localDraft, setLocalDraft] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [xpEarned, setXpEarned] = useState<number | null>(null);
@@ -274,6 +276,7 @@ export default function PracticeScreen() {
       {/* Content wrapper */}
       <View style={styles.contentWrapper}>
         <ScrollView
+          ref={scrollRef}
           contentContainerStyle={styles.scroll}
           keyboardShouldPersistTaps="handled"
           showsVerticalScrollIndicator={false}
@@ -287,7 +290,7 @@ export default function PracticeScreen() {
                 total={safeSentences.length}
               />
 
-              <View style={styles.inputSection}>
+              <View ref={inputSectionRef} style={styles.inputSection}>
                 {isCompleted && (
                   <View style={styles.completedBadge}>
                     <Ionicons name="checkmark-circle" size={14} color={colors.success} />
@@ -301,6 +304,17 @@ export default function PracticeScreen() {
                   onSubmit={handleSubmit}
                   loading={correctionLoading}
                   disabled={isCompleted}
+                  onInputFocus={() => {
+                    setTimeout(() => {
+                      inputSectionRef.current?.measureLayout(
+                        scrollRef.current?.getInnerViewNode?.() as any,
+                        (_x, y) => {
+                          scrollRef.current?.scrollTo({ y: Math.max(0, y - 80), animated: true });
+                        },
+                        () => {},
+                      );
+                    }, 300);
+                  }}
                 />
               </View>
 

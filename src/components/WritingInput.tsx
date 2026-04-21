@@ -20,6 +20,7 @@ interface WritingInputProps {
   onSubmit: () => void;
   loading: boolean;
   disabled: boolean;
+  onInputFocus?: () => void;
 }
 
 export default function WritingInput({
@@ -28,6 +29,7 @@ export default function WritingInput({
   onSubmit,
   loading,
   disabled,
+  onInputFocus,
 }: WritingInputProps) {
   const [isFocused, setIsFocused] = useState(false);
   const canSubmit = value.length >= MIN_CHARS && !loading && !disabled;
@@ -54,7 +56,7 @@ export default function WritingInput({
           textAlignVertical="top"
           onSubmitEditing={() => { if (canSubmit) onSubmit(); }}
           returnKeyType="done"
-          onFocus={() => setIsFocused(true)}
+          onFocus={() => { setIsFocused(true); onInputFocus?.(); }}
           onBlur={() => setIsFocused(false)}
         />
       </View>
