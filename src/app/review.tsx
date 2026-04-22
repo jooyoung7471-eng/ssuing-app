@@ -15,6 +15,8 @@ import { useCorrection } from '../hooks/useCorrection';
 import CorrectionResultView from '../components/CorrectionResult';
 import api from '../services/api';
 import { colors, getScoreColor } from '../constants/colors';
+import { typography } from '../constants/typography';
+import { spacing, radius, shadows } from '../constants/spacing';
 import type { Theme, Sentence, CorrectionResult, ReviewItem } from '../types';
 
 type ThemeFilter = 'all' | Theme;
@@ -148,7 +150,7 @@ export default function ReviewScreen() {
 
     submittingRef.current = true;
     try {
-      const result = await submit(currentSentence.id, draft);
+      const result = await submit(currentSentence.id, draft, undefined, currentSentence.koreanText);
       if (result) {
         setCurrentCorrection(result);
         setQuizResults((prev) => [
@@ -280,7 +282,7 @@ export default function ReviewScreen() {
           activeOpacity={0.8}
         >
           {settingsLoading ? (
-            <ActivityIndicator size="small" color="#FFFFFF" />
+            <ActivityIndicator size="small" color={colors.text.inverse} />
           ) : (
             <Text style={styles.startButtonText}>복습 시작</Text>
           )}
@@ -355,7 +357,7 @@ export default function ReviewScreen() {
               activeOpacity={0.8}
             >
               {correctionLoading ? (
-                <ActivityIndicator size="small" color="#FFFFFF" />
+                <ActivityIndicator size="small" color={colors.text.inverse} />
               ) : (
                 <Text style={styles.submitButtonText}>제출</Text>
               )}
@@ -400,7 +402,7 @@ export default function ReviewScreen() {
               <Text style={styles.nextButtonText}>
                 {currentIndex < (sentences || []).length - 1 ? '다음' : '결과 보기'}
               </Text>
-              <Ionicons name="chevron-forward" size={18} color="#FFFFFF" />
+              <Ionicons name="chevron-forward" size={18} color={colors.text.inverse} />
             </TouchableOpacity>
           </View>
         )}
@@ -419,7 +421,7 @@ export default function ReviewScreen() {
             <Ionicons
               name="chevron-back"
               size={20}
-              color={currentIndex > 0 ? '#2563EB' : '#D1D5DB'}
+              color={currentIndex > 0 ? colors.primary : colors.disabled}
             />
             <Text
               style={[
@@ -575,7 +577,7 @@ export default function ReviewScreen() {
           onPress={() => router.back()}
           activeOpacity={0.8}
         >
-          <Ionicons name="home-outline" size={18} color="#FFFFFF" />
+          <Ionicons name="home-outline" size={18} color={colors.text.inverse} />
           <Text style={styles.homeButtonText}>홈으로 돌아가기</Text>
         </TouchableOpacity>
       </View>
@@ -602,63 +604,63 @@ const styles = StyleSheet.create({
     backgroundColor: colors.background,
   },
   scroll: {
-    padding: 20,
-    paddingBottom: 40,
+    padding: spacing.screenPadding,
+    paddingBottom: spacing.xxxl,
   },
 
   // Step 1: Settings
   settingsContainer: {},
   settingsTitle: {
-    fontSize: 24,
-    fontWeight: '700',
+    ...typography.h1,
     color: colors.text.primary,
-    marginBottom: 8,
-  },
+    marginBottom: spacing.xs,
+  } as any,
   settingsSubtitle: {
+    ...typography.bodySmall,
     fontSize: 14,
     color: colors.text.secondary,
-    marginBottom: 24,
-  },
+    marginBottom: spacing.xl,
+  } as any,
   settingsLabel: {
-    fontSize: 14,
+    ...typography.bodySmall,
     fontWeight: '600',
     color: colors.text.primary,
-    marginBottom: 10,
-    marginTop: 8,
-  },
+    marginBottom: spacing.sm,
+    marginTop: spacing.xs,
+  } as any,
   chipRow: {
     flexDirection: 'row',
-    gap: 10,
-    marginBottom: 20,
+    gap: spacing.sm,
+    marginBottom: spacing.lg,
     flexWrap: 'wrap',
   },
   chip: {
-    paddingHorizontal: 16,
-    paddingVertical: 10,
-    borderRadius: 20,
-    backgroundColor: '#F3F4F6',
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm,
+    borderRadius: radius.lg,
+    backgroundColor: colors.surfaceAlt,
   },
   chipActive: {
-    backgroundColor: '#2563EB',
+    backgroundColor: colors.primary,
   },
   chipText: {
-    fontSize: 14,
+    ...typography.bodySmall,
     fontWeight: '600',
     color: colors.text.secondary,
-  },
+  } as any,
   chipTextActive: {
-    color: '#FFFFFF',
+    color: colors.text.inverse,
   },
   countButton: {
     width: 52,
     height: 44,
-    borderRadius: 12,
-    backgroundColor: '#F3F4F6',
+    borderRadius: radius.sm,
+    backgroundColor: colors.surfaceAlt,
     alignItems: 'center',
     justifyContent: 'center',
   },
   countButtonActive: {
-    backgroundColor: '#2563EB',
+    backgroundColor: colors.primary,
   },
   countButtonText: {
     fontSize: 16,
@@ -666,92 +668,88 @@ const styles = StyleSheet.create({
     color: colors.text.secondary,
   },
   countButtonTextActive: {
-    color: '#FFFFFF',
+    color: colors.text.inverse,
   },
   errorBox: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
+    gap: spacing.xs,
     backgroundColor: colors.errorLight,
-    borderRadius: 12,
-    padding: 14,
-    marginBottom: 8,
+    borderRadius: radius.sm,
+    padding: spacing.md,
+    marginBottom: spacing.xs,
   },
   errorBoxText: {
+    ...typography.bodySmall,
     fontSize: 14,
     color: colors.error,
     flex: 1,
-  },
+  } as any,
   startButton: {
-    backgroundColor: '#2563EB',
-    borderRadius: 14,
-    paddingVertical: 16,
+    backgroundColor: colors.primary,
+    borderRadius: radius.md,
+    paddingVertical: spacing.md,
     alignItems: 'center',
-    marginTop: 20,
+    marginTop: spacing.lg,
+    ...shadows.primary,
   },
   startButtonText: {
-    fontSize: 16,
-    fontWeight: '700',
-    color: '#FFFFFF',
-  },
+    ...typography.button,
+    color: colors.text.inverse,
+  } as any,
 
   // Step 2: Quiz
   quizContainer: {},
   progressSection: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 12,
-    marginBottom: 20,
+    gap: spacing.sm,
+    marginBottom: spacing.lg,
   },
   progressBarBg: {
     flex: 1,
     height: 8,
-    backgroundColor: '#E5E7EB',
-    borderRadius: 4,
+    backgroundColor: colors.disabled,
+    borderRadius: radius.xxs || 4,
     overflow: 'hidden',
   },
   progressBarFill: {
     height: '100%',
-    backgroundColor: '#2563EB',
-    borderRadius: 4,
+    backgroundColor: colors.primary,
+    borderRadius: radius.xxs || 4,
   },
   progressText: {
-    fontSize: 14,
+    ...typography.bodySmall,
     fontWeight: '600',
     color: colors.text.secondary,
-  },
+  } as any,
   quizCard: {
     backgroundColor: colors.card,
-    borderRadius: 16,
-    padding: 24,
+    borderRadius: radius.md,
+    padding: spacing.xl,
     borderWidth: 1,
     borderColor: colors.border,
-    marginBottom: 16,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.06,
-    shadowRadius: 8,
-    elevation: 2,
+    marginBottom: spacing.md,
+    ...shadows.sm,
   },
   quizKorean: {
-    fontSize: 18,
-    fontWeight: '600',
+    ...typography.h3,
     color: colors.text.primary,
     lineHeight: 28,
-  },
+  } as any,
   hintRow: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: 8,
-    marginTop: 12,
+    gap: spacing.xs,
+    marginTop: spacing.sm,
   },
   hintChip: {
     backgroundColor: colors.hint.background,
-    borderRadius: 8,
+    borderRadius: radius.xs,
     borderWidth: 1,
     borderColor: colors.hint.border,
-    paddingHorizontal: 10,
-    paddingVertical: 4,
+    paddingHorizontal: spacing.sm,
+    paddingVertical: spacing.xxs,
   },
   hintText: {
     fontSize: 12,
@@ -762,159 +760,154 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 6,
-    marginTop: 12,
-    paddingTop: 12,
+    marginTop: spacing.sm,
+    paddingTop: spacing.sm,
     borderTopWidth: 1,
     borderTopColor: colors.border,
   },
   prevScoreLabel: {
-    fontSize: 13,
+    ...typography.bodySmall,
     color: colors.text.hint,
-  },
+  } as any,
   prevScoreValue: {
-    fontSize: 14,
+    ...typography.bodySmall,
     fontWeight: '700',
-  },
+  } as any,
   inputSection: {
-    marginBottom: 16,
+    marginBottom: spacing.md,
   },
   quizInput: {
     backgroundColor: colors.card,
-    borderRadius: 12,
+    borderRadius: radius.sm,
     borderWidth: 1,
     borderColor: colors.border,
-    padding: 16,
+    padding: spacing.md,
     fontSize: 15,
     color: colors.text.primary,
     minHeight: 100,
     textAlignVertical: 'top',
-    marginBottom: 12,
+    marginBottom: spacing.sm,
   },
   submitButton: {
-    backgroundColor: '#2563EB',
-    borderRadius: 12,
-    paddingVertical: 14,
+    backgroundColor: colors.primary,
+    borderRadius: radius.sm,
+    paddingVertical: spacing.md,
     alignItems: 'center',
+    ...shadows.primary,
   },
   submitButtonDisabled: {
     opacity: 0.5,
+    shadowOpacity: 0,
+    elevation: 0,
   },
   submitButtonText: {
-    fontSize: 15,
-    fontWeight: '600',
-    color: '#FFFFFF',
-  },
+    ...typography.button,
+    color: colors.text.inverse,
+  } as any,
   errorText: {
-    fontSize: 14,
+    ...typography.bodySmall,
     color: colors.error,
-    marginTop: 8,
-  },
+    marginTop: spacing.xs,
+  } as any,
   correctionSection: {
-    marginBottom: 16,
+    marginBottom: spacing.md,
   },
   improvementRow: {
-    marginTop: 10,
-    paddingVertical: 8,
-    paddingHorizontal: 12,
-    borderRadius: 10,
-    backgroundColor: '#F0FDF4',
+    marginTop: spacing.sm,
+    paddingVertical: spacing.xs,
+    paddingHorizontal: spacing.sm,
+    borderRadius: radius.sm,
+    backgroundColor: colors.successLight,
     alignItems: 'center',
   },
   improvedText: {
-    fontSize: 14,
+    ...typography.bodySmall,
     fontWeight: '700',
-    color: '#16A34A',
-  },
+    color: colors.success,
+  } as any,
   sameText: {
-    fontSize: 14,
+    ...typography.bodySmall,
     fontWeight: '600',
     color: colors.text.hint,
-  },
+  } as any,
   declinedText: {
-    fontSize: 14,
+    ...typography.bodySmall,
     fontWeight: '600',
     color: colors.error,
-  },
+  } as any,
   nextButton: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     gap: 6,
-    backgroundColor: '#2563EB',
-    borderRadius: 12,
-    paddingVertical: 14,
-    marginTop: 16,
+    backgroundColor: colors.primary,
+    borderRadius: radius.sm,
+    paddingVertical: spacing.md,
+    marginTop: spacing.md,
+    ...shadows.primary,
   },
   nextButtonText: {
-    fontSize: 15,
-    fontWeight: '600',
-    color: '#FFFFFF',
-  },
+    ...typography.button,
+    color: colors.text.inverse,
+  } as any,
   quizNavRow: {
     flexDirection: 'row',
     justifyContent: 'flex-start',
-    marginTop: 8,
-    paddingBottom: 20,
+    marginTop: spacing.xs,
+    paddingBottom: spacing.lg,
   },
   navButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 4,
-    paddingVertical: 10,
-    paddingHorizontal: 16,
-    borderRadius: 10,
-    backgroundColor: '#EFF6FF',
+    gap: spacing.xxs,
+    paddingVertical: spacing.sm,
+    paddingHorizontal: spacing.md,
+    borderRadius: radius.sm,
+    backgroundColor: colors.primaryLight,
   },
   navButtonDisabled: {
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.surfaceAlt,
   },
   navText: {
-    fontSize: 14,
+    ...typography.bodySmall,
     fontWeight: '600',
-    color: '#2563EB',
-  },
+    color: colors.primary,
+  } as any,
   navTextDisabled: {
-    color: '#D1D5DB',
+    color: colors.disabled,
   },
 
   // Step 3: Results
   resultsContainer: {},
   resultsTitle: {
-    fontSize: 24,
-    fontWeight: '700',
+    ...typography.h1,
     color: colors.text.primary,
     textAlign: 'center',
-    marginBottom: 20,
-  },
+    marginBottom: spacing.lg,
+  } as any,
   avgScoreCard: {
     alignItems: 'center',
     backgroundColor: colors.card,
-    borderRadius: 20,
-    padding: 28,
-    marginBottom: 16,
+    borderRadius: radius.xl,
+    padding: spacing.xxl,
+    marginBottom: spacing.md,
     borderWidth: 1,
     borderColor: colors.border,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.06,
-    shadowRadius: 8,
-    elevation: 2,
+    ...shadows.sm,
   },
   avgScoreLabel: {
-    fontSize: 14,
+    ...typography.body,
     fontWeight: '500',
     color: colors.text.secondary,
-    marginBottom: 4,
-  },
+    marginBottom: spacing.xxs,
+  } as any,
   avgScoreNumber: {
-    fontSize: 48,
-    fontWeight: '800',
-    marginBottom: 12,
-  },
+    ...typography.score,
+  } as any,
   gaugeBarBg: {
     width: '100%',
     height: 12,
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.disabled,
     borderRadius: 6,
     overflow: 'hidden',
   },
@@ -923,64 +916,61 @@ const styles = StyleSheet.create({
     borderRadius: 6,
   },
   gaugePercent: {
-    fontSize: 14,
+    ...typography.bodySmall,
     fontWeight: '700',
     marginTop: 6,
-  },
+  } as any,
 
   // Gamification badges
   gamificationRow: {
-    marginBottom: 16,
-    gap: 8,
+    marginBottom: spacing.md,
+    gap: spacing.xs,
   },
   gamiBadge: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
+    gap: spacing.xs,
     backgroundColor: colors.card,
-    borderRadius: 12,
+    borderRadius: radius.sm,
     borderWidth: 1,
     borderColor: colors.border,
-    paddingVertical: 12,
-    paddingHorizontal: 16,
+    paddingVertical: spacing.sm,
+    paddingHorizontal: spacing.md,
   },
   gamiBadgeEmoji: {
     fontSize: 18,
   },
   gamiBadgeText: {
-    fontSize: 14,
+    ...typography.bodySmall,
     fontWeight: '600',
     color: colors.text.primary,
-  },
+  } as any,
 
   bestWorstRow: {
     flexDirection: 'row',
-    gap: 12,
-    marginBottom: 20,
+    gap: spacing.sm,
+    marginBottom: spacing.lg,
   },
   bestWorstCard: {
     flex: 1,
-    borderRadius: 14,
-    padding: 16,
+    borderRadius: radius.md,
+    padding: spacing.md,
   },
   bestCard: {
-    backgroundColor: '#E8F5E9',
+    backgroundColor: colors.successLight,
     borderLeftWidth: 3,
-    borderLeftColor: '#16A34A',
+    borderLeftColor: colors.success,
   },
   worstCard: {
-    backgroundColor: '#FFEBEE',
+    backgroundColor: colors.errorLight,
     borderLeftWidth: 3,
-    borderLeftColor: '#EF4444',
+    borderLeftColor: colors.error,
   },
   bestWorstLabel: {
-    fontSize: 12,
-    fontWeight: '700',
+    ...typography.label,
     color: colors.text.hint,
-    marginBottom: 4,
-    textTransform: 'uppercase',
-    letterSpacing: 0.5,
-  },
+    marginBottom: spacing.xxs,
+  } as any,
   bestWorstScore: {
     fontSize: 20,
     fontWeight: '800',
@@ -988,47 +978,47 @@ const styles = StyleSheet.create({
     marginBottom: 6,
   },
   bestWorstText: {
-    fontSize: 13,
+    ...typography.bodySmall,
     color: colors.text.secondary,
     lineHeight: 18,
-  },
+  } as any,
   keyExpressionsSection: {
-    backgroundColor: '#E3F2FD',
-    borderRadius: 14,
+    backgroundColor: colors.primaryLight,
+    borderRadius: radius.md,
     borderLeftWidth: 3,
-    borderLeftColor: '#2563EB',
-    padding: 16,
-    marginBottom: 20,
+    borderLeftColor: colors.primary,
+    padding: spacing.md,
+    marginBottom: spacing.lg,
   },
   keyExpressionsTitle: {
-    fontSize: 15,
+    ...typography.body,
     fontWeight: '700',
-    color: '#2563EB',
-    marginBottom: 12,
-  },
+    color: colors.primary,
+    marginBottom: spacing.sm,
+  } as any,
   keyExprItem: {
     flexDirection: 'row',
-    marginBottom: 10,
+    marginBottom: spacing.sm,
     gap: 6,
   },
   keyExprBullet: {
-    fontSize: 14,
-    color: '#2563EB',
+    ...typography.bodySmall,
+    color: colors.primary,
     marginTop: 1,
-  },
+  } as any,
   keyExprContent: {
     flex: 1,
   },
   keyExprEnglish: {
-    fontSize: 15,
+    ...typography.body,
     fontWeight: '700',
-    color: '#2563EB',
-  },
+    color: colors.primary,
+  } as any,
   keyExprKorean: {
-    fontSize: 13,
+    ...typography.bodySmall,
     color: colors.text.secondary,
     marginTop: 2,
-  },
+  } as any,
   keyExprExample: {
     fontSize: 12,
     color: colors.text.hint,
@@ -1036,29 +1026,29 @@ const styles = StyleSheet.create({
     marginTop: 2,
   },
   detailsSection: {
-    marginBottom: 20,
+    marginBottom: spacing.lg,
   },
   detailsTitle: {
+    ...typography.bodyBold,
     fontSize: 16,
-    fontWeight: '700',
     color: colors.text.primary,
-    marginBottom: 12,
-  },
+    marginBottom: spacing.sm,
+  } as any,
   detailItem: {
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: colors.card,
-    borderRadius: 12,
-    padding: 14,
-    marginBottom: 8,
+    borderRadius: radius.sm,
+    padding: spacing.md,
+    marginBottom: spacing.xs,
     borderWidth: 1,
     borderColor: colors.border,
-    gap: 12,
+    gap: spacing.sm,
   },
   detailScoreBadge: {
     width: 40,
     height: 40,
-    borderRadius: 10,
+    borderRadius: radius.sm,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -1070,10 +1060,10 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   detailKorean: {
-    fontSize: 14,
+    ...typography.bodySmall,
     fontWeight: '600',
     color: colors.text.primary,
-  },
+  } as any,
   detailUserWriting: {
     fontSize: 12,
     color: colors.text.secondary,
@@ -1083,28 +1073,28 @@ const styles = StyleSheet.create({
     width: 28,
     height: 28,
     borderRadius: 14,
-    backgroundColor: '#DCFCE7',
+    backgroundColor: colors.successLight,
     alignItems: 'center',
     justifyContent: 'center',
   },
   improvedBadgeText: {
     fontSize: 14,
     fontWeight: '800',
-    color: '#16A34A',
+    color: colors.success,
   },
   homeButton: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 8,
-    backgroundColor: '#2563EB',
-    borderRadius: 14,
-    paddingVertical: 16,
-    marginTop: 8,
+    gap: spacing.xs,
+    backgroundColor: colors.primary,
+    borderRadius: radius.md,
+    paddingVertical: spacing.md,
+    marginTop: spacing.xs,
+    ...shadows.primary,
   },
   homeButtonText: {
-    fontSize: 16,
-    fontWeight: '700',
-    color: '#FFFFFF',
-  },
+    ...typography.button,
+    color: colors.text.inverse,
+  } as any,
 });

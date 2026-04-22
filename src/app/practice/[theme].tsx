@@ -231,7 +231,7 @@ export default function PracticeScreen() {
       <SafeAreaView style={styles.centerContainer}>
         <Text style={[styles.statusText, { color: colors.error, marginBottom: 16 }]}>{sentencesError}</Text>
         <TouchableOpacity
-          style={{ backgroundColor: colors.primary, borderRadius: 12, paddingHorizontal: 24, paddingVertical: 12, marginBottom: 8 }}
+          style={{ backgroundColor: colors.primary, borderRadius: radius.sm, paddingHorizontal: spacing.xl, paddingVertical: spacing.sm, marginBottom: spacing.xs }}
           onPress={() => {
             if (theme) {
               AsyncStorage.getItem('engwrite_difficulty').then((saved) => {
@@ -241,10 +241,10 @@ export default function PracticeScreen() {
             }
           }}
         >
-          <Text style={{ color: '#fff', fontWeight: '700', fontSize: 15 }}>다시 시도</Text>
+          <Text style={{ color: colors.text.inverse, fontWeight: '700', fontSize: 15 }}>다시 시도</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => router.back()}>
-          <Text style={{ color: colors.text.secondary, fontSize: 14, marginTop: 8 }}>홈으로 돌아가기</Text>
+          <Text style={{ color: colors.text.secondary, fontSize: 14, marginTop: spacing.xs }}>홈으로 돌아가기</Text>
         </TouchableOpacity>
       </SafeAreaView>
     );
