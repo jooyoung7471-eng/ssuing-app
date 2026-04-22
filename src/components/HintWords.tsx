@@ -39,13 +39,14 @@ const styles = StyleSheet.create({
   chipRow: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: spacing.sm,
+    marginHorizontal: -6,
   },
   chip: {
     backgroundColor: colors.primaryLight,
     borderRadius: radius.sm,
     padding: spacing.sm,
-    width: '48.5%',
+    width: '47%',
+    margin: 6,
   },
   chipEnglish: {
     fontSize: 14,
