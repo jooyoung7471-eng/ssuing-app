@@ -6,7 +6,7 @@ interface UseCorrectionReturn {
   result: CorrectionResult | null;
   loading: boolean;
   error: string | null;
-  submit: (sentenceId: string, userWriting: string, difficulty?: string) => Promise<CorrectionResult | null>;
+  submit: (sentenceId: string, userWriting: string, difficulty?: string, koreanText?: string) => Promise<CorrectionResult | null>;
   reset: () => void;
 }
 
@@ -16,12 +16,13 @@ export function useCorrection(): UseCorrectionReturn {
   const [error, setError] = useState<string | null>(null);
 
   const submit = useCallback(
-    async (sentenceId: string, userWriting: string, difficulty?: string): Promise<CorrectionResult | null> => {
+    async (sentenceId: string, userWriting: string, difficulty?: string, koreanText?: string): Promise<CorrectionResult | null> => {
       setLoading(true);
       setError(null);
       try {
         const body: Record<string, string> = { sentenceId, userWriting };
         if (difficulty) body.difficulty = difficulty;
+        if (koreanText) body.koreanText = koreanText;
         const res = await api.post('/corrections', body);
         const raw = res.data?.data;
         if (!raw) {

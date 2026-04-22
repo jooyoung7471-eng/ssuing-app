@@ -49,10 +49,31 @@ router.get("/weak", optionalAuthMiddleware, async (req: Request, res: Response, 
 // POST /api/review/retry — re-submit a sentence for correction (review mode)
 router.post("/retry", optionalAuthMiddleware, async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { sentenceId, userWriting, difficulty } = correctionSchema.parse(req.body);
+    const { sentenceId, koreanText, userWriting, difficulty } = correctionSchema.parse(req.body);
     const userId = req.user!.userId;
 
-    const sentence = await prisma.sentence.findUnique({ where: { id: sentenceId } });
+    // UUID 형태면 DB 직접 조회, 로컬 문장이면 koreanText로 매칭
+    const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(sentenceId);
+    let sentence: { id: string; korean_text: string; theme?: string; difficulty?: string } | null = null;
+
+    if (isUuid) {
+      sentence = await prisma.sentence.findUnique({ where: { id: sentenceId } });
+    }
+    if (!sentence && koreanText) {
+      sentence = await prisma.sentence.findFirst({ where: { korean_text: koreanText } });
+    }
+    if (!sentence && koreanText) {
+      sentence = await prisma.sentence.create({
+        data: {
+          korean_text: koreanText,
+          theme: "daily",
+          category: "general",
+          difficulty: difficulty || "beginner",
+          hint_words: "[]",
+          tags: "[]",
+        },
+      });
+    }
     if (!sentence) {
       throw new AppError(404, "NOT_FOUND", "문장을 찾을 수 없습니다");
     }
@@ -64,7 +85,7 @@ router.post("/retry", optionalAuthMiddleware, async (req: Request, res: Response
     const correction = await prisma.correction.create({
       data: {
         user_id: userId,
-        sentence_id: sentenceId,
+        sentence_id: sentence.id,
         user_writing: userWriting,
         corrected_sentence: result.correctedSentence,
         explanation: result.explanation,
@@ -74,7 +95,7 @@ router.post("/retry", optionalAuthMiddleware, async (req: Request, res: Response
     });
 
     // Process gamification
-    const gamification = await processCorrection(userId, result.score, sentenceId);
+    const gamification = await processCorrection(userId, result.score, sentence.id);
 
     res.json({
       data: {

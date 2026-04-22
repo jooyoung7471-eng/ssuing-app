@@ -23,7 +23,8 @@ export const socialLoginSchema = z.object({
 });
 
 export const correctionSchema = z.object({
-  sentenceId: z.string().uuid("유효한 문장 ID를 입력해주세요"),
+  sentenceId: z.string().min(1, "문장 ID를 입력해주세요"),
+  koreanText: z.string().optional(),
   userWriting: z.string().min(1, "영어 작문을 입력해주세요").max(1000),
   difficulty: z.enum(["beginner", "intermediate"]).optional().default("beginner"),
 });
@@ -43,7 +44,8 @@ export const reviewStartSchema = z.object({
 
 export const reviewSubmitSchema = z.object({
   sessionId: z.string().uuid("유효한 세션 ID를 입력해주세요"),
-  sentenceId: z.string().uuid("유효한 문장 ID를 입력해주세요"),
+  sentenceId: z.string().min(1, "문장 ID를 입력해주세요"),
+  koreanText: z.string().optional(),
   userWriting: z.string().min(1, "영어 작문을 입력해주세요").max(1000),
 });
 

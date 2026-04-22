@@ -43,17 +43,15 @@ const styles = StyleSheet.create({
   },
   chip: {
     backgroundColor: colors.primaryLight,
-    borderRadius: radius.pill,
-    paddingHorizontal: spacing.md,
-    paddingVertical: spacing.xs + 2,
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: spacing.xs,
+    borderRadius: radius.sm,
+    padding: spacing.sm,
+    width: '48.5%',
   },
   chipEnglish: {
     fontSize: 14,
     fontWeight: '700',
     color: colors.primary,
+    marginBottom: 2,
   },
   chipKorean: {
     fontSize: 12,

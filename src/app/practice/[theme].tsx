@@ -132,7 +132,7 @@ export default function PracticeScreen() {
     if (writing.length < 10) return;
 
     submittingRef.current = true;
-    const correctionResult = await submit(currentSentence.id, writing);
+    const correctionResult = await submit(currentSentence.id, writing, undefined, currentSentence.koreanText);
     submittingRef.current = false;
 
     if (correctionResult) {
@@ -160,7 +160,7 @@ export default function PracticeScreen() {
     if (!currentSentence || submittingRef.current) return;
     submittingRef.current = true;
     try {
-      const correctionResult = await submit(currentSentence.id, draftRef.current);
+      const correctionResult = await submit(currentSentence.id, draftRef.current, undefined, currentSentence.koreanText);
       if (correctionResult) {
         setCorrection(currentSentence.id, correctionResult);
 

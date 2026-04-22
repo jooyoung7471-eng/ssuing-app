@@ -54,6 +54,7 @@ export default function WritingInput({
           onChangeText={onChangeText}
           editable={!disabled}
           textAlignVertical="top"
+          blurOnSubmit={false}
           onSubmitEditing={() => { if (canSubmit) onSubmit(); }}
           returnKeyType="done"
           onFocus={() => { setIsFocused(true); onInputFocus?.(); }}

@@ -103,15 +103,14 @@ export default function HistoryScreen() {
 
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
-      {/* Title */}
-      <View style={styles.titleSection}>
-        <Text style={styles.screenTitle}>{'학습 기록'}</Text>
-        {pagination && pagination.total > 0 && (
+      {/* Title meta (navigation header already shows title) */}
+      {pagination && pagination.total > 0 && (
+        <View style={styles.titleSection}>
           <Text style={styles.titleMeta}>
             <Text style={styles.titleMetaBold}>{pagination.total}개</Text> 문장
           </Text>
-        )}
-      </View>
+        </View>
+      )}
 
       {/* Month filter chips - horizontal scroll */}
       <ScrollView
@@ -195,11 +194,6 @@ const styles = StyleSheet.create({
     paddingTop: spacing.md,
     paddingBottom: spacing.xs,
   },
-  screenTitle: {
-    ...typography.h1,
-    color: colors.text.primary,
-    marginBottom: 4,
-  },
   titleMeta: {
     ...typography.bodySmall,
     color: colors.text.secondary,
@@ -220,19 +214,16 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   filterChip: {
-    paddingHorizontal: 16,
-    paddingVertical: 7,
+    paddingHorizontal: 14,
+    paddingVertical: 6,
     borderRadius: radius.pill,
-    backgroundColor: colors.card,
-    borderWidth: 1,
-    borderColor: colors.border,
+    backgroundColor: colors.surfaceAlt,
   },
   filterChipActive: {
     backgroundColor: colors.primary,
-    borderColor: colors.primary,
   },
   filterText: {
-    ...typography.caption,
+    fontSize: 12,
     color: colors.text.secondary,
     fontWeight: '600',
   },
@@ -249,21 +240,21 @@ const styles = StyleSheet.create({
     gap: 6,
   },
   themeChip: {
-    paddingHorizontal: 12,
-    paddingVertical: 5,
-    borderRadius: radius.xs,
+    paddingHorizontal: 14,
+    paddingVertical: 6,
+    borderRadius: radius.pill,
     backgroundColor: colors.surfaceAlt,
   },
   themeChipActive: {
-    backgroundColor: colors.primary + '18',
+    backgroundColor: colors.primary,
   },
   themeChipText: {
-    fontSize: 11,
+    fontSize: 12,
     fontWeight: '600',
-    color: colors.text.hint,
+    color: colors.text.secondary,
   },
   themeChipTextActive: {
-    color: colors.primary,
+    color: '#FFFFFF',
     fontWeight: '700',
   },
 
