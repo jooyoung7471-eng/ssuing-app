@@ -112,38 +112,9 @@ export default function HistoryScreen() {
         </View>
       )}
 
-      {/* Month filter chips - horizontal scroll */}
-      <ScrollView
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        contentContainerStyle={styles.filterRow}
-        style={styles.filterScroll}
-      >
-        {monthFilters.map((f) => (
-          <TouchableOpacity
-            key={f.value ?? 'all'}
-            style={[
-              styles.filterChip,
-              selectedMonth === f.value && styles.filterChipActive,
-            ]}
-            onPress={() => setSelectedMonth(f.value)}
-            activeOpacity={0.7}
-          >
-            <Text
-              style={[
-                styles.filterText,
-                selectedMonth === f.value && styles.filterTextActive,
-              ]}
-            >
-              {f.label}
-            </Text>
-          </TouchableOpacity>
-        ))}
-      </ScrollView>
-
       {/* Theme filter */}
       <View style={styles.themeFilterRow}>
-        {([undefined, 'daily', 'business', 'travel'] as (Theme | undefined)[]).map((t) => (
+        {([undefined, 'daily', 'business'] as (Theme | undefined)[]).map((t) => (
           <TouchableOpacity
             key={t ?? 'all'}
             style={[styles.themeChip, selectedTheme === t && styles.themeChipActive]}
@@ -156,7 +127,7 @@ export default function HistoryScreen() {
                 selectedTheme === t && styles.themeChipTextActive,
               ]}
             >
-              {t === undefined ? '전체' : t === 'daily' ? '일상' : t === 'travel' ? '여행' : '비즈니스'}
+              {t === undefined ? '전체' : t === 'daily' ? '일상' : '비즈니스'}
             </Text>
           </TouchableOpacity>
         ))}
