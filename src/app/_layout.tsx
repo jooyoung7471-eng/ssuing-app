@@ -83,14 +83,21 @@ export default function RootLayout() {
   useEffect(() => {
     loadToken();
     refreshFlags();
-    // 스플래시 1.5초 유지 후 숨김
-    const timer = setTimeout(() => SplashScreen.hideAsync(), 1500);
-    return () => clearTimeout(timer);
   }, []);
+
+  // 모든 초기 데이터 로딩이 완료되면 스플래시 숨김
+  const allReady = isReady && onboardingDone !== null && termsAgreed !== null;
+  useEffect(() => {
+    if (allReady) {
+      // 최소 1초 대기 후 숨김 (너무 빠른 깜빡임 방지)
+      const timer = setTimeout(() => SplashScreen.hideAsync(), 500);
+      return () => clearTimeout(timer);
+    }
+  }, [allReady]);
 
   useProtectedRoute(onboardingDone, termsAgreed, refreshFlags);
 
-  if (!isReady || onboardingDone === null || termsAgreed === null) {
+  if (!allReady) {
     const loading = (
       <View style={[styles.root, styles.loading]}>
         <ActivityIndicator size="large" color={colors.primary} />
