@@ -15,6 +15,7 @@ import ThemeCard from '../../components/ThemeCard';
 import { useDailySentences } from '../../hooks/useDailySentences';
 import { useGamification } from '../../hooks/useGamification';
 import api from '../../services/api';
+import { useAuthStore } from '../../stores/authStore';
 import { colors } from '../../constants/colors';
 import { typography } from '../../constants/typography';
 import { spacing, radius, shadows } from '../../constants/spacing';
@@ -24,6 +25,7 @@ const DIFFICULTY_KEY = 'engwrite_difficulty';
 
 export default function HomeScreen() {
   const router = useRouter();
+  const { user } = useAuthStore();
   const { sentences: dailySentences, fetch: fetchDaily } = useDailySentences();
   const { sentences: bizSentences, fetch: fetchBiz } = useDailySentences();
   const { sentences: travelSentences, fetch: fetchTravel } = useDailySentences();
@@ -123,7 +125,7 @@ export default function HomeScreen() {
         <View style={styles.header}>
           <View style={styles.headerLeft}>
             <Text style={styles.dateCaption}>{dateCaption}</Text>
-            <Text style={styles.greeting}>{'안녕하세요, 쓰잉님'} {'\u{1F44B}'}</Text>
+            <Text style={styles.greeting}>안녕하세요{user?.name ? `, ${user.name}님` : ''} {'\u{1F44B}'}</Text>
           </View>
           <View style={styles.headerRight}>
             {gamification.streakDays > 0 && (

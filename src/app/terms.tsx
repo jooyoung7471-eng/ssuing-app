@@ -84,8 +84,17 @@ const TERMS: TermItem[] = [
 - 전자적 파일 형태: 복구 불가능한 방법으로 영구 삭제`,
   },
   {
-    id: 'thirdparty',
+    id: 'age',
     label: '만 14세 이상입니다',
+    required: true,
+    content: `만 14세 이상 확인
+
+본 서비스는 만 14세 이상의 이용자만 가입 및 이용이 가능합니다.
+만 14세 미만의 아동은 법정대리인의 동의 없이 개인정보를 수집할 수 없으며, 본 서비스를 이용할 수 없습니다.`,
+  },
+  {
+    id: 'thirdparty',
+    label: '제3자 정보 제공 동의',
     required: true,
     content: `제3자 정보 제공 동의
 
