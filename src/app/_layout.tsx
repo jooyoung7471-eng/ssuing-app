@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { Stack, useRouter, useSegments } from 'expo-router';
 import { StyleSheet, View, Platform, ActivityIndicator } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
@@ -19,20 +19,15 @@ function useProtectedRoute(
   onboardingDone: boolean | null,
   termsAgreed: boolean | null,
   refreshFlags: () => void,
+  onRouteReady: () => void,
 ) {
   const { token, isGuest, isReady } = useAuthStore();
   const segments = useSegments();
   const router = useRouter();
+  const hasRouted = useRef(false);
 
-  // 현재 최상위 세그먼트를 문자열로 변환해 안정적인 의존성으로 사용.
-  // segments 배열 참조는 매 렌더마다 바뀔 수 있으므로 segments[0] 문자열로 비교한다.
   const currentSegment = segments[0] ?? '';
 
-  // 세그먼트가 변경될 때마다 AsyncStorage에서 플래그를 다시 읽는다.
-  // onboarding.tsx, auth.tsx, terms.tsx가 AsyncStorage를 직접 변경한 뒤
-  // router.replace()로 화면을 전환하면, 세그먼트 변경이 이 effect를 트리거한다.
-  // refreshFlags는 비동기로 state를 갱신하고, state 변경이 아래 라우팅 effect를
-  // 다시 실행하므로 최신 플래그 기반으로 올바른 라우팅 결정을 내린다.
   useEffect(() => {
     refreshFlags();
   }, [currentSegment]);
@@ -47,6 +42,7 @@ function useProtectedRoute(
 
     if (!onboardingDone && !inOnboarding && !inAuthScreen && !inTermsScreen) {
       router.replace('/onboarding');
+      if (!hasRouted.current) { hasRouted.current = true; onRouteReady(); }
       return;
     }
 
@@ -59,6 +55,12 @@ function useProtectedRoute(
         router.replace('/(tabs)');
       }
     }
+
+    // 첫 라우팅 결정 완료 → 스플래시 숨김 허용
+    if (!hasRouted.current) {
+      hasRouted.current = true;
+      onRouteReady();
+    }
   }, [token, isGuest, isReady, segments, onboardingDone, termsAgreed]);
 }
 
@@ -66,11 +68,8 @@ export default function RootLayout() {
   const { loadToken, isReady } = useAuthStore();
   const [onboardingDone, setOnboardingDone] = useState<boolean | null>(null);
   const [termsAgreed, setTermsAgreed] = useState<boolean | null>(null);
+  const [routeReady, setRouteReady] = useState(false);
 
-  // AsyncStorage에서 플래그를 다시 읽어 state를 갱신하는 함수.
-  // onboarding.tsx, terms.tsx가 AsyncStorage를 직접 변경한 뒤
-  // router.replace()로 화면이 바뀌면, segments 변경이 useProtectedRoute를
-  // 재실행하고, 이때 refreshFlags로 최신 값을 반영한다.
   const refreshFlags = () => {
     AsyncStorage.getItem(ONBOARDING_KEY).then((value) => {
       setOnboardingDone(value === 'true');
@@ -85,31 +84,18 @@ export default function RootLayout() {
     refreshFlags();
   }, []);
 
-  // 모든 초기 데이터 로딩이 완료되면 스플래시 숨김
+  const handleRouteReady = () => {
+    setRouteReady(true);
+    SplashScreen.hideAsync();
+  };
+
+  useProtectedRoute(onboardingDone, termsAgreed, refreshFlags, handleRouteReady);
+
   const allReady = isReady && onboardingDone !== null && termsAgreed !== null;
-  useEffect(() => {
-    if (allReady) {
-      // 최소 1초 대기 후 숨김 (너무 빠른 깜빡임 방지)
-      const timer = setTimeout(() => SplashScreen.hideAsync(), 500);
-      return () => clearTimeout(timer);
-    }
-  }, [allReady]);
 
-  useProtectedRoute(onboardingDone, termsAgreed, refreshFlags);
-
-  if (!allReady) {
-    const loading = (
-      <View style={[styles.root, styles.loading]}>
-        <ActivityIndicator size="large" color={colors.primary} />
-      </View>
-    );
-
-    if (!isWeb) return loading;
-    return (
-      <View style={styles.webOuter}>
-        <View style={styles.webFrame}>{loading}</View>
-      </View>
-    );
+  // 데이터 로딩 중이거나 첫 라우팅 미완료 → 스플래시 뒤에서 대기
+  if (!allReady || !routeReady) {
+    return null; // 스플래시가 가려줌
   }
 
   const content = (
@@ -177,11 +163,6 @@ export default function RootLayout() {
 
 const styles = StyleSheet.create({
   root: { flex: 1 },
-  loading: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: colors.background,
-  },
   webOuter: {
     flex: 1,
     backgroundColor: '#1A1A2E',
