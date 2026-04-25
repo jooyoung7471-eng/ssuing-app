@@ -17,16 +17,20 @@ SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
   const { loadToken, isReady, token, isGuest } = useAuthStore();
-  const [onboardingDone, setOnboardingDone] = useState<boolean | null>(null);
-  const [termsAgreed, setTermsAgreed] = useState<boolean | null>(null);
-  const splashHidden = useRef(false);
   const segments = useSegments();
   const router = useRouter();
+  const splashHidden = useRef(false);
+  const appStartTime = useRef(Date.now());
+  const [onboardingDone, setOnboardingDone] = useState<boolean | null>(null);
+  const [termsAgreed, setTermsAgreed] = useState<boolean | null>(null);
 
-  // AsyncStorage 플래그 읽기
-  const refreshFlags = useCallback(() => {
-    AsyncStorage.getItem(ONBOARDING_KEY).then((v) => setOnboardingDone(v === 'true'));
-    AsyncStorage.getItem(TERMS_AGREED_KEY).then((v) => setTermsAgreed(v === 'true'));
+  const refreshFlags = useCallback(async () => {
+    const [obVal, taVal] = await Promise.all([
+      AsyncStorage.getItem(ONBOARDING_KEY),
+      AsyncStorage.getItem(TERMS_AGREED_KEY),
+    ]);
+    setOnboardingDone(obVal === 'true');
+    setTermsAgreed(taVal === 'true');
   }, []);
 
   // 초기 로딩
@@ -41,7 +45,7 @@ export default function RootLayout() {
     refreshFlags();
   }, [currentSegment]);
 
-  // 라우팅 가드
+  // 라우팅 가드 — 보호만 담당 (각 화면의 성공 이동을 중복하지 않음)
   useEffect(() => {
     if (onboardingDone === null || termsAgreed === null || !isReady) return;
 
@@ -50,32 +54,41 @@ export default function RootLayout() {
     const inTerms = currentSegment === 'terms';
     const isAuthenticated = !!token || isGuest;
 
-    let didRoute = false;
-
+    // 온보딩 미완료 → 온보딩으로
     if (!onboardingDone && !inOnboarding && !inAuth && !inTerms) {
       router.replace('/onboarding');
-      didRoute = true;
-    } else if (onboardingDone) {
-      if (!isAuthenticated && !inAuth && !inOnboarding) {
-        router.replace('/auth');
-        didRoute = true;
-      } else if (isAuthenticated && !termsAgreed && !inTerms && !inAuth && !inOnboarding) {
-        router.replace('/terms');
-        didRoute = true;
-      } else if (isAuthenticated && termsAgreed && (inAuth || inOnboarding || inTerms)) {
-        router.replace('/(tabs)');
-        didRoute = true;
-      }
+      hideSplash();
+      return;
     }
 
-    // 스플래시 숨김: 첫 라우팅 결정 후
-    if (!splashHidden.current) {
-      splashHidden.current = true;
-      // 라우팅이 발생했으면 약간 대기 후 숨김 (화면 전환 완료 대기)
-      const delay = didRoute ? 300 : 0;
-      setTimeout(() => SplashScreen.hideAsync(), delay);
+    // 미인증 → 로그인으로
+    if (onboardingDone && !isAuthenticated && !inAuth && !inOnboarding) {
+      router.replace('/auth');
+      hideSplash();
+      return;
     }
+
+    // 약관 미동의 → 약관으로
+    if (onboardingDone && isAuthenticated && !termsAgreed && !inTerms && !inAuth && !inOnboarding) {
+      router.replace('/terms');
+      hideSplash();
+      return;
+    }
+
+    // 이미 올바른 화면에 있음 → 스플래시만 숨김
+    // 주의: auth/onboarding/terms에서 (tabs)로 보내는 것은 각 화면이 직접 처리
+    // 여기서 중복 replace하면 이중 네비게이션(깜빡임) 발생
+    hideSplash();
   }, [token, isGuest, isReady, currentSegment, onboardingDone, termsAgreed]);
+
+  function hideSplash() {
+    if (splashHidden.current) return;
+    splashHidden.current = true;
+    // 최소 800ms 스플래시 표시 (재시작 시 너무 짧은 깜빡임 방지)
+    const elapsed = Date.now() - appStartTime.current;
+    const delay = Math.max(0, 800 - elapsed);
+    setTimeout(() => SplashScreen.hideAsync(), delay);
+  }
 
   // Stack은 항상 렌더 (expo-router hooks 동작 필수)
   const content = (
@@ -89,9 +102,9 @@ export default function RootLayout() {
         }}
       >
         <Stack.Screen name="onboarding" options={{ headerShown: false, animation: 'none' }} />
-        <Stack.Screen name="auth" options={{ headerShown: false }} />
-        <Stack.Screen name="terms" options={{ headerShown: false, gestureEnabled: false }} />
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack.Screen name="auth" options={{ headerShown: false, animation: 'none' }} />
+        <Stack.Screen name="terms" options={{ headerShown: false, gestureEnabled: false, animation: 'none' }} />
+        <Stack.Screen name="(tabs)" options={{ headerShown: false, animation: 'none' }} />
         <Stack.Screen name="practice/[theme]" options={{ headerShown: false }} />
         <Stack.Screen name="history/[id]" options={{ headerTitle: '학습 상세', headerBackTitle: '돌아가기' }} />
         <Stack.Screen name="achievements" options={{ headerTitle: '업적', headerBackTitle: '돌아가기' }} />
