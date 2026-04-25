@@ -114,7 +114,7 @@ export default function HistoryScreen() {
 
       {/* Theme filter */}
       <View style={styles.themeFilterRow}>
-        {([undefined, 'daily', 'business'] as (Theme | undefined)[]).map((t) => (
+        {([undefined, 'daily', 'business', 'travel'] as (Theme | undefined)[]).map((t) => (
           <TouchableOpacity
             key={t ?? 'all'}
             style={[styles.themeChip, selectedTheme === t && styles.themeChipActive]}
@@ -127,7 +127,7 @@ export default function HistoryScreen() {
                 selectedTheme === t && styles.themeChipTextActive,
               ]}
             >
-              {t === undefined ? '전체' : t === 'daily' ? '일상' : '비즈니스'}
+              {t === undefined ? '전체' : t === 'daily' ? '일상' : t === 'travel' ? '여행' : '비즈니스'}
             </Text>
           </TouchableOpacity>
         ))}
