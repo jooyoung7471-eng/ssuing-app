@@ -166,19 +166,22 @@ export default function TermsScreen() {
   }, [allChecked]);
 
   const handleAgree = async () => {
-    // Save agreement
+    // 모든 AsyncStorage 저장을 먼저 완료
     await AsyncStorage.setItem(TERMS_AGREED_KEY, 'true');
     if (checked.marketing) {
       await AsyncStorage.setItem(MARKETING_AGREED_KEY, 'true');
     }
     if (checked.push) {
       await AsyncStorage.setItem(PUSH_AGREED_KEY, 'true');
-      // Request push permission and schedule notifications
-      await enablePushNotifications();
     }
 
-    // Navigate to home
+    // 즉시 홈으로 이동 (푸시 알림은 백그라운드로)
     router.replace('/(tabs)');
+
+    // 푸시 알림 등록은 화면 이동 후 백그라운드에서
+    if (checked.push) {
+      enablePushNotifications().catch(() => {});
+    }
   };
 
   return (
