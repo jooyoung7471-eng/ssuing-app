@@ -21,70 +21,46 @@ export default function RootLayout() {
   const router = useRouter();
   const splashHidden = useRef(false);
   const appStartTime = useRef(Date.now());
+  const initialRouted = useRef(false);
   const [onboardingDone, setOnboardingDone] = useState<boolean | null>(null);
   const [termsAgreed, setTermsAgreed] = useState<boolean | null>(null);
 
-  const refreshFlags = useCallback(async () => {
-    const [obVal, taVal] = await Promise.all([
-      AsyncStorage.getItem(ONBOARDING_KEY),
-      AsyncStorage.getItem(TERMS_AGREED_KEY),
-    ]);
-    setOnboardingDone(obVal === 'true');
-    setTermsAgreed(taVal === 'true');
+  // 초기 로딩 (1회만)
+  useEffect(() => {
+    (async () => {
+      await loadToken();
+      const [obVal, taVal] = await Promise.all([
+        AsyncStorage.getItem(ONBOARDING_KEY),
+        AsyncStorage.getItem(TERMS_AGREED_KEY),
+      ]);
+      setOnboardingDone(obVal === 'true');
+      setTermsAgreed(taVal === 'true');
+    })();
   }, []);
 
-  // 초기 로딩
-  useEffect(() => {
-    loadToken();
-    refreshFlags();
-  }, []);
-
-  // 세그먼트 변경 시 플래그 갱신
-  const currentSegment = segments[0] ?? '';
-  useEffect(() => {
-    refreshFlags();
-  }, [currentSegment]);
-
-  // 라우팅 가드 — 보호만 담당 (각 화면의 성공 이동을 중복하지 않음)
+  // 라우팅 가드 — 앱 시작 시 1회만 올바른 화면으로 이동
   useEffect(() => {
     if (onboardingDone === null || termsAgreed === null || !isReady) return;
+    if (initialRouted.current) return; // 이미 초기 라우팅 완료
+    initialRouted.current = true;
 
-    const inOnboarding = currentSegment === 'onboarding';
-    const inAuth = currentSegment === 'auth';
-    const inTerms = currentSegment === 'terms';
     const isAuthenticated = !!token || isGuest;
 
-    // 온보딩 미완료 → 온보딩으로
-    if (!onboardingDone && !inOnboarding && !inAuth && !inTerms) {
+    if (!onboardingDone) {
       router.replace('/onboarding');
-      hideSplash();
-      return;
-    }
-
-    // 미인증 → 로그인으로
-    if (onboardingDone && !isAuthenticated && !inAuth && !inOnboarding) {
+    } else if (!isAuthenticated) {
       router.replace('/auth');
-      hideSplash();
-      return;
-    }
-
-    // 약관 미동의 → 약관으로
-    if (onboardingDone && isAuthenticated && !termsAgreed && !inTerms && !inAuth && !inOnboarding) {
+    } else if (!termsAgreed) {
       router.replace('/terms');
-      hideSplash();
-      return;
     }
+    // 이미 인증+동의 완료면 기본 라우트 (tabs)에 그대로 있음
 
-    // 이미 올바른 화면에 있음 → 스플래시만 숨김
-    // 주의: auth/onboarding/terms에서 (tabs)로 보내는 것은 각 화면이 직접 처리
-    // 여기서 중복 replace하면 이중 네비게이션(깜빡임) 발생
     hideSplash();
-  }, [token, isGuest, isReady, currentSegment, onboardingDone, termsAgreed]);
+  }, [onboardingDone, termsAgreed, isReady, token, isGuest]);
 
   function hideSplash() {
     if (splashHidden.current) return;
     splashHidden.current = true;
-    // 최소 800ms 스플래시 표시 (재시작 시 너무 짧은 깜빡임 방지)
     const elapsed = Date.now() - appStartTime.current;
     const delay = Math.max(0, 800 - elapsed);
     setTimeout(() => SplashScreen.hideAsync(), delay);
