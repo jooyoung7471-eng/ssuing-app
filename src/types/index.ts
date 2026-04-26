@@ -111,6 +111,7 @@ export interface Achievement {
   title: string;
   description: string;
   emoji: string;
+  category?: string;
 }
 
 export interface WeeklyReport {

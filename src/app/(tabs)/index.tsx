@@ -23,6 +23,16 @@ import type { Theme, LearningStats, Difficulty } from '../../types';
 
 const DIFFICULTY_KEY = 'engwrite_difficulty';
 
+function getLevelTitle(level: number): string {
+  if (level >= 21) return '영어 전설';
+  if (level >= 16) return '작문 마스터';
+  if (level >= 11) return '영어 달인';
+  if (level >= 8) return '문장 장인';
+  if (level >= 5) return '영어 탐험가';
+  if (level >= 3) return '초보 작가';
+  return '영어 새싹';
+}
+
 export default function HomeScreen() {
   const router = useRouter();
   const { user } = useAuthStore();
@@ -155,10 +165,13 @@ export default function HomeScreen() {
           <View style={styles.heroDecor} />
 
           <View style={styles.heroContent}>
-            {/* Top row: LEVEL + next level info */}
+            {/* Top row: LEVEL + title + next level info */}
             <View style={styles.heroTopRow}>
-              <View style={styles.levelBadge}>
-                <Text style={styles.levelText}>LEVEL {gamification.level}</Text>
+              <View style={styles.levelRow}>
+                <View style={styles.levelBadge}>
+                  <Text style={styles.levelText}>LEVEL {gamification.level}</Text>
+                </View>
+                <Text style={styles.titleText}>{getLevelTitle(gamification.level)}</Text>
               </View>
               <Text style={styles.nextLevelText}>
                 {'다음 레벨까지'} {xpToNext > 0 ? xpToNext : 0} XP
@@ -420,6 +433,11 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     marginBottom: 6,
   },
+  levelRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
   levelBadge: {
     backgroundColor: 'rgba(255,255,255,0.2)',
     paddingHorizontal: 10,
@@ -431,6 +449,11 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     color: '#FFFFFF',
     letterSpacing: 0.5,
+  },
+  titleText: {
+    fontSize: 12,
+    fontWeight: '600',
+    color: 'rgba(255,255,255,0.9)',
   },
   nextLevelText: {
     fontSize: 11,

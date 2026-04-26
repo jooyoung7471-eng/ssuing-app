@@ -3,7 +3,7 @@ import { PrismaClient } from "@prisma/client";
 import { optionalAuthMiddleware } from "../middleware/auth";
 import { correctionSchema, reviewStartSchema, reviewSubmitSchema, idParamSchema } from "../validators/schemas";
 import { correctWriting } from "../services/llm";
-import { processCorrection } from "../services/gamification";
+import { processCorrection, tryUnlockReviewFirst } from "../services/gamification";
 import { AppError } from "../middleware/errorHandler";
 import { HintWord } from "../types";
 
@@ -96,6 +96,12 @@ router.post("/retry", optionalAuthMiddleware, async (req: Request, res: Response
 
     // Process gamification
     const gamification = await processCorrection(userId, result.score, sentence.id);
+
+    // Check review_first achievement
+    const reviewAchievement = await tryUnlockReviewFirst(userId);
+    if (reviewAchievement) {
+      gamification.newAchievements.push(reviewAchievement);
+    }
 
     res.json({
       data: {
@@ -251,6 +257,9 @@ router.post("/submit", optionalAuthMiddleware, async (req: Request, res: Respons
       },
     });
 
+    // Check review_first achievement
+    const reviewAchievement = await tryUnlockReviewFirst(userId);
+
     res.json({
       data: {
         answerId: answer.id,
@@ -260,6 +269,7 @@ router.post("/submit", optionalAuthMiddleware, async (req: Request, res: Respons
         keyExpression: result.keyExpression,
         score: result.score,
         highlights: result.highlights,
+        newAchievements: reviewAchievement ? [reviewAchievement] : [],
       },
     });
   } catch (err) {
