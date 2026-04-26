@@ -89,10 +89,6 @@
       {
         "english": "how",
         "korean": "어떻게"
-      },
-      {
-        "english": "you",
-        "korean": "당신"
       }
     ],
     "tags": [
@@ -173,10 +169,6 @@
       {
         "english": "ask",
         "korean": "부탁"
-      },
-      {
-        "english": "please",
-        "korean": "제발"
       }
     ],
     "tags": [
@@ -395,10 +387,6 @@
       {
         "english": "one",
         "korean": "하나"
-      },
-      {
-        "english": "have",
-        "korean": "있다"
       }
     ],
     "tags": [
@@ -1208,10 +1196,6 @@
       {
         "english": "cup",
         "korean": "잔"
-      },
-      {
-        "english": "please",
-        "korean": "주세요"
       }
     ],
     "tags": [
@@ -1258,10 +1242,6 @@
       {
         "english": "slice",
         "korean": "조각"
-      },
-      {
-        "english": "please",
-        "korean": "줄래"
       }
     ],
     "tags": [
@@ -1329,10 +1309,6 @@
       {
         "english": "one",
         "korean": "한 개"
-      },
-      {
-        "english": "please",
-        "korean": "주세요"
       }
     ],
     "tags": [
@@ -1354,10 +1330,6 @@
       {
         "english": "add",
         "korean": "넣다"
-      },
-      {
-        "english": "please",
-        "korean": "주세요"
       }
     ],
     "tags": [
@@ -1450,10 +1422,6 @@
       {
         "english": "latte",
         "korean": "라떼"
-      },
-      {
-        "english": "please",
-        "korean": "주세요"
       }
     ],
     "tags": [
@@ -1546,10 +1514,6 @@
       {
         "english": "without",
         "korean": "없이"
-      },
-      {
-        "english": "please",
-        "korean": "주세요"
       }
     ],
     "tags": [
@@ -2514,10 +2478,6 @@
       {
         "english": "color",
         "korean": "색깔"
-      },
-      {
-        "english": "have",
-        "korean": "있다"
       }
     ],
     "tags": [
@@ -2637,10 +2597,6 @@
         "korean": "바지"
       },
       {
-        "english": "have",
-        "korean": "있다"
-      },
-      {
         "english": "stock",
         "korean": "재고"
       }
@@ -2689,10 +2645,6 @@
       {
         "english": "available",
         "korean": "가능하다"
-      },
-      {
-        "english": "have",
-        "korean": "있다"
       }
     ],
     "tags": [
@@ -2831,10 +2783,6 @@
       {
         "english": "wrap",
         "korean": "포장하다"
-      },
-      {
-        "english": "please",
-        "korean": "주세요"
       }
     ],
     "tags": [
@@ -4269,10 +4217,6 @@
       {
         "english": "give",
         "korean": "주다"
-      },
-      {
-        "english": "please",
-        "korean": "주세요"
       }
     ],
     "tags": [
@@ -9981,10 +9925,6 @@
     "category": "가족/친구",
     "hintWords": [
       {
-        "english": "you",
-        "korean": "너"
-      },
-      {
         "english": "really",
         "korean": "정말"
       },
@@ -10176,10 +10116,6 @@
     "difficulty": "beginner",
     "category": "가족/친구",
     "hintWords": [
-      {
-        "english": "you",
-        "korean": "너"
-      },
       {
         "english": "funny",
         "korean": "재미있다"
@@ -10390,10 +10326,6 @@
     "category": "가족/친구",
     "hintWords": [
       {
-        "english": "you",
-        "korean": "너"
-      },
-      {
         "english": "best",
         "korean": "최고"
       },
@@ -10439,10 +10371,6 @@
     "difficulty": "beginner",
     "category": "가족/친구",
     "hintWords": [
-      {
-        "english": "you",
-        "korean": "너"
-      },
       {
         "english": "great",
         "korean": "훌륭하다"
@@ -11268,14 +11196,6 @@
       {
         "english": "angry",
         "korean": "화내다"
-      },
-      {
-        "english": "you",
-        "korean": "너"
-      },
-      {
-        "english": "not",
-        "korean": "안"
       }
     ],
     "tags": [
@@ -11644,10 +11564,6 @@
       {
         "english": "brave",
         "korean": "용감하다"
-      },
-      {
-        "english": "you",
-        "korean": "넌"
       },
       {
         "english": "look",
@@ -12949,10 +12865,6 @@
       {
         "english": "alone",
         "korean": "혼자"
-      },
-      {
-        "english": "not",
-        "korean": "아니다"
       }
     ],
     "tags": [
@@ -12970,10 +12882,6 @@
       {
         "english": "busy",
         "korean": "바쁘다"
-      },
-      {
-        "english": "but",
-        "korean": "데"
       },
       {
         "english": "next",
@@ -15068,10 +14976,6 @@
       {
         "english": "laundry",
         "korean": "빨래"
-      },
-      {
-        "english": "have",
-        "korean": "있다"
       }
     ],
     "tags": [
@@ -15143,10 +15047,6 @@
       {
         "english": "close",
         "korean": "닫다"
-      },
-      {
-        "english": "please",
-        "korean": "주세요"
       }
     ],
     "tags": [
@@ -15218,10 +15118,6 @@
       {
         "english": "smell",
         "korean": "냄새"
-      },
-      {
-        "english": "have",
-        "korean": "나다"
       }
     ],
     "tags": [
@@ -15268,10 +15164,6 @@
       {
         "english": "turn off",
         "korean": "끄다"
-      },
-      {
-        "english": "please",
-        "korean": "주세요"
       }
     ],
     "tags": [
@@ -15393,10 +15285,6 @@
       {
         "english": "close",
         "korean": "닫히다"
-      },
-      {
-        "english": "not",
-        "korean": "안"
       }
     ],
     "tags": [
@@ -16143,10 +16031,6 @@
       {
         "english": "afternoon",
         "korean": "오후"
-      },
-      {
-        "english": "have",
-        "korean": "있다"
       }
     ],
     "tags": [
@@ -17406,10 +17290,6 @@
       {
         "english": "account",
         "korean": "계정"
-      },
-      {
-        "english": "please",
-        "korean": "부탁"
       }
     ],
     "tags": [
@@ -17452,10 +17332,6 @@
       {
         "english": "comment",
         "korean": "댓글"
-      },
-      {
-        "english": "please",
-        "korean": "부탁"
       },
       {
         "english": "leave",
@@ -17694,10 +17570,6 @@
       {
         "english": "retweet",
         "korean": "리트윗"
-      },
-      {
-        "english": "please",
-        "korean": "해줄래"
       }
     ],
     "tags": [
@@ -17790,10 +17662,6 @@
       {
         "english": "setting",
         "korean": "설정"
-      },
-      {
-        "english": "please",
-        "korean": "해줄래"
       }
     ],
     "tags": [
@@ -17815,10 +17683,6 @@
       {
         "english": "take",
         "korean": "찍다"
-      },
-      {
-        "english": "please",
-        "korean": "줄래"
       }
     ],
     "tags": [
@@ -17915,10 +17779,6 @@
       {
         "english": "check",
         "korean": "확인"
-      },
-      {
-        "english": "please",
-        "korean": "해줄래"
       }
     ],
     "tags": [
@@ -18665,10 +18525,6 @@
       {
         "english": "request",
         "korean": "부탁"
-      },
-      {
-        "english": "please",
-        "korean": "주세요"
       }
     ],
     "tags": [
@@ -18861,10 +18717,6 @@
       {
         "english": "material",
         "korean": "자료"
-      },
-      {
-        "english": "please",
-        "korean": "주세요"
       }
     ],
     "tags": [
@@ -19174,10 +19026,6 @@
       {
         "english": "request",
         "korean": "부탁"
-      },
-      {
-        "english": "please",
-        "korean": "주세요"
       }
     ],
     "tags": [
@@ -19899,10 +19747,6 @@
       {
         "english": "any",
         "korean": "혹시"
-      },
-      {
-        "english": "have",
-        "korean": "있다"
       }
     ],
     "tags": [
@@ -21170,10 +21014,6 @@
       {
         "english": "extend",
         "korean": "연장하다"
-      },
-      {
-        "english": "please",
-        "korean": "주세요"
       }
     ],
     "tags": [
@@ -21220,10 +21060,6 @@
       {
         "english": "proposal",
         "korean": "안건"
-      },
-      {
-        "english": "please",
-        "korean": "주세요"
       }
     ],
     "tags": [
@@ -21462,10 +21298,6 @@
       {
         "english": "review",
         "korean": "검토하다"
-      },
-      {
-        "english": "please",
-        "korean": "주세요"
       }
     ],
     "tags": [
@@ -21704,10 +21536,6 @@
       {
         "english": "plan",
         "korean": "계획"
-      },
-      {
-        "english": "please",
-        "korean": "부탁합니다"
       }
     ],
     "tags": [
@@ -23900,10 +23728,6 @@
       {
         "english": "yourself",
         "korean": "자신"
-      },
-      {
-        "english": "please",
-        "korean": "부탁"
       }
     ],
     "tags": [
@@ -25421,10 +25245,6 @@
       {
         "english": "suggest",
         "korean": "추천하다"
-      },
-      {
-        "english": "they",
-        "korean": "그들"
       }
     ],
     "tags": [
@@ -26180,31 +26000,6 @@
     "tags": [
       "sales",
       "revenue"
-    ]
-  },
-  {
-    "id": "sent_1053",
-    "koreanText": "가격을 올려야 할 것 같아요.",
-    "theme": "business",
-    "difficulty": "beginner",
-    "category": "재무/회계",
-    "hintWords": [
-      {
-        "english": "price",
-        "korean": "가격"
-      },
-      {
-        "english": "increase",
-        "korean": "올리다"
-      },
-      {
-        "english": "adjust",
-        "korean": "조정하다"
-      }
-    ],
-    "tags": [
-      "price",
-      "increase"
     ]
   },
   {
@@ -31315,10 +31110,6 @@
         "korean": "회의"
       },
       {
-        "english": "have",
-        "korean": "있다"
-      },
-      {
         "english": "there is",
         "korean": "있어요"
       }
@@ -32401,10 +32192,6 @@
       {
         "english": "help",
         "korean": "도움"
-      },
-      {
-        "english": "you",
-        "korean": "당신"
       }
     ],
     "tags": [
@@ -32426,10 +32213,6 @@
       {
         "english": "wait",
         "korean": "기다리다"
-      },
-      {
-        "english": "please",
-        "korean": "부탁"
       }
     ],
     "tags": [
@@ -32964,10 +32747,6 @@
       {
         "english": "how",
         "korean": "어떻게"
-      },
-      {
-        "english": "you",
-        "korean": "당신"
       }
     ],
     "tags": [
@@ -40853,10 +40632,6 @@
       {
         "english": "mild",
         "korean": "순한맛"
-      },
-      {
-        "english": "please",
-        "korean": "주세요"
       }
     ],
     "tags": [
@@ -42765,10 +42540,6 @@
         "korean": "배탈"
       },
       {
-        "english": "have",
-        "korean": "나다"
-      },
-      {
         "english": "hospital",
         "korean": "병원"
       },
@@ -43807,10 +43578,6 @@
     "category": "감정표현",
     "hintWords": [
       {
-        "english": "your",
-        "korean": "너의"
-      },
-      {
         "english": "understand",
         "korean": "알다"
       },
@@ -43895,10 +43662,6 @@
       {
         "english": "hang in there",
         "korean": "힘내"
-      },
-      {
-        "english": "you",
-        "korean": "넌"
       },
       {
         "english": "enough",
@@ -44543,10 +44306,6 @@
     "category": "감정표현",
     "hintWords": [
       {
-        "english": "you",
-        "korean": "넌"
-      },
-      {
         "english": "did well",
         "korean": "잘했어"
       },
@@ -44607,16 +44366,8 @@
     "category": "감정표현",
     "hintWords": [
       {
-        "english": "you",
-        "korean": "너"
-      },
-      {
         "english": "alone",
         "korean": "혼자"
-      },
-      {
-        "english": "not",
-        "korean": "아니다"
       },
       {
         "english": "together",
@@ -45389,10 +45140,6 @@
       {
         "english": "problem",
         "korean": "문제"
-      },
-      {
-        "english": "have",
-        "korean": "있다"
       }
     ],
     "tags": [
@@ -45751,10 +45498,6 @@
       {
         "english": "free",
         "korean": "안 내다"
-      },
-      {
-        "english": "have",
-        "korean": "있다"
       }
     ],
     "tags": [
@@ -46023,10 +45766,6 @@
       {
         "english": "buy",
         "korean": "사다"
-      },
-      {
-        "english": "should",
-        "korean": "해야 할까"
       }
     ],
     "tags": [
@@ -46847,8 +46586,8 @@
     "category": "식당",
     "hintWords": [
       {
-        "english": "please",
-        "korean": "부탁합니다"
+        "english": "get",
+        "korean": "얻다"
       }
     ],
     "tags": [
@@ -46867,10 +46606,6 @@
       {
         "english": "bill",
         "korean": "계산서"
-      },
-      {
-        "english": "please",
-        "korean": "부탁합니다"
       }
     ],
     "tags": [
@@ -47387,10 +47122,6 @@
       {
         "english": "gift wrap",
         "korean": "선물 포장"
-      },
-      {
-        "english": "please",
-        "korean": "부탁합니다"
       }
     ],
     "tags": [
@@ -47409,10 +47140,6 @@
       {
         "english": "receipt",
         "korean": "영수증"
-      },
-      {
-        "english": "please",
-        "korean": "부탁합니다"
       }
     ],
     "tags": [
@@ -47585,10 +47312,6 @@
       {
         "english": "map",
         "korean": "지도"
-      },
-      {
-        "english": "please",
-        "korean": "부탁합니다"
       }
     ],
     "tags": [
@@ -47717,10 +47440,6 @@
       {
         "english": "help",
         "korean": "도움"
-      },
-      {
-        "english": "please",
-        "korean": "부탁합니다"
       }
     ],
     "tags": [
@@ -47915,10 +47634,6 @@
       {
         "english": "insurance",
         "korean": "보험"
-      },
-      {
-        "english": "have",
-        "korean": "가지고 있다"
       }
     ],
     "tags": [
@@ -47981,10 +47696,6 @@
       {
         "english": "repeat",
         "korean": "반복하다"
-      },
-      {
-        "english": "please",
-        "korean": "부탁합니다"
       }
     ],
     "tags": [
@@ -49479,10 +49190,6 @@
       {
         "english": "receipt",
         "korean": "영수증"
-      },
-      {
-        "english": "have",
-        "korean": "가지고 있다"
       }
     ],
     "tags": [
@@ -52328,76 +52035,6 @@
     ]
   },
   {
-    "id": "sent_2013",
-    "koreanText": "이 버스가 시내로 가나요?",
-    "theme": "travel",
-    "difficulty": "beginner",
-    "category": "교통",
-    "hintWords": [
-      {
-        "english": "bus",
-        "korean": "버스"
-      },
-      {
-        "english": "downtown",
-        "korean": "시내"
-      },
-      {
-        "english": "go to",
-        "korean": "가다"
-      }
-    ],
-    "tags": [
-      "교통",
-      "버스",
-      "방향"
-    ]
-  },
-  {
-    "id": "sent_2014",
-    "koreanText": "택시 타는 곳이 어디예요?",
-    "theme": "travel",
-    "difficulty": "beginner",
-    "category": "교통",
-    "hintWords": [
-      {
-        "english": "taxi stand",
-        "korean": "택시 타는 곳"
-      },
-      {
-        "english": "where",
-        "korean": "어디"
-      }
-    ],
-    "tags": [
-      "교통",
-      "택시",
-      "위치"
-    ]
-  },
-  {
-    "id": "sent_2015",
-    "koreanText": "이 주소로 가 주세요.",
-    "theme": "travel",
-    "difficulty": "beginner",
-    "category": "교통",
-    "hintWords": [
-      {
-        "english": "address",
-        "korean": "주소"
-      },
-      {
-        "english": "take me to",
-        "korean": "데려다 주다"
-      }
-    ],
-    "tags": [
-      "교통",
-      "택시",
-      "목적지"
-    ]
-  },
-  {
     "id": "sent_2016",
     "koreanText": "얼마나 걸려요?",
     "theme": "travel",
@@ -53002,90 +52639,6 @@
     ]
   },
   {
-    "id": "sent_2042",
-    "koreanText": "계산서 주세요.",
-    "theme": "travel",
-    "difficulty": "beginner",
-    "category": "식당",
-    "hintWords": [
-      {
-        "english": "bill",
-        "korean": "계산서"
-      }
-    ],
-    "tags": [
-      "식당",
-      "계산",
-      "요청"
-    ]
-  },
-  {
-    "id": "sent_2043",
-    "koreanText": "카드로 결제할 수 있나요?",
-    "theme": "travel",
-    "difficulty": "beginner",
-    "category": "식당",
-    "hintWords": [
-      {
-        "english": "credit card",
-        "korean": "카드"
-      },
-      {
-        "english": "pay",
-        "korean": "결제하다"
-      }
-    ],
-    "tags": [
-      "식당",
-      "계산",
-      "카드"
-    ]
-  },
-  {
-    "id": "sent_2044",
-    "koreanText": "포장해 주세요.",
-    "theme": "travel",
-    "difficulty": "beginner",
-    "category": "식당",
-    "hintWords": [
-      {
-        "english": "to go",
-        "korean": "포장"
-      },
-      {
-        "english": "wrap up",
-        "korean": "싸다"
-      }
-    ],
-    "tags": [
-      "식당",
-      "포장",
-      "요청"
-    ]
-  },
-  {
-    "id": "sent_2045",
-    "koreanText": "두 명이요.",
-    "theme": "travel",
-    "difficulty": "beginner",
-    "category": "식당",
-    "hintWords": [
-      {
-        "english": "two people",
-        "korean": "두 명"
-      },
-      {
-        "english": "table for",
-        "korean": "~명 자리"
-      }
-    ],
-    "tags": [
-      "식당",
-      "입장",
-      "인원"
-    ]
-  },
-  {
     "id": "sent_2046",
     "koreanText": "예약 안 하고 왔는데 자리 있나요?",
     "theme": "travel",
@@ -53121,10 +52674,6 @@
       {
         "english": "what's in",
         "korean": "뭐가 들어간"
-      },
-      {
-        "english": "this",
-        "korean": "이것"
       }
     ],
     "tags": [
@@ -53488,24 +53037,6 @@
     ]
   },
   {
-    "id": "sent_2063",
-    "koreanText": "사진 좀 찍어 주시겠어요?",
-    "theme": "travel",
-    "difficulty": "beginner",
-    "category": "현지소통",
-    "hintWords": [
-      {
-        "english": "take a photo",
-        "korean": "사진을 찍다"
-      }
-    ],
-    "tags": [
-      "현지소통",
-      "사진",
-      "부탁"
-    ]
-  },
-  {
     "id": "sent_2064",
     "koreanText": "무료 와이파이 되나요?",
     "theme": "travel",
@@ -53537,38 +53068,12 @@
       {
         "english": "English menu",
         "korean": "영어 메뉴판"
-      },
-      {
-        "english": "have",
-        "korean": "있다"
       }
     ],
     "tags": [
       "현지소통",
       "영어",
       "메뉴"
-    ]
-  },
-  {
-    "id": "sent_2066",
-    "koreanText": "천천히 말해 주세요.",
-    "theme": "travel",
-    "difficulty": "beginner",
-    "category": "현지소통",
-    "hintWords": [
-      {
-        "english": "slowly",
-        "korean": "천천히"
-      },
-      {
-        "english": "speak",
-        "korean": "말하다"
-      }
-    ],
-    "tags": [
-      "현지소통",
-      "소통",
-      "요청"
     ]
   },
   {
@@ -53705,28 +53210,6 @@
       "현지소통",
       "언어",
       "표현"
-    ]
-  },
-  {
-    "id": "sent_2073",
-    "koreanText": "이거 얼마예요?",
-    "theme": "travel",
-    "difficulty": "beginner",
-    "category": "현지소통",
-    "hintWords": [
-      {
-        "english": "how much",
-        "korean": "얼마"
-      },
-      {
-        "english": "this",
-        "korean": "이것"
-      }
-    ],
-    "tags": [
-      "현지소통",
-      "가격",
-      "질문"
     ]
   },
   {
@@ -54097,50 +53580,6 @@
       "관광",
       "입장",
       "가격"
-    ]
-  },
-  {
-    "id": "sent_2089",
-    "koreanText": "여기서 사진 찍어도 되나요?",
-    "theme": "travel",
-    "difficulty": "beginner",
-    "category": "관광",
-    "hintWords": [
-      {
-        "english": "take photos",
-        "korean": "사진 찍다"
-      },
-      {
-        "english": "allowed",
-        "korean": "되는"
-      }
-    ],
-    "tags": [
-      "관광",
-      "사진",
-      "허가"
-    ]
-  },
-  {
-    "id": "sent_2090",
-    "koreanText": "가이드 투어가 있나요?",
-    "theme": "travel",
-    "difficulty": "beginner",
-    "category": "관광",
-    "hintWords": [
-      {
-        "english": "guided tour",
-        "korean": "가이드 투어"
-      },
-      {
-        "english": "available",
-        "korean": "있는"
-      }
-    ],
-    "tags": [
-      "관광",
-      "투어",
-      "질문"
     ]
   },
   {
@@ -54676,28 +54115,6 @@
     ]
   },
   {
-    "id": "sent_2113",
-    "koreanText": "지갑을 잃어버렸어요.",
-    "theme": "travel",
-    "difficulty": "beginner",
-    "category": "긴급상황",
-    "hintWords": [
-      {
-        "english": "wallet",
-        "korean": "지갑"
-      },
-      {
-        "english": "lost",
-        "korean": "잃어버린"
-      }
-    ],
-    "tags": [
-      "긴급상황",
-      "분실",
-      "지갑"
-    ]
-  },
-  {
     "id": "sent_2114",
     "koreanText": "여권을 도둑맞았어요.",
     "theme": "travel",
@@ -54751,10 +54168,6 @@
       {
         "english": "headache",
         "korean": "두통"
-      },
-      {
-        "english": "have",
-        "korean": "있다"
       }
     ],
     "tags": [
@@ -54773,10 +54186,6 @@
       {
         "english": "stomachache",
         "korean": "배탈"
-      },
-      {
-        "english": "have",
-        "korean": "있다"
       }
     ],
     "tags": [
@@ -54805,24 +54214,6 @@
       "긴급상황",
       "약국",
       "위치"
-    ]
-  },
-  {
-    "id": "sent_2119",
-    "koreanText": "도와주세요!",
-    "theme": "travel",
-    "difficulty": "beginner",
-    "category": "긴급상황",
-    "hintWords": [
-      {
-        "english": "help",
-        "korean": "도와주다"
-      }
-    ],
-    "tags": [
-      "긴급상황",
-      "도움",
-      "긴급"
     ]
   },
   {
@@ -54857,10 +54248,6 @@
       {
         "english": "fever",
         "korean": "열"
-      },
-      {
-        "english": "have",
-        "korean": "있다"
       }
     ],
     "tags": [
@@ -54963,10 +54350,6 @@
       {
         "english": "cold medicine",
         "korean": "감기약"
-      },
-      {
-        "english": "have",
-        "korean": "있다"
       }
     ],
     "tags": [
@@ -55250,50 +54633,6 @@
     ]
   },
   {
-    "id": "sent_2138",
-    "koreanText": "이거 얼마예요?",
-    "theme": "travel",
-    "difficulty": "beginner",
-    "category": "쇼핑",
-    "hintWords": [
-      {
-        "english": "how much",
-        "korean": "얼마"
-      },
-      {
-        "english": "this",
-        "korean": "이것"
-      }
-    ],
-    "tags": [
-      "쇼핑",
-      "가격",
-      "질문"
-    ]
-  },
-  {
-    "id": "sent_2139",
-    "koreanText": "좀 깎아 주세요.",
-    "theme": "travel",
-    "difficulty": "beginner",
-    "category": "쇼핑",
-    "hintWords": [
-      {
-        "english": "discount",
-        "korean": "할인"
-      },
-      {
-        "english": "give",
-        "korean": "주다"
-      }
-    ],
-    "tags": [
-      "쇼핑",
-      "흥정",
-      "할인"
-    ]
-  },
-  {
     "id": "sent_2140",
     "koreanText": "다른 색 있어요?",
     "theme": "travel",
@@ -55343,10 +54682,6 @@
       {
         "english": "bigger size",
         "korean": "더 큰 사이즈"
-      },
-      {
-        "english": "have",
-        "korean": "있다"
       }
     ],
     "tags": [
@@ -55371,24 +54706,6 @@
       "쇼핑",
       "세일",
       "질문"
-    ]
-  },
-  {
-    "id": "sent_2144",
-    "koreanText": "영수증 주세요.",
-    "theme": "travel",
-    "difficulty": "beginner",
-    "category": "쇼핑",
-    "hintWords": [
-      {
-        "english": "receipt",
-        "korean": "영수증"
-      }
-    ],
-    "tags": [
-      "쇼핑",
-      "계산",
-      "영수증"
     ]
   },
   {
@@ -58514,32 +57831,6 @@
     ]
   },
   {
-    "id": "sent_2278",
-    "koreanText": "이 사원에 들어갈 때 신발을 벗어야 하나요?",
-    "theme": "travel",
-    "difficulty": "intermediate",
-    "category": "문화체험",
-    "hintWords": [
-      {
-        "english": "temple",
-        "korean": "사원"
-      },
-      {
-        "english": "take off shoes",
-        "korean": "신발을 벗다"
-      },
-      {
-        "english": "enter",
-        "korean": "들어가다"
-      }
-    ],
-    "tags": [
-      "문화체험",
-      "문화",
-      "사원"
-    ]
-  },
-  {
     "id": "sent_2279",
     "koreanText": "야시장이 몇 시부터 시작해요?",
     "theme": "travel",
@@ -59891,10 +59182,6 @@
       {
         "english": "carry on",
         "korean": "기내에 가져가다"
-      },
-      {
-        "english": "this",
-        "korean": "이것"
       }
     ],
     "tags": [
@@ -61543,10 +60830,6 @@
       {
         "english": "food",
         "korean": "음식"
-      },
-      {
-        "english": "this",
-        "korean": "이것"
       }
     ],
     "tags": [
@@ -61565,10 +60848,6 @@
       {
         "english": "delicious",
         "korean": "맛있는"
-      },
-      {
-        "english": "this",
-        "korean": "이것"
       }
     ],
     "tags": [
@@ -61675,10 +60954,6 @@
       {
         "english": "try",
         "korean": "먹어 보다"
-      },
-      {
-        "english": "this",
-        "korean": "이것"
       }
     ],
     "tags": [
@@ -62765,28 +62040,6 @@
       "환승경유",
       "비자",
       "경유"
-    ]
-  },
-  {
-    "id": "sent_2457",
-    "koreanText": "무료 와이파이 되나요?",
-    "theme": "travel",
-    "difficulty": "beginner",
-    "category": "환승경유",
-    "hintWords": [
-      {
-        "english": "free Wi-Fi",
-        "korean": "무료 와이파이"
-      },
-      {
-        "english": "available",
-        "korean": "되는"
-      }
-    ],
-    "tags": [
-      "환승경유",
-      "시설",
-      "와이파이"
     ]
   },
   {
@@ -68013,10 +67266,6 @@
       {
         "english": "squat",
         "korean": "스쿼트"
-      },
-      {
-        "english": "do",
-        "korean": "하다"
       }
     ],
     "tags": [
