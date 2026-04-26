@@ -1,5 +1,22 @@
 import express from "express";
 import cors from "cors";
+import { PrismaClient } from "@prisma/client";
+
+// 서버 시작 시 DB 마이그레이션 실행 (소셜 로그인 컬럼 추가)
+(async () => {
+  const migrationPrisma = new PrismaClient();
+  try {
+    await migrationPrisma.$executeRawUnsafe(`ALTER TABLE "User" ADD COLUMN IF NOT EXISTS "provider" TEXT`);
+    await migrationPrisma.$executeRawUnsafe(`ALTER TABLE "User" ADD COLUMN IF NOT EXISTS "social_id" TEXT`);
+    await migrationPrisma.$executeRawUnsafe(`ALTER TABLE "User" ADD COLUMN IF NOT EXISTS "name" TEXT`);
+    await migrationPrisma.$executeRawUnsafe(`CREATE UNIQUE INDEX IF NOT EXISTS "User_provider_social_id_key" ON "User"("provider", "social_id")`);
+    console.log("Migration: social login columns OK");
+  } catch (e: any) {
+    console.log("Migration note:", e.message);
+  } finally {
+    await migrationPrisma.$disconnect();
+  }
+})();
 import { apiRateLimit } from "./middleware/rateLimit";
 import authRoutes from "./routes/auth";
 import sentenceRoutes from "./routes/sentences";
