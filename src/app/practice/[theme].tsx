@@ -14,6 +14,7 @@ import AchievementModal from '../../components/AchievementModal';
 import { useDailySentences } from '../../hooks/useDailySentences';
 import { useCorrection } from '../../hooks/useCorrection';
 import { usePracticeStore } from '../../stores/practiceStore';
+import { markSentenceCompleted } from '../../services/localSentences';
 import { colors } from '../../constants/colors';
 import { typography } from '../../constants/typography';
 import { spacing, radius, shadows } from '../../constants/spacing';
@@ -137,6 +138,12 @@ export default function PracticeScreen() {
 
     if (correctionResult) {
       setCorrection(currentSentence.id, correctionResult);
+
+      // 캐시에 완료 상태 저장 (홈 화면 진행률 유지)
+      AsyncStorage.getItem('engwrite_difficulty').then((saved) => {
+        const diff = saved === 'intermediate' ? 'intermediate' : 'beginner';
+        markSentenceCompleted(theme as Theme, diff as any, currentSentence.id);
+      });
 
       if (correctionResult.xpEarned) {
         setXpEarned(correctionResult.xpEarned);

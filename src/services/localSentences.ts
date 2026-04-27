@@ -44,6 +44,27 @@ function getTodayString(): string {
  * - 최근 30일 사용 문장은 중복 방지
  * - 날짜 기반 시드로 결정적 셔플
  */
+/**
+ * 특정 문장의 완료 상태를 캐시에 반영한다.
+ * 작문 완료 시 호출하여 홈 화면 진행률을 유지.
+ */
+export async function markSentenceCompleted(
+  theme: Theme,
+  difficulty: Difficulty,
+  sentenceId: string,
+): Promise<void> {
+  const today = getTodayString();
+  const cacheKey = `daily_${theme}_${difficulty}_${today}`;
+  const cached = await AsyncStorage.getItem(cacheKey);
+  if (!cached) return;
+
+  const sentences: Sentence[] = JSON.parse(cached);
+  const updated = sentences.map((s) =>
+    s.id === sentenceId ? { ...s, isCompleted: true } : s,
+  );
+  await AsyncStorage.setItem(cacheKey, JSON.stringify(updated));
+}
+
 export async function getDailySentences(
   theme: Theme,
   difficulty: Difficulty = 'beginner',
