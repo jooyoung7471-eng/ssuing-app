@@ -11,9 +11,11 @@ import CorrectionResultView from '../../components/CorrectionResult';
 import CompletionModal from '../../components/CompletionModal';
 import XpNotification from '../../components/XpNotification';
 import AchievementModal from '../../components/AchievementModal';
+import PaywallModal from '../../components/PaywallModal';
 import { useDailySentences } from '../../hooks/useDailySentences';
 import { useCorrection } from '../../hooks/useCorrection';
 import { usePracticeStore } from '../../stores/practiceStore';
+import { useSubscriptionStore } from '../../stores/subscriptionStore';
 import { markSentenceCompleted } from '../../services/localSentences';
 import { colors } from '../../constants/colors';
 import { typography } from '../../constants/typography';
@@ -58,6 +60,8 @@ export default function PracticeScreen() {
   const [showAchievement, setShowAchievement] = useState(false);
   const draftRef = useRef('');
   const submittingRef = useRef(false);
+  const [showPaywall, setShowPaywall] = useState(false);
+  const { isPremium, canWriteMore, recordUsage, getRemainingWrites } = useSubscriptionStore();
 
   const themeTitle = theme === 'daily' ? '일상 영어' : theme === 'travel' ? '여행 영어' : '비즈니스 영어';
   const themeEmoji = theme === 'daily' ? '\u2615' : theme === 'travel' ? '\u{2708}\u{FE0F}' : '\u{1F4BC}';
@@ -109,7 +113,13 @@ export default function PracticeScreen() {
   }, [currentIndex, currentSentence?.id]);
 
   const handleNext = () => {
-    if (canGoNext) setCurrentIndex(currentIndex + 1);
+    if (!canGoNext) return;
+    // 무료 사용자: 2번째 문장부터 paywall
+    if (!isPremium && currentIndex + 1 >= 1 && !canWriteMore) {
+      setShowPaywall(true);
+      return;
+    }
+    setCurrentIndex(currentIndex + 1);
   };
 
   const handlePrev = () => {
@@ -132,12 +142,21 @@ export default function PracticeScreen() {
     const writing = draftRef.current;
     if (writing.length < 10) return;
 
+    // 무료 사용자 제한 체크
+    if (!isPremium && !canWriteMore) {
+      setShowPaywall(true);
+      return;
+    }
+
     submittingRef.current = true;
     const correctionResult = await submit(currentSentence.id, writing, undefined, currentSentence.koreanText);
     submittingRef.current = false;
 
     if (correctionResult) {
       setCorrection(currentSentence.id, correctionResult);
+
+      // 사용량 기록 (무료 사용자 제한용)
+      recordUsage();
 
       // 캐시에 완료 상태 저장 (홈 화면 진행률 유지)
       AsyncStorage.getItem('engwrite_difficulty').then((saved) => {
@@ -421,6 +440,12 @@ export default function PracticeScreen() {
         visible={showAchievement}
         achievement={pendingAchievements[0] || null}
         onClose={handleAchievementClose}
+      />
+
+      <PaywallModal
+        visible={showPaywall}
+        onClose={() => setShowPaywall(false)}
+        trigger="practice_limit"
       />
     </View>
   );

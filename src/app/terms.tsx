@@ -19,6 +19,7 @@ import {
   enablePushNotifications,
   registerForPushNotifications,
 } from '../services/notifications';
+import { useSubscriptionStore } from '../stores/subscriptionStore';
 
 const TERMS_AGREED_KEY = 'terms_agreed';
 const MARKETING_AGREED_KEY = 'marketing_agreed';
@@ -144,6 +145,7 @@ export default function TermsScreen() {
   const params = useLocalSearchParams<{ returnTo?: string }>();
   const [checked, setChecked] = useState<Record<string, boolean>>({});
   const [modalContent, setModalContent] = useState<TermItem | null>(null);
+  const { startTrial } = useSubscriptionStore();
 
   const allRequired = TERMS.filter((t) => t.required);
   const allRequiredChecked = allRequired.every((t) => checked[t.id]);
@@ -174,6 +176,9 @@ export default function TermsScreen() {
     if (checked.push) {
       await AsyncStorage.setItem(PUSH_AGREED_KEY, 'true');
     }
+
+    // 7일 무료 체험 자동 시작
+    await startTrial();
 
     // 즉시 홈으로 이동 (푸시 알림은 백그라운드로)
     router.replace('/(tabs)');
@@ -278,7 +283,7 @@ export default function TermsScreen() {
               !allRequiredChecked && styles.agreeButtonTextDisabled,
             ]}
           >
-            {'동의하고 시작하기'}
+            {'동의하고 7일 무료 체험 시작'}
           </Text>
         </TouchableOpacity>
       </View>

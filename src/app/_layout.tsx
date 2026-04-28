@@ -6,6 +6,7 @@ import * as SplashScreen from 'expo-splash-screen';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { colors } from '../constants/colors';
 import { useAuthStore } from '../stores/authStore';
+import { useSubscriptionStore } from '../stores/subscriptionStore';
 
 const ONBOARDING_KEY = 'onboarding_completed';
 const TERMS_AGREED_KEY = 'terms_agreed';
@@ -25,6 +26,8 @@ export default function RootLayout() {
   const [onboardingDone, setOnboardingDone] = useState<boolean | null>(null);
   const [termsAgreed, setTermsAgreed] = useState<boolean | null>(null);
 
+  const initializeSubscription = useSubscriptionStore((s) => s.initialize);
+
   // 초기 로딩 (1회만)
   useEffect(() => {
     (async () => {
@@ -35,6 +38,9 @@ export default function RootLayout() {
       ]);
       setOnboardingDone(obVal === 'true');
       setTermsAgreed(taVal === 'true');
+
+      // 구독 상태 ��기화
+      initializeSubscription();
     })();
   }, []);
 

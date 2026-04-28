@@ -7,6 +7,8 @@ import { colors } from '../../constants/colors';
 import { typography } from '../../constants/typography';
 import { spacing, radius, shadows } from '../../constants/spacing';
 import { useAuthStore, SocialProvider } from '../../stores/authStore';
+import { useSubscriptionStore } from '../../stores/subscriptionStore';
+import PaywallModal from '../../components/PaywallModal';
 import {
   isPushEnabled,
   enablePushNotifications,
@@ -19,9 +21,11 @@ const REMINDER_HOURS = [6, 7, 8, 9, 10, 11, 12, 18, 19, 20, 21];
 
 export default function SettingsScreen() {
   const { user, isGuest, logout, deleteAccount, linkSocialAccount, isLoading } = useAuthStore();
+  const { plan, isPremium, trialDaysLeft, expirationDate, willRenew, restore } = useSubscriptionStore();
   const [pushEnabled, setPushEnabled] = useState(false);
   const [reminderHour, setReminderHour] = useState(9);
   const [showTimePicker, setShowTimePicker] = useState(false);
+  const [showPaywall, setShowPaywall] = useState(false);
 
   useEffect(() => {
     isPushEnabled().then(setPushEnabled);
@@ -212,6 +216,96 @@ export default function SettingsScreen() {
           )}
         </View>
 
+        {/* Premium Section */}
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>{'구독'}</Text>
+          <View style={styles.sectionCard}>
+            <View style={styles.row}>
+              <View style={styles.rowLeft}>
+                <Text style={styles.rowLabel}>{'구독 상태'}</Text>
+              </View>
+              <View style={[
+                styles.providerBadge,
+                {
+                  backgroundColor: isPremium ? colors.primaryLight : colors.surfaceAlt,
+                  borderColor: isPremium ? colors.primary + '30' : colors.border,
+                },
+              ]}>
+                <Text style={[
+                  styles.providerBadgeText,
+                  { color: isPremium ? colors.primary : colors.text.secondary },
+                ]}>
+                  {plan === 'premium' ? 'Premium' : plan === 'trial' ? `\uCCB4\uD5D8 (${trialDaysLeft}\uC77C)` : 'Free'}
+                </Text>
+              </View>
+            </View>
+            {plan === 'premium' && expirationDate && (
+              <>
+                <View style={styles.rowDivider} />
+                <View style={styles.row}>
+                  <Text style={styles.rowLabel}>{'갱신일'}</Text>
+                  <Text style={styles.rowValue}>
+                    {new Date(expirationDate).toLocaleDateString('ko-KR')}
+                  </Text>
+                </View>
+                <View style={styles.rowDivider} />
+                <View style={styles.row}>
+                  <Text style={styles.rowLabel}>{'자동 갱신'}</Text>
+                  <Text style={styles.rowValue}>{willRenew ? '켜짐' : '꺼짐'}</Text>
+                </View>
+              </>
+            )}
+            {!isPremium && (
+              <>
+                <View style={styles.rowDivider} />
+                <TouchableOpacity
+                  style={styles.row}
+                  onPress={() => setShowPaywall(true)}
+                  activeOpacity={0.7}
+                >
+                  <Text style={[styles.rowLabel, { color: colors.primary, fontWeight: '700' }]}>
+                    {'Premium \uC73C\uB85C \uC5C5\uADF8\uB808\uC774\uB4DC'}
+                  </Text>
+                  <Text style={styles.rowChevron}>{'›'}</Text>
+                </TouchableOpacity>
+              </>
+            )}
+            <View style={styles.rowDivider} />
+            <TouchableOpacity
+              style={styles.row}
+              onPress={async () => {
+                const result = await restore();
+                if (result.isPremium) {
+                  Alert.alert('\uBCF5\uC6D0 \uC644\uB8CC', '\uAD6C\uB3C5\uC774 \uBCF5\uC6D0\uB418\uC5C8\uC2B5\uB2C8\uB2E4.');
+                } else {
+                  Alert.alert('\uBCF5\uC6D0 \uACB0\uACFC', '\uD65C\uC131\uD654\uB41C \uAD6C\uB3C5\uC744 \uCC3E\uC744 \uC218 \uC5C6\uC2B5\uB2C8\uB2E4.');
+                }
+              }}
+              activeOpacity={0.7}
+            >
+              <Text style={styles.rowLabel}>{'구매 복원'}</Text>
+              <Text style={styles.rowChevron}>{'›'}</Text>
+            </TouchableOpacity>
+            {plan === 'premium' && (
+              <>
+                <View style={styles.rowDivider} />
+                <TouchableOpacity
+                  style={styles.row}
+                  onPress={() => {
+                    if (Platform.OS === 'ios') {
+                      Linking.openURL('https://apps.apple.com/account/subscriptions');
+                    }
+                  }}
+                  activeOpacity={0.7}
+                >
+                  <Text style={styles.rowLabel}>{'구독 관리'}</Text>
+                  <Text style={styles.rowChevron}>{'›'}</Text>
+                </TouchableOpacity>
+              </>
+            )}
+          </View>
+        </View>
+
         {/* Guest: social account linking */}
         {isGuest && (
           <View style={styles.section}>
@@ -346,6 +440,12 @@ export default function SettingsScreen() {
           )}
         </View>
       </ScrollView>
+
+      <PaywallModal
+        visible={showPaywall}
+        onClose={() => setShowPaywall(false)}
+        trigger="settings"
+      />
     </SafeAreaView>
   );
 }

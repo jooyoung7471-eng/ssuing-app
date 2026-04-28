@@ -12,10 +12,13 @@ import Animated, {
   Easing,
 } from 'react-native-reanimated';
 import ThemeCard from '../../components/ThemeCard';
+import { PremiumLockOverlay } from '../../components/PremiumBadge';
+import PaywallModal from '../../components/PaywallModal';
 import { useDailySentences } from '../../hooks/useDailySentences';
 import { useGamification } from '../../hooks/useGamification';
 import api from '../../services/api';
 import { useAuthStore } from '../../stores/authStore';
+import { useSubscriptionStore } from '../../stores/subscriptionStore';
 import { colors } from '../../constants/colors';
 import { typography } from '../../constants/typography';
 import { spacing, radius, shadows } from '../../constants/spacing';
@@ -36,6 +39,7 @@ function getLevelTitle(level: number): string {
 export default function HomeScreen() {
   const router = useRouter();
   const { user } = useAuthStore();
+  const { isPremium, canAccessTheme, canAccessFeature, plan, trialDaysLeft } = useSubscriptionStore();
   const { sentences: dailySentences, fetch: fetchDaily } = useDailySentences();
   const { sentences: bizSentences, fetch: fetchBiz } = useDailySentences();
   const { sentences: travelSentences, fetch: fetchTravel } = useDailySentences();
@@ -43,6 +47,8 @@ export default function HomeScreen() {
   const [stats, setStats] = useState<LearningStats | null>(null);
   const [difficulty, setDifficulty] = useState<Difficulty>('beginner');
   const { stats: gamification, achievements, refetch: refetchGamification } = useGamification();
+  const [showPaywall, setShowPaywall] = useState(false);
+  const [paywallTrigger, setPaywallTrigger] = useState('');
 
   // XP progress bar animation
   const xpBarWidth = useSharedValue(0);
@@ -100,7 +106,30 @@ export default function HomeScreen() {
   };
 
   const handleThemePress = (theme: Theme) => {
+    if (!canAccessTheme(theme)) {
+      setPaywallTrigger(`theme_${theme}`);
+      setShowPaywall(true);
+      return;
+    }
     router.push(`/practice/${theme}`);
+  };
+
+  const handleReviewPress = () => {
+    if (!canAccessFeature('review')) {
+      setPaywallTrigger('review');
+      setShowPaywall(true);
+      return;
+    }
+    router.push('/review');
+  };
+
+  const handleWeeklyPress = () => {
+    if (!canAccessFeature('weekly')) {
+      setPaywallTrigger('weekly');
+      setShowPaywall(true);
+      return;
+    }
+    router.push('/weekly');
   };
 
   const dailyCompleted = (dailySentences || []).filter((s) => s.isCompleted).length;
@@ -252,6 +281,30 @@ export default function HomeScreen() {
           </Text>
         </View>
 
+        {/* Trial / Premium banner */}
+        {plan === 'trial' && trialDaysLeft > 0 && (
+          <View style={styles.trialBanner}>
+            <Text style={styles.trialBannerEmoji}>{'\u{23F3}'}</Text>
+            <Text style={styles.trialBannerText}>
+              {'무료 체험 '}{trialDaysLeft}{'일 남음'}
+            </Text>
+          </View>
+        )}
+        {plan === 'free' && (
+          <TouchableOpacity
+            style={styles.upgradeBanner}
+            onPress={() => { setPaywallTrigger('banner'); setShowPaywall(true); }}
+            activeOpacity={0.8}
+          >
+            <Text style={styles.upgradeBannerEmoji}>{'\u{2B50}'}</Text>
+            <View style={styles.upgradeBannerContent}>
+              <Text style={styles.upgradeBannerTitle}>{'Premium \uC73C\uB85C \uC5C5\uADF8\uB808\uC774\uB4DC'}</Text>
+              <Text style={styles.upgradeBannerDesc}>{'3\uBB38\uC7A5 + \uBAA8\uB4E0 \uD14C\uB9C8 + \uBCF5\uC2B5 \uAE30\uB2A5'}</Text>
+            </View>
+            <Text style={styles.upgradeBannerChevron}>{'\u203A'}</Text>
+          </TouchableOpacity>
+        )}
+
         {/* Theme Cards */}
         <View style={styles.cards}>
           <ThemeCard
@@ -261,27 +314,37 @@ export default function HomeScreen() {
             onPress={() => handleThemePress('daily')}
             difficulty={difficulty}
           />
-          <ThemeCard
-            theme="business"
-            completedCount={bizCompleted}
-            totalCount={(bizSentences || []).length || 3}
-            onPress={() => handleThemePress('business')}
-            difficulty={difficulty}
-          />
-          <ThemeCard
-            theme="travel"
-            completedCount={travelCompleted}
-            totalCount={(travelSentences || []).length || 3}
-            onPress={() => handleThemePress('travel')}
-            difficulty={difficulty}
-          />
+          <View style={{ position: 'relative' }}>
+            <ThemeCard
+              theme="business"
+              completedCount={bizCompleted}
+              totalCount={(bizSentences || []).length || 3}
+              onPress={() => handleThemePress('business')}
+              difficulty={difficulty}
+            />
+            {!canAccessTheme('business') && (
+              <PremiumLockOverlay message="PRO" />
+            )}
+          </View>
+          <View style={{ position: 'relative' }}>
+            <ThemeCard
+              theme="travel"
+              completedCount={travelCompleted}
+              totalCount={(travelSentences || []).length || 3}
+              onPress={() => handleThemePress('travel')}
+              difficulty={difficulty}
+            />
+            {!canAccessTheme('travel') && (
+              <PremiumLockOverlay message="PRO" />
+            )}
+          </View>
         </View>
 
         {/* Quick Access List */}
         <View style={styles.quickAccessList}>
           <TouchableOpacity
             style={styles.quickListItem}
-            onPress={() => router.push('/review')}
+            onPress={handleReviewPress}
             activeOpacity={0.7}
           >
             <View style={[styles.quickListIcon, { backgroundColor: colors.primaryLight }]}>
@@ -303,7 +366,7 @@ export default function HomeScreen() {
 
           <TouchableOpacity
             style={styles.quickListItem}
-            onPress={() => router.push('/weekly')}
+            onPress={handleWeeklyPress}
             activeOpacity={0.7}
           >
             <View style={[styles.quickListIcon, { backgroundColor: colors.warningLight }]}>
@@ -337,6 +400,12 @@ export default function HomeScreen() {
           </TouchableOpacity>
         </View>
       </ScrollView>
+
+      <PaywallModal
+        visible={showPaywall}
+        onClose={() => setShowPaywall(false)}
+        trigger={paywallTrigger}
+      />
     </SafeAreaView>
   );
 }
@@ -614,6 +683,63 @@ const styles = StyleSheet.create({
   quickListChevron: {
     color: colors.text.hint,
     fontSize: 20,
+    fontWeight: '300',
+  },
+
+  // Trial / Upgrade banners
+  trialBanner: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
+    backgroundColor: colors.warningLight,
+    borderRadius: radius.sm,
+    borderWidth: 1,
+    borderColor: colors.warning + '40',
+    paddingVertical: 10,
+    paddingHorizontal: spacing.md,
+    marginBottom: spacing.md,
+  },
+  trialBannerEmoji: {
+    fontSize: 16,
+  },
+  trialBannerText: {
+    fontSize: 13,
+    fontWeight: '700',
+    color: '#92400E',
+  },
+  upgradeBanner: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+    backgroundColor: colors.primaryLight,
+    borderRadius: radius.md,
+    borderWidth: 1,
+    borderColor: colors.primary + '25',
+    paddingVertical: 12,
+    paddingHorizontal: 14,
+    marginBottom: spacing.md,
+  },
+  upgradeBannerEmoji: {
+    fontSize: 20,
+  },
+  upgradeBannerContent: {
+    flex: 1,
+  },
+  upgradeBannerTitle: {
+    fontSize: 14,
+    fontWeight: '800',
+    color: colors.primary,
+    marginBottom: 2,
+  },
+  upgradeBannerDesc: {
+    fontSize: 11,
+    fontWeight: '500',
+    color: colors.text.secondary,
+  },
+  upgradeBannerChevron: {
+    fontSize: 20,
+    color: colors.primary,
     fontWeight: '300',
   },
 });
