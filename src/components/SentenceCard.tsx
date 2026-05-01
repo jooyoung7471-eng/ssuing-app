@@ -18,7 +18,7 @@ interface SentenceCardProps {
 }
 
 export default function SentenceCard({ sentence, index, total }: SentenceCardProps) {
-  const [vocabOpen, setVocabOpen] = useState(true);
+  const [vocabOpen, setVocabOpen] = useState(false);
 
   const toggleVocab = () => {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
