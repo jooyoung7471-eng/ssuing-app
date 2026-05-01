@@ -710,13 +710,13 @@ const styles = StyleSheet.create({
     flex: 1,
     height: 8,
     backgroundColor: colors.disabled,
-    borderRadius: radius.xxs || 4,
+    borderRadius: 4,
     overflow: 'hidden',
   },
   progressBarFill: {
     height: '100%',
     backgroundColor: colors.primary,
-    borderRadius: radius.xxs || 4,
+    borderRadius: 4,
   },
   progressText: {
     ...typography.bodySmall,

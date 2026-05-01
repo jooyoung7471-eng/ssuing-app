@@ -298,8 +298,8 @@ export default function HomeScreen() {
           >
             <Text style={styles.upgradeBannerEmoji}>{'\u{2B50}'}</Text>
             <View style={styles.upgradeBannerContent}>
-              <Text style={styles.upgradeBannerTitle}>{'Premium \uC73C\uB85C \uC5C5\uADF8\uB808\uC774\uB4DC'}</Text>
-              <Text style={styles.upgradeBannerDesc}>{'3\uBB38\uC7A5 + \uBAA8\uB4E0 \uD14C\uB9C8 + \uBCF5\uC2B5 \uAE30\uB2A5'}</Text>
+              <Text style={styles.upgradeBannerTitle}>{'Premium으로 업그레이드'}</Text>
+              <Text style={styles.upgradeBannerDesc}>{'3문장 + 모든 테마 + 복습 기능'}</Text>
             </View>
             <Text style={styles.upgradeBannerChevron}>{'\u203A'}</Text>
           </TouchableOpacity>
