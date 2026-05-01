@@ -7,8 +7,9 @@ import { colors } from '../../constants/colors';
 import { typography } from '../../constants/typography';
 import { spacing, radius, shadows } from '../../constants/spacing';
 import { useAuthStore, SocialProvider } from '../../stores/authStore';
-import { useSubscriptionStore } from '../../stores/subscriptionStore';
+import { useSubscriptionStore, SubscriptionConfig } from '../../stores/subscriptionStore';
 import PaywallModal from '../../components/PaywallModal';
+import { LinearGradient } from 'expo-linear-gradient';
 import {
   isPushEnabled,
   enablePushNotifications,
@@ -220,41 +221,48 @@ export default function SettingsScreen() {
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>{'구독'}</Text>
           <View style={styles.sectionCard}>
-            <View style={styles.row}>
-              <View style={styles.rowLeft}>
-                <Text style={styles.rowLabel}>{'구독 상태'}</Text>
-              </View>
-              <View style={[
-                styles.providerBadge,
-                {
-                  backgroundColor: isPremium ? colors.primaryLight : colors.surfaceAlt,
-                  borderColor: isPremium ? colors.primary + '30' : colors.border,
-                },
-              ]}>
-                <Text style={[
-                  styles.providerBadgeText,
-                  { color: isPremium ? colors.primary : colors.text.secondary },
+            {/* 현재 상태 행 */}
+            {plan === 'premium' ? (
+              <LinearGradient
+                colors={['#E8F1FB', '#F0EAFF']}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 1 }}
+                style={styles.row}
+              >
+                <Text style={styles.rowLabel}>{'현재 상태'}</Text>
+                <LinearGradient
+                  colors={['#4A90D9', '#7C4DFF']}
+                  start={{ x: 0, y: 0 }}
+                  end={{ x: 1, y: 1 }}
+                  style={styles.subscriptionPill}
+                >
+                  <Text style={styles.subscriptionPillTextWhite}>{'PREMIUM \u2728'}</Text>
+                </LinearGradient>
+              </LinearGradient>
+            ) : (
+              <View style={styles.row}>
+                <Text style={styles.rowLabel}>{'현재 상태'}</Text>
+                <View style={[
+                  styles.subscriptionPill,
+                  {
+                    backgroundColor: plan === 'trial' ? '#FEF3DC' : '#F4F5F7',
+                  },
                 ]}>
-                  {plan === 'premium' ? 'Premium' : plan === 'trial' ? `\uCCB4\uD5D8 (${trialDaysLeft}\uC77C)` : 'Free'}
-                </Text>
-              </View>
-            </View>
-            {plan === 'premium' && expirationDate && (
-              <>
-                <View style={styles.rowDivider} />
-                <View style={styles.row}>
-                  <Text style={styles.rowLabel}>{'갱신일'}</Text>
-                  <Text style={styles.rowValue}>
-                    {new Date(expirationDate).toLocaleDateString('ko-KR')}
+                  <Text style={[
+                    styles.subscriptionPillText,
+                    {
+                      color: plan === 'trial' ? '#92400E' : colors.text.secondary,
+                    },
+                  ]}>
+                    {plan === 'trial'
+                      ? SubscriptionConfig.trialBannerText(trialDaysLeft)
+                      : 'FREE'}
                   </Text>
                 </View>
-                <View style={styles.rowDivider} />
-                <View style={styles.row}>
-                  <Text style={styles.rowLabel}>{'자동 갱신'}</Text>
-                  <Text style={styles.rowValue}>{willRenew ? '켜짐' : '꺼짐'}</Text>
-                </View>
-              </>
+              </View>
             )}
+
+            {/* Premium으로 업그레이드 (Free/Trial만) */}
             {!isPremium && (
               <>
                 <View style={styles.rowDivider} />
@@ -263,46 +271,56 @@ export default function SettingsScreen() {
                   onPress={() => setShowPaywall(true)}
                   activeOpacity={0.7}
                 >
-                  <Text style={[styles.rowLabel, { color: colors.primary, fontWeight: '700' }]}>
-                    {'Premium \uC73C\uB85C \uC5C5\uADF8\uB808\uC774\uB4DC'}
-                  </Text>
-                  <Text style={styles.rowChevron}>{'›'}</Text>
+                  <View style={styles.rowLeft}>
+                    <LinearGradient
+                      colors={['#4A90D9', '#7C4DFF']}
+                      start={{ x: 0, y: 0 }}
+                      end={{ x: 1, y: 1 }}
+                      style={styles.upgradeIconBox}
+                    >
+                      <Ionicons name="star" size={14} color="#FFFFFF" />
+                    </LinearGradient>
+                    <Text style={styles.upgradeLabel}>
+                      {'Premium으로 업그레이드'}
+                    </Text>
+                  </View>
+                  <Ionicons name="chevron-forward" size={16} color={colors.text.hint} />
                 </TouchableOpacity>
               </>
             )}
+
+            {/* 구매 복원 */}
             <View style={styles.rowDivider} />
             <TouchableOpacity
               style={styles.row}
               onPress={async () => {
                 const result = await restore();
                 if (result.isPremium) {
-                  Alert.alert('\uBCF5\uC6D0 \uC644\uB8CC', '\uAD6C\uB3C5\uC774 \uBCF5\uC6D0\uB418\uC5C8\uC2B5\uB2C8\uB2E4.');
+                  Alert.alert('복원 완료', '구독이 복원되었습니다.');
                 } else {
-                  Alert.alert('\uBCF5\uC6D0 \uACB0\uACFC', '\uD65C\uC131\uD654\uB41C \uAD6C\uB3C5\uC744 \uCC3E\uC744 \uC218 \uC5C6\uC2B5\uB2C8\uB2E4.');
+                  Alert.alert('복원 결과', '활성화된 구독을 찾을 수 없습니다.');
                 }
               }}
               activeOpacity={0.7}
             >
               <Text style={styles.rowLabel}>{'구매 복원'}</Text>
-              <Text style={styles.rowChevron}>{'›'}</Text>
+              <Ionicons name="chevron-forward" size={16} color={colors.text.hint} />
             </TouchableOpacity>
-            {plan === 'premium' && (
-              <>
-                <View style={styles.rowDivider} />
-                <TouchableOpacity
-                  style={styles.row}
-                  onPress={() => {
-                    if (Platform.OS === 'ios') {
-                      Linking.openURL('https://apps.apple.com/account/subscriptions');
-                    }
-                  }}
-                  activeOpacity={0.7}
-                >
-                  <Text style={styles.rowLabel}>{'구독 관리'}</Text>
-                  <Text style={styles.rowChevron}>{'›'}</Text>
-                </TouchableOpacity>
-              </>
-            )}
+
+            {/* 구독 관리 */}
+            <View style={styles.rowDivider} />
+            <TouchableOpacity
+              style={[styles.row, { borderBottomWidth: 0 }]}
+              onPress={() => {
+                if (Platform.OS === 'ios') {
+                  Linking.openURL('https://apps.apple.com/account/subscriptions');
+                }
+              }}
+              activeOpacity={0.7}
+            >
+              <Text style={styles.rowLabel}>{'구독 관리'}</Text>
+              <Ionicons name="chevron-forward" size={16} color={colors.text.hint} />
+            </TouchableOpacity>
           </View>
         </View>
 
@@ -518,16 +536,17 @@ const styles = StyleSheet.create({
     marginBottom: spacing.sm,
   },
   sectionTitle: {
-    ...typography.caption,
-    color: colors.text.secondary,
+    fontSize: 10,
+    fontWeight: '800',
+    color: colors.text.hint,
     textTransform: 'uppercase',
-    letterSpacing: 0.8,
-    paddingLeft: 4,
-    marginBottom: 6,
+    letterSpacing: 1,
+    paddingHorizontal: 4,
+    marginBottom: 8,
   },
   sectionCard: {
     backgroundColor: colors.card,
-    borderRadius: radius.md,
+    borderRadius: 16,
     borderWidth: 1,
     borderColor: colors.border,
     overflow: 'hidden',
@@ -538,8 +557,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: 14,
-    paddingVertical: 13,
+    paddingHorizontal: 16,
+    paddingVertical: 14,
+    minHeight: 52,
   },
   rowLeft: {
     flexDirection: 'row',
@@ -559,6 +579,34 @@ const styles = StyleSheet.create({
   rowChevron: {
     color: colors.text.hint,
     fontSize: 16,
+  },
+  subscriptionPill: {
+    borderRadius: 999,
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+  },
+  subscriptionPillText: {
+    fontSize: 11,
+    fontWeight: '800',
+    letterSpacing: 0.5,
+  },
+  subscriptionPillTextWhite: {
+    fontSize: 11,
+    fontWeight: '800',
+    color: '#FFFFFF',
+    letterSpacing: 0.5,
+  },
+  upgradeIconBox: {
+    width: 28,
+    height: 28,
+    borderRadius: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  upgradeLabel: {
+    fontSize: 15,
+    fontWeight: '800',
+    color: '#2E6DB3',
   },
   rowDivider: {
     height: 1,

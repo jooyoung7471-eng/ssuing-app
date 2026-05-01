@@ -1,6 +1,6 @@
 /**
- * PaywallModal - 프리미엄 업그레이드 모달
- * - 기능 비교 카드 + 구매 버튼 + 복원 버튼
+ * PaywallModal - 프리미엄 업그레이드 모달 (Variant A: Free vs Pro 비교)
+ * 디자인 핸드오프 스펙 기반 pixel-perfect 구현
  */
 import React, { useEffect, useState } from 'react';
 import {
@@ -13,57 +13,50 @@ import {
   Alert,
   ScrollView,
   Platform,
+  Dimensions,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { colors } from '../constants/colors';
 import { typography } from '../constants/typography';
 import { spacing, radius, shadows } from '../constants/spacing';
-import { useSubscriptionStore } from '../stores/subscriptionStore';
+import { useSubscriptionStore, SubscriptionConfig } from '../stores/subscriptionStore';
 
 interface PaywallModalProps {
   visible: boolean;
   onClose: () => void;
-  trigger?: string; // 어디서 트리거됐는지 (추적용)
+  trigger?: string;
 }
 
-const FEATURES = [
+const BENEFITS = [
   {
-    emoji: '\u{270D}\u{FE0F}',
-    title: '하루 3문장 무제한',
-    desc: '모든 테마에서 작문 + AI 교정',
-    free: '하루 1문장',
-    premium: '하루 3문장',
+    emoji: '\u270D\uFE0F',
+    title: '무제한 작문',
+    desc: '하루 3문장 한도 제거',
   },
   {
-    emoji: '\u{1F30D}',
+    emoji: '\uD83C\uDF0D',
     title: '모든 테마',
-    desc: '일상 + 비즈니스 + 여행',
-    free: '일상만',
-    premium: '모든 테마',
+    desc: '비즈니스 \u00B7 여행 잠금 해제',
   },
   {
-    emoji: '\u{1F4DA}',
+    emoji: '\uD83D\uDCDD',
     title: '오답 복습',
-    desc: '틀린 문장을 다시 연습',
-    free: '-',
-    premium: '무제한',
+    desc: '약점 집중 트레이닝',
   },
   {
-    emoji: '\u{1F4CA}',
+    emoji: '\uD83D\uDCCA',
     title: '주간 리포트',
-    desc: '학습 통계와 인사이트',
-    free: '-',
-    premium: '매주 제공',
+    desc: '학습 통계 \u00B7 추세',
   },
   {
-    emoji: '\u{1F3C6}',
-    title: '모든 업적 + 칭호',
-    desc: '프리미엄 전용 업적 달성',
-    free: '기본만',
-    premium: '전체',
+    emoji: '\uD83C\uDFC6',
+    title: '전체 업적',
+    desc: '모든 칭호 획득 가능',
   },
 ];
+
+const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
 export default function PaywallModal({ visible, onClose, trigger }: PaywallModalProps) {
   const {
@@ -85,7 +78,7 @@ export default function PaywallModal({ visible, onClose, trigger }: PaywallModal
     }
   }, [visible]);
 
-  const priceText = monthlyPackage?.product?.priceString || '5,000원/월';
+  const priceText = monthlyPackage?.product?.priceString || SubscriptionConfig.MONTHLY_PRICE_DISPLAY;
   const hasFreeTrial = plan === 'free' && trialDaysLeft === 0;
 
   const handlePurchase = async () => {
@@ -120,96 +113,157 @@ export default function PaywallModal({ visible, onClose, trigger }: PaywallModal
       onRequestClose={onClose}
     >
       <View style={styles.container}>
-        {/* Close button */}
-        <TouchableOpacity
-          style={styles.closeButton}
-          onPress={onClose}
-          hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
-        >
-          <Ionicons name="close" size={24} color={colors.text.secondary} />
-        </TouchableOpacity>
-
         <ScrollView
           contentContainerStyle={styles.scrollContent}
           showsVerticalScrollIndicator={false}
+          bounces={false}
         >
-          {/* Hero */}
+          {/* ─── Hero 영역 ─── */}
           <LinearGradient
-            colors={[colors.primary, colors.primaryDark]}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 1 }}
+            colors={['#4A90D9', '#7C4DFF']}
+            start={{ x: 0.1, y: 0 }}
+            end={{ x: 0.9, y: 1 }}
             style={styles.hero}
           >
-            <View style={styles.heroDecor} />
-            <Text style={styles.heroEmoji}>{'\u{2B50}'}</Text>
-            <Text style={styles.heroTitle}>{'Premium'}</Text>
-            <Text style={styles.heroSubtitle}>
-              {'영어 실력을 더 빠르게 키워보세요'}
+            {/* 데코 원 2개 */}
+            <View style={styles.decoCircle1} />
+            <View style={styles.decoCircle2} />
+
+            {/* 상단 sparkle row */}
+            <View style={styles.sparkleRow}>
+              <View style={styles.sparkleDotSmall} />
+              <View style={styles.sparkleCenter}>
+                <Ionicons name="star" size={16} color="#7C4DFF" />
+              </View>
+              <View style={styles.sparkleDotSmall} />
+            </View>
+
+            {/* SSUING PREMIUM 글래스 칩 */}
+            <View style={styles.premiumChip}>
+              <Text style={styles.premiumChipText}>SSUING PREMIUM</Text>
+            </View>
+
+            {/* 타이틀 */}
+            <Text style={styles.heroTitle}>
+              {'영어 실력,\n제한 없이.'}
             </Text>
+
+            {/* 서브카피 */}
+            <Text style={styles.heroSubtitle}>
+              매일 더 많이, 더 다양하게 연습하세요
+            </Text>
+
+            {/* X 닫기 버튼 */}
+            <TouchableOpacity
+              style={styles.closeButton}
+              onPress={onClose}
+              hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+            >
+              <Ionicons name="close" size={18} color="#FFFFFF" />
+            </TouchableOpacity>
           </LinearGradient>
 
-          {/* Feature list */}
-          <View style={styles.featureList}>
-            {FEATURES.map((feat, i) => (
-              <View key={i} style={styles.featureRow}>
-                <View style={styles.featureIcon}>
-                  <Text style={styles.featureEmoji}>{feat.emoji}</Text>
-                </View>
-                <View style={styles.featureContent}>
-                  <Text style={styles.featureTitle}>{feat.title}</Text>
-                  <Text style={styles.featureDesc}>{feat.desc}</Text>
-                </View>
-                <View style={styles.featureBadge}>
-                  <Text style={styles.featureBadgeText}>{feat.premium}</Text>
-                </View>
+          {/* ─── Free vs Pro 비교 그리드 ─── */}
+          <View style={styles.comparisonSection}>
+            <View style={styles.comparisonGrid}>
+              {/* Free 컬럼 */}
+              <View style={styles.freeColumn}>
+                <Text style={styles.columnLabel}>FREE</Text>
+                <Text style={styles.columnLine}>하루 3문장</Text>
+                <Text style={styles.columnLine}>일상 테마만</Text>
               </View>
-            ))}
+
+              {/* Pro 컬럼 */}
+              <LinearGradient
+                colors={['#4A90D9', '#7C4DFF']}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 1 }}
+                style={styles.proColumn}
+              >
+                <Text style={styles.proLabel}>PRO ✨</Text>
+                <Text style={styles.proLine}>무제한</Text>
+                <Text style={styles.proLine}>모든 기능</Text>
+              </LinearGradient>
+            </View>
           </View>
 
-          {/* Price & CTA */}
-          <View style={styles.priceSection}>
-            <Text style={styles.priceLabel}>{'월간 구독'}</Text>
-            <Text style={styles.priceAmount}>{priceText}</Text>
-            {hasFreeTrial && (
-              <Text style={styles.trialNote}>{'7일 무료 체험 포함'}</Text>
-            )}
+          {/* ─── 포함된 혜택 리스트 ─── */}
+          <View style={styles.benefitsSection}>
+            <Text style={styles.benefitsSectionTitle}>포함된 혜택</Text>
+            <View style={styles.benefitsCard}>
+              {BENEFITS.map((benefit, i) => (
+                <React.Fragment key={i}>
+                  {i > 0 && <View style={styles.benefitDivider} />}
+                  <View style={styles.benefitRow}>
+                    <Text style={styles.benefitEmoji}>{benefit.emoji}</Text>
+                    <View style={styles.benefitContent}>
+                      <Text style={styles.benefitTitle}>{benefit.title}</Text>
+                      <Text style={styles.benefitDesc}>{benefit.desc}</Text>
+                    </View>
+                    <View style={styles.benefitCheck}>
+                      <Ionicons name="checkmark" size={14} color="#FFFFFF" />
+                    </View>
+                  </View>
+                </React.Fragment>
+              ))}
+            </View>
+          </View>
+        </ScrollView>
+
+        {/* ─── CTA 푸터 (고정) ─── */}
+        <View style={styles.ctaFooter}>
+          {/* 가격 행 */}
+          <View style={styles.priceRow}>
+            <Text style={styles.priceCaption}>
+              {hasFreeTrial ? SubscriptionConfig.trialPriceCaption : '월간 구독'}
+            </Text>
+            <Text style={styles.priceAmount}>
+              {'월 '}{priceText.replace('/월', '').replace('월', '')}
+            </Text>
           </View>
 
+          {/* CTA 버튼 */}
           <TouchableOpacity
-            style={styles.purchaseButton}
             onPress={handlePurchase}
             disabled={isLoading}
             activeOpacity={0.8}
+            style={styles.ctaButtonWrap}
           >
-            {isLoading ? (
-              <ActivityIndicator size="small" color="#FFFFFF" />
-            ) : (
-              <Text style={styles.purchaseButtonText}>
-                {hasFreeTrial ? '7일 무료 체험 시작' : '프리미엄 구독하기'}
-              </Text>
-            )}
+            <LinearGradient
+              colors={['#4A90D9', '#2E6DB3']}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 1 }}
+              style={styles.ctaButton}
+            >
+              {isLoading ? (
+                <ActivityIndicator size="small" color="#FFFFFF" />
+              ) : (
+                <Text style={styles.ctaButtonText}>
+                  {hasFreeTrial ? SubscriptionConfig.trialCTALabel : '프리미엄 구독하기'}
+                </Text>
+              )}
+            </LinearGradient>
           </TouchableOpacity>
 
-          {/* Restore */}
+          {/* 구매 복원 */}
           <TouchableOpacity
-            style={styles.restoreButton}
             onPress={handleRestore}
             disabled={restoring}
             activeOpacity={0.7}
+            style={styles.restoreButton}
           >
             {restoring ? (
               <ActivityIndicator size="small" color={colors.text.secondary} />
             ) : (
-              <Text style={styles.restoreText}>{'구매 복원'}</Text>
+              <Text style={styles.restoreText}>구매 복원</Text>
             )}
           </TouchableOpacity>
 
-          {/* Legal text */}
+          {/* Apple 약관 */}
           <Text style={styles.legalText}>
-            {'구독은 Apple 계정으로 결제되며, 기간 만료 24시간 전에 자동 갱신됩니다. '}
-            {'구독은 설정 > Apple ID > 구독에서 관리하거나 해지할 수 있습니다.'}
+            구독은 iTunes 계정을 통해 청구되며, 현재 결제 기간 종료 24시간 이전에 해지하지 않으면 자동 갱신됩니다. 결제 후에는 iTunes 계정 설정에서 구독을 관리하거나 해지할 수 있습니다.
           </Text>
-        </ScrollView>
+        </View>
       </View>
     </Modal>
   );
@@ -220,167 +274,265 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.background,
   },
-  closeButton: {
-    position: 'absolute',
-    top: Platform.OS === 'ios' ? 16 : 12,
-    right: 16,
-    zIndex: 10,
-    width: 36,
-    height: 36,
-    borderRadius: 18,
-    backgroundColor: colors.surfaceAlt,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
   scrollContent: {
-    paddingBottom: 40,
+    paddingBottom: 20,
   },
 
-  // Hero
+  // ── Hero ──
   hero: {
     alignItems: 'center',
-    paddingTop: 60,
-    paddingBottom: 32,
-    borderBottomLeftRadius: radius.xxl,
-    borderBottomRightRadius: radius.xxl,
+    paddingTop: 48,
+    paddingBottom: 36,
     overflow: 'hidden',
+    position: 'relative',
+    minHeight: 280,
+    justifyContent: 'center',
   },
-  heroDecor: {
+  decoCircle1: {
     position: 'absolute',
-    top: -40,
-    right: -40,
-    width: 160,
-    height: 160,
-    borderRadius: 80,
-    backgroundColor: 'rgba(255,255,255,0.1)',
+    top: -60,
+    left: -40,
+    width: 180,
+    height: 180,
+    borderRadius: 90,
+    backgroundColor: 'rgba(255,255,255,0.08)',
   },
-  heroEmoji: {
-    fontSize: 48,
-    marginBottom: 12,
+  decoCircle2: {
+    position: 'absolute',
+    bottom: -30,
+    right: -50,
+    width: 200,
+    height: 200,
+    borderRadius: 100,
+    backgroundColor: 'rgba(255,255,255,0.06)',
   },
-  heroTitle: {
-    fontSize: 32,
-    fontWeight: '900',
-    color: '#FFFFFF',
-    letterSpacing: -1,
-    marginBottom: 8,
-  },
-  heroSubtitle: {
-    fontSize: 15,
-    fontWeight: '500',
-    color: 'rgba(255,255,255,0.85)',
-  },
-
-  // Features
-  featureList: {
-    paddingHorizontal: spacing.screenPadding,
-    paddingTop: spacing.xl,
-  },
-  featureRow: {
+  sparkleRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: 14,
-    borderBottomWidth: 1,
-    borderBottomColor: colors.border,
-    gap: 12,
+    gap: 8,
+    marginBottom: 12,
   },
-  featureIcon: {
-    width: 40,
-    height: 40,
-    borderRadius: 12,
-    backgroundColor: colors.primaryLight,
+  sparkleDotSmall: {
+    width: 6,
+    height: 6,
+    borderRadius: 3,
+    backgroundColor: 'rgba(255,255,255,0.5)',
+  },
+  sparkleCenter: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    backgroundColor: '#FFFFFF',
     alignItems: 'center',
     justifyContent: 'center',
   },
-  featureEmoji: {
-    fontSize: 18,
+  premiumChip: {
+    backgroundColor: 'rgba(255,255,255,0.22)',
+    paddingHorizontal: 12,
+    paddingVertical: 4,
+    borderRadius: 999,
+    marginBottom: 14,
   },
-  featureContent: {
+  premiumChipText: {
+    fontSize: 11,
+    fontWeight: '800',
+    color: '#FFFFFF',
+    letterSpacing: 1.2,
+  },
+  heroTitle: {
+    fontSize: 30,
+    fontWeight: '900',
+    color: '#FFFFFF',
+    letterSpacing: -0.8,
+    textAlign: 'center',
+    lineHeight: 38,
+    marginBottom: 10,
+  },
+  heroSubtitle: {
+    fontSize: 14,
+    fontWeight: '500',
+    color: 'rgba(255,255,255,0.85)',
+    textAlign: 'center',
+  },
+  closeButton: {
+    position: 'absolute',
+    top: 16,
+    right: 20,
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    backgroundColor: 'rgba(255,255,255,0.22)',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+
+  // ── Free vs Pro 비교 ──
+  comparisonSection: {
+    paddingHorizontal: spacing.screenPadding,
+    paddingTop: spacing.lg,
+  },
+  comparisonGrid: {
+    flexDirection: 'row',
+    gap: 10,
+  },
+  freeColumn: {
     flex: 1,
+    backgroundColor: '#F4F5F7',
+    borderRadius: radius.md,
+    padding: 16,
   },
-  featureTitle: {
+  columnLabel: {
+    fontSize: 10,
+    fontWeight: '800',
+    color: colors.text.secondary,
+    letterSpacing: 1,
+    textTransform: 'uppercase',
+    marginBottom: 8,
+  },
+  columnLine: {
     fontSize: 14,
     fontWeight: '700',
     color: colors.text.primary,
-    marginBottom: 2,
+    lineHeight: 22,
   },
-  featureDesc: {
+  proColumn: {
+    flex: 1,
+    borderRadius: radius.md,
+    padding: 16,
+  },
+  proLabel: {
+    fontSize: 10,
+    fontWeight: '800',
+    color: '#FFFFFF',
+    letterSpacing: 1,
+    marginBottom: 8,
+  },
+  proLine: {
+    fontSize: 14,
+    fontWeight: '700',
+    color: '#FFFFFF',
+    lineHeight: 22,
+  },
+
+  // ── 혜택 리스트 ──
+  benefitsSection: {
+    paddingHorizontal: spacing.screenPadding,
+    paddingTop: spacing.lg,
+  },
+  benefitsSectionTitle: {
+    fontSize: 13,
+    fontWeight: '600',
+    color: colors.text.secondary,
+    marginBottom: 10,
+  },
+  benefitsCard: {
+    backgroundColor: colors.card,
+    borderRadius: radius.md,
+    borderWidth: 1,
+    borderColor: colors.border,
+    overflow: 'hidden',
+  },
+  benefitRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 16,
+    paddingVertical: 14,
+    gap: 12,
+  },
+  benefitDivider: {
+    height: 1,
+    backgroundColor: colors.border,
+    marginLeft: 16,
+  },
+  benefitEmoji: {
+    fontSize: 20,
+    width: 28,
+    textAlign: 'center',
+  },
+  benefitContent: {
+    flex: 1,
+  },
+  benefitTitle: {
+    fontSize: 14,
+    fontWeight: '700',
+    color: colors.text.primary,
+    marginBottom: 1,
+  },
+  benefitDesc: {
     fontSize: 12,
     fontWeight: '500',
     color: colors.text.secondary,
   },
-  featureBadge: {
-    backgroundColor: colors.primaryLight,
-    borderRadius: radius.pill,
-    paddingHorizontal: 10,
-    paddingVertical: 4,
-  },
-  featureBadgeText: {
-    fontSize: 11,
-    fontWeight: '700',
-    color: colors.primary,
+  benefitCheck: {
+    width: 24,
+    height: 24,
+    borderRadius: 12,
+    backgroundColor: colors.primary,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 
-  // Price
-  priceSection: {
-    alignItems: 'center',
-    paddingTop: spacing.xl,
-    paddingBottom: spacing.md,
+  // ── CTA 푸터 ──
+  ctaFooter: {
+    backgroundColor: colors.card,
+    borderTopWidth: 1,
+    borderTopColor: colors.border,
+    paddingHorizontal: spacing.screenPadding,
+    paddingTop: 16,
+    paddingBottom: Platform.OS === 'ios' ? 34 : 20,
   },
-  priceLabel: {
-    fontSize: 13,
-    fontWeight: '600',
+  priceRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 12,
+  },
+  priceCaption: {
+    fontSize: 14,
+    fontWeight: '500',
     color: colors.text.secondary,
-    marginBottom: 4,
   },
   priceAmount: {
-    fontSize: 28,
+    fontSize: 22,
     fontWeight: '900',
     color: colors.text.primary,
     letterSpacing: -0.5,
   },
-  trialNote: {
-    fontSize: 13,
-    fontWeight: '600',
-    color: colors.success,
-    marginTop: 6,
+  ctaButtonWrap: {
+    marginBottom: 12,
   },
-
-  // CTA
-  purchaseButton: {
-    marginHorizontal: spacing.screenPadding,
-    backgroundColor: colors.primary,
-    borderRadius: radius.md,
-    height: 54,
+  ctaButton: {
+    height: 56,
+    borderRadius: 14,
     alignItems: 'center',
     justifyContent: 'center',
-    ...shadows.primary,
+    shadowColor: '#4A90D9',
+    shadowOffset: { width: 0, height: 12 },
+    shadowOpacity: 0.4,
+    shadowRadius: 12,
+    elevation: 8,
   },
-  purchaseButtonText: {
-    ...typography.button,
+  ctaButtonText: {
     fontSize: 16,
+    fontWeight: '800',
     color: '#FFFFFF',
   },
-
-  // Restore
   restoreButton: {
     alignItems: 'center',
-    paddingVertical: spacing.md,
+    paddingVertical: 8,
   },
   restoreText: {
     fontSize: 13,
     fontWeight: '600',
     color: colors.text.secondary,
-    textDecorationLine: 'underline',
   },
-
-  // Legal
   legalText: {
-    paddingHorizontal: spacing.xl,
     fontSize: 10,
-    fontWeight: '400',
+    fontWeight: '500',
     color: colors.text.hint,
     textAlign: 'center',
-    lineHeight: 16,
+    lineHeight: 15,
+    marginTop: 8,
+    paddingHorizontal: 4,
   },
 });

@@ -19,8 +19,30 @@ const TRIAL_START_KEY = 'premium_trial_start';
 const DAILY_USAGE_KEY = 'premium_daily_usage'; // JSON: { date: string, count: number }
 
 const FREE_DAILY_LIMIT = 1; // 무료: 하루 1문장
-const TRIAL_DAYS = 7;
 const FREE_THEMES = ['daily'] as const; // 무료: 일상 테마만
+
+// ── 설정 가능 상수 (한 곳에서 관리) ──────────────────────────
+export const SubscriptionConfig = {
+  /** 무료 체험 일수. App Store Connect introductory offer와 일치시킬 것. */
+  TRIAL_DAYS: 7,
+  /** 표시용 월간 가격. 실제 결제 가격은 RevenueCat product.priceString 사용 권장. */
+  MONTHLY_PRICE_DISPLAY: '5,000원',
+  /** 월간 구독 product ID (App Store Connect에서 생성) */
+  PRODUCT_ID: 'app.ssuing.premium.monthly',
+
+  // 카피 헬퍼
+  get trialCTALabel() {
+    return `${this.TRIAL_DAYS}일 무료 체험 시작`;
+  },
+  get trialPriceCaption() {
+    return `${this.TRIAL_DAYS}일 무료 체험 후`;
+  },
+  trialBannerText(daysLeft: number) {
+    return `무료 체험 ${daysLeft}일 남음`;
+  },
+};
+
+const TRIAL_DAYS = SubscriptionConfig.TRIAL_DAYS;
 
 export type SubscriptionPlan = 'free' | 'trial' | 'premium';
 
