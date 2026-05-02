@@ -78,7 +78,7 @@ export default function PaywallModal({ visible, onClose, trigger }: PaywallModal
     }
   }, [visible]);
 
-  const priceText = monthlyPackage?.product?.priceString || SubscriptionConfig.MONTHLY_PRICE_DISPLAY;
+  const priceText = monthlyPackage?.price || SubscriptionConfig.MONTHLY_PRICE_DISPLAY;
   const hasFreeTrial = plan === 'free' && trialDaysLeft === 0;
 
   const handlePurchase = async () => {

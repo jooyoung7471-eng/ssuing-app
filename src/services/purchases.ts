@@ -1,62 +1,33 @@
 /**
- * RevenueCat 구독 서비스
- * - 초기화, 구독 상태 확인, 구매 실행
- * - 환경변수: EXPO_PUBLIC_REVENUECAT_API_KEY
+ * Apple In-App Purchases 서비스 (expo-in-app-purchases)
+ * - RevenueCat SDK 제거, StoreKit 2 기반 직접 구현
+ * - 구독 초기화, 상품 조회, 구매, 복원
  */
+import * as InAppPurchases from 'expo-in-app-purchases';
 import { Platform } from 'react-native';
-import Purchases, {
-  PurchasesPackage,
-  CustomerInfo,
-  LOG_LEVEL,
-} from 'react-native-purchases';
 
-// RevenueCat 상수
-const REVENUECAT_API_KEY = process.env.EXPO_PUBLIC_REVENUECAT_API_KEY || '';
-const ENTITLEMENT_ID = 'premium'; // RevenueCat Dashboard에서 설정한 entitlement identifier
+const PRODUCT_ID = 'app.ssuing.premium.monthly';
 
-let isConfigured = false;
+let isConnected = false;
 
 /**
- * RevenueCat SDK 초기화
+ * IAP 연결 초기화
  */
-export async function configurePurchases(userId?: string): Promise<void> {
-  if (isConfigured) return;
-  if (!REVENUECAT_API_KEY) {
-    console.warn('[Purchases] EXPO_PUBLIC_REVENUECAT_API_KEY가 설정되지 않았습니다.');
-    return;
-  }
+export async function configurePurchases(_userId?: string): Promise<void> {
+  if (isConnected) return;
 
   try {
-    if (__DEV__) {
-      Purchases.setLogLevel(LOG_LEVEL.DEBUG);
-    }
-
-    Purchases.configure({
-      apiKey: REVENUECAT_API_KEY,
-      appUserID: userId || undefined,
-    });
-
-    isConfigured = true;
+    await InAppPurchases.connectAsync();
+    isConnected = true;
+    console.log('[Purchases] IAP 연결 성공');
   } catch (error) {
-    console.error('[Purchases] 초기화 실패:', error);
-  }
-}
-
-/**
- * 현재 고객 정보 가져오기
- */
-export async function getCustomerInfo(): Promise<CustomerInfo | null> {
-  try {
-    if (!isConfigured) return null;
-    return await Purchases.getCustomerInfo();
-  } catch (error) {
-    console.error('[Purchases] 고객 정보 조회 실패:', error);
-    return null;
+    console.error('[Purchases] IAP 연결 실패:', error);
   }
 }
 
 /**
  * 프리미엄 구독 활성 상태 확인
+ * - 구매 이력에서 현재 유효한 구독이 있는지 검사
  */
 export async function checkPremiumStatus(): Promise<{
   isPremium: boolean;
@@ -64,17 +35,25 @@ export async function checkPremiumStatus(): Promise<{
   willRenew: boolean;
 }> {
   try {
-    const customerInfo = await getCustomerInfo();
-    if (!customerInfo) {
+    if (!isConnected) {
       return { isPremium: false, expirationDate: null, willRenew: false };
     }
 
-    const entitlement = customerInfo.entitlements.active[ENTITLEMENT_ID];
-    if (entitlement) {
+    const { results } = await InAppPurchases.getPurchaseHistoryAsync();
+    if (!results || results.length === 0) {
+      return { isPremium: false, expirationDate: null, willRenew: false };
+    }
+
+    // 해당 product의 구매 이력 확인
+    const premiumPurchase = results.find(
+      (p) => p.productId === PRODUCT_ID && p.acknowledged
+    );
+
+    if (premiumPurchase) {
       return {
         isPremium: true,
-        expirationDate: entitlement.expirationDate,
-        willRenew: entitlement.willRenew,
+        expirationDate: null, // expo-in-app-purchases는 만료일을 직접 제공하지 않음
+        willRenew: true, // 구독 활성 상태로 가정
       };
     }
 
@@ -86,16 +65,15 @@ export async function checkPremiumStatus(): Promise<{
 }
 
 /**
- * 구매 가능한 패키지 목록 가져오기
+ * 구매 가능한 상품 목록 가져오기
+ * - RevenueCat의 PurchasesPackage 대신 IAPItemDetails 반환
  */
-export async function getOfferings(): Promise<PurchasesPackage[]> {
+export async function getOfferings(): Promise<InAppPurchases.IAPItemDetails[]> {
   try {
-    if (!isConfigured) return [];
-    const offerings = await Purchases.getOfferings();
-    if (offerings.current && offerings.current.availablePackages.length > 0) {
-      return offerings.current.availablePackages;
-    }
-    return [];
+    if (!isConnected) return [];
+
+    const { results } = await InAppPurchases.getProductsAsync([PRODUCT_ID]);
+    return results ?? [];
   } catch (error) {
     console.error('[Purchases] 상품 조회 실패:', error);
     return [];
@@ -105,23 +83,24 @@ export async function getOfferings(): Promise<PurchasesPackage[]> {
 /**
  * 구독 구매
  */
-export async function purchasePackage(
-  pkg: PurchasesPackage
+export async function purchaseProduct(
+  productId: string = PRODUCT_ID
 ): Promise<{ success: boolean; isPremium: boolean; error?: string }> {
   try {
-    if (!isConfigured) {
-      return { success: false, isPremium: false, error: '결제 시스템이 초기화되지 않았습니다.' };
+    if (!isConnected) {
+      return {
+        success: false,
+        isPremium: false,
+        error: '결제 시스템이 초기화되지 않았습니다.',
+      };
     }
 
-    const { customerInfo } = await Purchases.purchasePackage(pkg);
-    const isPremium = !!customerInfo.entitlements.active[ENTITLEMENT_ID];
+    await InAppPurchases.purchaseItemAsync(productId);
 
-    return { success: true, isPremium };
+    // 결과는 purchaseListener를 통해 비동기로 전달됨
+    // 여기서는 요청 성공만 반환
+    return { success: true, isPremium: false };
   } catch (error: any) {
-    // 사용자 취소
-    if (error.userCancelled) {
-      return { success: false, isPremium: false };
-    }
     console.error('[Purchases] 구매 실패:', error);
     return {
       success: false,
@@ -129,6 +108,38 @@ export async function purchasePackage(
       error: error?.message || '구매 처리 중 오류가 발생했습니다.',
     };
   }
+}
+
+/**
+ * 구매 리스너 설정
+ * - 구매 완료/실패 시 콜백 호출
+ */
+export function setPurchaseListener(
+  onPurchaseComplete: (isPremium: boolean) => void
+): void {
+  InAppPurchases.setPurchaseListener(async ({ responseCode, results }) => {
+    if (
+      responseCode === InAppPurchases.IAPResponseCode.OK &&
+      results &&
+      results.length > 0
+    ) {
+      for (const purchase of results) {
+        if (!purchase.acknowledged) {
+          // 구매 확인 (finishTransaction)
+          await InAppPurchases.finishTransactionAsync(purchase, true);
+        }
+        if (purchase.productId === PRODUCT_ID) {
+          onPurchaseComplete(true);
+        }
+      }
+    } else if (responseCode === InAppPurchases.IAPResponseCode.USER_CANCELED) {
+      // 사용자 취소 - 별도 처리 없음
+      console.log('[Purchases] 사용자가 구매를 취소했습니다.');
+    } else {
+      console.error('[Purchases] 구매 실패, responseCode:', responseCode);
+      onPurchaseComplete(false);
+    }
+  });
 }
 
 /**
@@ -140,14 +151,19 @@ export async function restorePurchases(): Promise<{
   error?: string;
 }> {
   try {
-    if (!isConfigured) {
-      return { success: false, isPremium: false, error: '결제 시스템이 초기화되지 않았습니다.' };
+    if (!isConnected) {
+      return {
+        success: false,
+        isPremium: false,
+        error: '결제 시스템이 초기화되지 않았습니다.',
+      };
     }
 
-    const customerInfo = await Purchases.restorePurchases();
-    const isPremium = !!customerInfo.entitlements.active[ENTITLEMENT_ID];
+    const { results } = await InAppPurchases.getPurchaseHistoryAsync();
+    const hasPremium =
+      results?.some((p) => p.productId === PRODUCT_ID) ?? false;
 
-    return { success: true, isPremium };
+    return { success: true, isPremium: hasPremium };
   } catch (error: any) {
     console.error('[Purchases] 복원 실패:', error);
     return {
@@ -159,25 +175,28 @@ export async function restorePurchases(): Promise<{
 }
 
 /**
- * RevenueCat 사용자 ID 설정 (로그인 시)
+ * IAP 연결 해제
  */
-export async function loginPurchases(userId: string): Promise<void> {
+export async function disconnectPurchases(): Promise<void> {
   try {
-    if (!isConfigured) return;
-    await Purchases.logIn(userId);
+    if (!isConnected) return;
+    await InAppPurchases.disconnectAsync();
+    isConnected = false;
   } catch (error) {
-    console.error('[Purchases] 로그인 실패:', error);
+    console.error('[Purchases] 연결 해제 실패:', error);
   }
 }
 
 /**
- * RevenueCat 로그아웃 (익명 사용자로 전환)
+ * RevenueCat 호환 - 사용자 로그인 (no-op)
+ */
+export async function loginPurchases(_userId: string): Promise<void> {
+  // expo-in-app-purchases는 별도 로그인 불필요
+}
+
+/**
+ * RevenueCat 호환 - 사용자 로그아웃 (no-op)
  */
 export async function logoutPurchases(): Promise<void> {
-  try {
-    if (!isConfigured) return;
-    await Purchases.logOut();
-  } catch (error) {
-    console.error('[Purchases] 로그아웃 실패:', error);
-  }
+  // expo-in-app-purchases는 별도 로그아웃 불필요
 }

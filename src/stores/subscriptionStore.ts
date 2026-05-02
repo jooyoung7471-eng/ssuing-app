@@ -9,10 +9,11 @@ import {
   configurePurchases,
   checkPremiumStatus,
   getOfferings,
-  purchasePackage,
+  purchaseProduct,
   restorePurchases,
+  setPurchaseListener,
 } from '../services/purchases';
-import type { PurchasesPackage } from 'react-native-purchases';
+import type { IAPItemDetails } from 'expo-in-app-purchases';
 
 // AsyncStorage keys
 const TRIAL_START_KEY = 'premium_trial_start';
@@ -25,7 +26,7 @@ const FREE_THEMES = ['daily'] as const; // 무료: 일상 테마만
 export const SubscriptionConfig = {
   /** 무료 체험 일수. App Store Connect introductory offer와 일치시킬 것. */
   TRIAL_DAYS: 7,
-  /** 표시용 월간 가격. 실제 결제 가격은 RevenueCat product.priceString 사용 권장. */
+  /** 표시용 월간 가격. 실제 결제 가격은 IAP product.price 사용 권장. */
   MONTHLY_PRICE_DISPLAY: '5,000원',
   /** 월간 구독 product ID (App Store Connect에서 생성) */
   PRODUCT_ID: 'app.ssuing.premium.monthly',
@@ -66,14 +67,14 @@ interface SubscriptionState {
   canWriteMore: boolean;
 
   // 패키지
-  packages: PurchasesPackage[];
-  monthlyPackage: PurchasesPackage | null;
+  packages: IAPItemDetails[];
+  monthlyPackage: IAPItemDetails | null;
 
   // 액션
   initialize: (userId?: string) => Promise<void>;
   refreshStatus: () => Promise<void>;
   loadPackages: () => Promise<void>;
-  purchase: (pkg?: PurchasesPackage) => Promise<{ success: boolean; error?: string }>;
+  purchase: (pkg?: IAPItemDetails) => Promise<{ success: boolean; error?: string }>;
   restore: () => Promise<{ success: boolean; isPremium: boolean; error?: string }>;
   recordUsage: () => Promise<void>;
   canAccessTheme: (theme: string) => boolean;
@@ -111,8 +112,22 @@ export const useSubscriptionStore = create<SubscriptionState>((set, get) => ({
   initialize: async (userId?: string) => {
     set({ isLoading: true });
     try {
-      // RevenueCat 초기화
+      // IAP 초기화
       await configurePurchases(userId);
+
+      // 구매 완료 리스너 설정
+      setPurchaseListener((isPremium) => {
+        if (isPremium) {
+          set({
+            plan: 'premium',
+            isPremium: true,
+            canWriteMore: true,
+            isLoading: false,
+          });
+        } else {
+          set({ isLoading: false });
+        }
+      });
 
       // 구독 상태 확인
       const status = await checkPremiumStatus();
@@ -215,29 +230,24 @@ export const useSubscriptionStore = create<SubscriptionState>((set, get) => ({
 
   loadPackages: async () => {
     const packages = await getOfferings();
+    // expo-in-app-purchases: productId로 매칭
     const monthly = packages.find(
-      (p) => p.packageType === 'MONTHLY' || p.identifier === '$rc_monthly'
+      (p) => p.productId === SubscriptionConfig.PRODUCT_ID
     ) || packages[0] || null;
 
     set({ packages, monthlyPackage: monthly });
   },
 
-  purchase: async (pkg?: PurchasesPackage) => {
+  purchase: async (pkg?: IAPItemDetails) => {
     const target = pkg || get().monthlyPackage;
     if (!target) {
       return { success: false, error: '구매 가능한 상품이 없습니다.' };
     }
 
     set({ isLoading: true });
-    const result = await purchasePackage(target);
-    if (result.success && result.isPremium) {
-      set({
-        plan: 'premium',
-        isPremium: true,
-        canWriteMore: true,
-        isLoading: false,
-      });
-    } else {
+    const result = await purchaseProduct(target.productId);
+    // 실제 구매 완료는 setPurchaseListener에서 처리됨
+    if (!result.success) {
       set({ isLoading: false });
     }
     return result;
