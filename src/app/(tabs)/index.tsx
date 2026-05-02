@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { StyleSheet, Text, View, ScrollView, RefreshControl, TouchableOpacity } from 'react-native';
-import { useRouter } from 'expo-router';
+import { useFocusEffect, useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -68,14 +68,26 @@ export default function HomeScreen() {
     ]);
   };
 
+  const initializedRef = useRef(false);
+
   useEffect(() => {
     // Restore saved difficulty
     AsyncStorage.getItem(DIFFICULTY_KEY).then((saved) => {
       const d = (saved === 'intermediate' ? 'intermediate' : 'beginner') as Difficulty;
       setDifficulty(d);
       loadData(d);
+      initializedRef.current = true;
     });
   }, []);
+
+  // 학습 화면에서 돌아올 때마다 진행률 새로고침 (캐시의 isCompleted 반영)
+  useFocusEffect(
+    useCallback(() => {
+      if (initializedRef.current) {
+        loadData();
+      }
+    }, [difficulty]),
+  );
 
   // Animate XP bar when gamification data loads
   useEffect(() => {

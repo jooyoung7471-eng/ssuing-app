@@ -16,6 +16,8 @@ interface PracticeState {
   setDraft: (sentenceId: string, text: string) => void;
   setCompletionShown: (shown: boolean) => void;
   resetForTheme: (newTheme: Theme) => void;
+  /** 캐시(AsyncStorage)에서 불러온 corrections를 메모리 store에 병합 */
+  hydrateCorrections: (corrections: Record<string, CorrectionResult>) => void;
 }
 
 export const usePracticeStore = create<PracticeState>((set, get) => ({
@@ -52,4 +54,9 @@ export const usePracticeStore = create<PracticeState>((set, get) => ({
       });
     }
   },
+  hydrateCorrections: (loaded) =>
+    set((state) => ({
+      // 메모리에 이미 있는 항목은 우선 (최신 작성 보존), 없으면 캐시값 사용
+      corrections: { ...loaded, ...state.corrections },
+    })),
 }));

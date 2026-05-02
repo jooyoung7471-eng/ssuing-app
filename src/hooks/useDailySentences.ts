@@ -39,9 +39,19 @@ export function useDailySentences(): UseDailySentencesReturn {
           sentenceIds: localSentences.map((s) => s.id),
           sentenceTexts: localSentences.map((s) => s.koreanText),
         });
-        // 서버 응답에 isCompleted 정보가 있으면 반영
-        if (res.data?.data) {
-          setSentences(res.data.data);
+        // 서버 응답에 isCompleted 정보가 있으면 병합 (로컬 데이터 + 서버 완료 상태)
+        if (res.data?.data && Array.isArray(res.data.data)) {
+          const completedFromServer = new Map<string, boolean>();
+          for (const s of res.data.data) {
+            if (s && typeof s.id === 'string') {
+              completedFromServer.set(s.id, !!s.isCompleted);
+            }
+          }
+          const merged = localSentences.map((s) => ({
+            ...s,
+            isCompleted: !!s.isCompleted || !!completedFromServer.get(s.id),
+          }));
+          setSentences(merged);
         } else {
           setSentences(localSentences);
         }

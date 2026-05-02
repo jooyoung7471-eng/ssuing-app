@@ -16,7 +16,7 @@ import { useDailySentences } from '../../hooks/useDailySentences';
 import { useCorrection } from '../../hooks/useCorrection';
 import { usePracticeStore } from '../../stores/practiceStore';
 import { useSubscriptionStore } from '../../stores/subscriptionStore';
-import { markSentenceCompleted } from '../../services/localSentences';
+import { markSentenceCompleted, saveCorrection, loadCorrections } from '../../services/localSentences';
 import { colors } from '../../constants/colors';
 import { typography } from '../../constants/typography';
 import { spacing, radius, shadows } from '../../constants/spacing';
@@ -47,6 +47,7 @@ export default function PracticeScreen() {
     setSentences: storeSentences,
     setCompletionShown,
     resetForTheme,
+    hydrateCorrections,
   } = store;
 
   const scrollRef = useRef<ScrollView>(null);
@@ -72,8 +73,15 @@ export default function PracticeScreen() {
     navigation.setOptions({ headerShown: false });
     if (theme) {
       resetForTheme(theme);
-      AsyncStorage.getItem('engwrite_difficulty').then((saved) => {
+      AsyncStorage.getItem('engwrite_difficulty').then(async (saved) => {
         const diff = saved === 'intermediate' ? 'intermediate' : 'beginner';
+        // 캐시된 corrections를 먼저 메모리로 복원 (홈에서 본 진행률과 동기화)
+        try {
+          const cached = await loadCorrections(theme, diff as any);
+          if (cached && Object.keys(cached).length > 0) {
+            hydrateCorrections(cached);
+          }
+        } catch {}
         fetchSentences(theme, diff as any);
       });
     }
@@ -158,10 +166,11 @@ export default function PracticeScreen() {
       // 사용량 기록 (무료 사용자 제한용)
       recordUsage();
 
-      // 캐시에 완료 상태 저장 (홈 화면 진행률 유지)
+      // 캐시에 완료 상태 + correction 결과 저장 (홈 진행률 + 학습 재진입 동기화)
       AsyncStorage.getItem('engwrite_difficulty').then((saved) => {
         const diff = saved === 'intermediate' ? 'intermediate' : 'beginner';
         markSentenceCompleted(theme as Theme, diff as any, currentSentence.id);
+        saveCorrection(theme as Theme, diff as any, currentSentence.id, correctionResult);
       });
 
       if (correctionResult.xpEarned) {
@@ -189,6 +198,13 @@ export default function PracticeScreen() {
       const correctionResult = await submit(currentSentence.id, draftRef.current, undefined, currentSentence.koreanText);
       if (correctionResult) {
         setCorrection(currentSentence.id, correctionResult);
+
+        // 캐시 동기화 (재시도 시에도 홈 진행률 유지)
+        AsyncStorage.getItem('engwrite_difficulty').then((saved) => {
+          const diff = saved === 'intermediate' ? 'intermediate' : 'beginner';
+          markSentenceCompleted(theme as Theme, diff as any, currentSentence.id);
+          saveCorrection(theme as Theme, diff as any, currentSentence.id, correctionResult);
+        });
 
         if (correctionResult.xpEarned) {
           setXpEarned(correctionResult.xpEarned);

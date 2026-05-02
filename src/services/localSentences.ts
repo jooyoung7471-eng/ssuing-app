@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import allSentences from '../data/sentences.json';
 import type { LocalSentence } from '../data/types';
-import type { Sentence, Theme, Difficulty } from '../types';
+import type { Sentence, Theme, Difficulty, CorrectionResult } from '../types';
 
 const DAILY_COUNT = 3;
 const RECYCLE_AFTER_DAYS = 30;
@@ -63,6 +63,43 @@ export async function markSentenceCompleted(
     s.id === sentenceId ? { ...s, isCompleted: true } : s,
   );
   await AsyncStorage.setItem(cacheKey, JSON.stringify(updated));
+}
+
+/**
+ * 작문 결과(corrections)를 영속 저장.
+ * 학습 화면 재진입 시 이전 작성 내역을 복원하기 위해 사용.
+ * 키: corrections_${theme}_${difficulty}_${today}
+ */
+function correctionsKey(theme: Theme, difficulty: Difficulty): string {
+  const today = getTodayString();
+  return `corrections_${theme}_${difficulty}_${today}`;
+}
+
+export async function saveCorrection(
+  theme: Theme,
+  difficulty: Difficulty,
+  sentenceId: string,
+  result: CorrectionResult,
+): Promise<void> {
+  const key = correctionsKey(theme, difficulty);
+  const raw = await AsyncStorage.getItem(key);
+  const map: Record<string, CorrectionResult> = raw ? JSON.parse(raw) : {};
+  map[sentenceId] = result;
+  await AsyncStorage.setItem(key, JSON.stringify(map));
+}
+
+export async function loadCorrections(
+  theme: Theme,
+  difficulty: Difficulty,
+): Promise<Record<string, CorrectionResult>> {
+  const key = correctionsKey(theme, difficulty);
+  const raw = await AsyncStorage.getItem(key);
+  if (!raw) return {};
+  try {
+    return JSON.parse(raw);
+  } catch {
+    return {};
+  }
 }
 
 export async function getDailySentences(

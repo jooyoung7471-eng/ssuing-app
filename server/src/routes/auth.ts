@@ -70,30 +70,67 @@ router.post("/login", authRateLimit, async (req: Request, res: Response, next: N
 
 // --- Social Login ---
 
+/**
+ * JWT payload를 검증 없이 디코드한다.
+ * Apple/Google identity token에서 stable user id(sub)와 email을 추출하기 위함.
+ * (운영 환경에서는 서명 검증을 추가해야 함)
+ */
+function decodeJwtPayload(token: string): Record<string, unknown> | null {
+  try {
+    const parts = token.split(".");
+    if (parts.length < 2) return null;
+    // base64url -> base64
+    const b64 = parts[1].replace(/-/g, "+").replace(/_/g, "/");
+    const padded = b64 + "===".slice((b64.length + 3) % 4);
+    const json = Buffer.from(padded, "base64").toString("utf8");
+    return JSON.parse(json);
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * provider별 stable social id를 추출한다.
+ * - apple/google: identity token JWT의 sub
+ * - kakao: 토큰을 그대로 사용 (서버가 별도 검증/조회 가능)
+ * 디코드 실패 시 token 자체를 폴백으로 사용 (기존 동작 유지).
+ */
+function extractStableSocialId(provider: string, token: string): { socialId: string; email?: string | null; name?: string | null } {
+  if (provider === "apple" || provider === "google") {
+    const payload = decodeJwtPayload(token);
+    if (payload && typeof payload.sub === "string" && payload.sub.length > 0) {
+      const sub = payload.sub as string;
+      const decodedEmail = typeof payload.email === "string" ? (payload.email as string) : null;
+      const decodedName = typeof payload.name === "string" ? (payload.name as string) : null;
+      return { socialId: sub, email: decodedEmail, name: decodedName };
+    }
+  }
+  // Fallback: 토큰을 그대로 사용 (kakao 또는 디코드 실패)
+  // 토큰이 너무 길면 잘라서 컬럼 길이 보호
+  return { socialId: token.length > 255 ? token.slice(0, 255) : token };
+}
+
 router.post("/social", authRateLimit, async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { provider, token: socialToken, email, name } = socialLoginSchema.parse(req.body);
+    const { provider, token: socialToken, email: clientEmail, name: clientName } = socialLoginSchema.parse(req.body);
 
-    // In production, verify the social token with each provider's API:
-    // - Apple: verify identityToken with Apple's public keys
-    // - Google: verify idToken with Google's tokeninfo endpoint
-    // - Kakao: verify access_token with Kakao's user/me endpoint
-    // For now, we trust the token and use the email/socialId from the client.
+    // Identity token에서 stable social id를 추출 (Apple은 매 로그인마다 token이 바뀌지만 sub는 동일)
+    const extracted = extractStableSocialId(provider, socialToken);
+    const socialId = extracted.socialId;
+    // 이메일/이름은 클라이언트가 보낸 값이 우선 (Apple은 첫 가입에만 제공),
+    // 없으면 토큰에서 디코드한 값 사용
+    const email = clientEmail ?? extracted.email ?? null;
+    const name = clientName ?? extracted.name ?? null;
 
-    // Use the social token as a stand-in for the social_id.
-    // In a real implementation, you'd decode/verify the token to extract the social user ID.
-    const socialId = socialToken;
-
-    // Try to find existing user by provider + socialId
+    // 1) provider + socialId로 기존 사용자 조회 (가장 안정적인 키)
     let user = await prisma.user.findFirst({
       where: { provider, social_id: socialId },
     });
 
+    // 2) email로 기존 사용자 조회 (이메일 가입 → 소셜 전환 등)
     if (!user && email) {
-      // Check if there's an existing user with this email (e.g., previously registered via email)
       user = await prisma.user.findUnique({ where: { email } });
       if (user) {
-        // Link the social account to the existing user
         user = await prisma.user.update({
           where: { id: user.id },
           data: { provider, social_id: socialId, name: name || user.name },
@@ -101,18 +138,32 @@ router.post("/social", authRateLimit, async (req: Request, res: Response, next: 
       }
     }
 
+    // 3) 신규 사용자 생성
     if (!user) {
-      // Create a new user
       const userEmail = email || `${provider}_${socialId.substring(0, 8)}@social.ssuing.app`;
-      user = await prisma.user.create({
-        data: {
-          email: userEmail,
-          password: "social-login-no-password",
-          provider,
-          social_id: socialId,
-          name: name || null,
-        },
-      });
+      // 매우 드물게 동일 socialId/email 충돌 시 race condition 방지
+      try {
+        user = await prisma.user.create({
+          data: {
+            email: userEmail,
+            password: "social-login-no-password",
+            provider,
+            social_id: socialId,
+            name: name || null,
+          },
+        });
+      } catch (createErr: any) {
+        // unique 제약 충돌(P2002): 동시 요청으로 이미 생성됨 → 다시 조회
+        if (createErr?.code === "P2002") {
+          user = await prisma.user.findFirst({
+            where: { provider, social_id: socialId },
+          });
+          if (!user && email) {
+            user = await prisma.user.findUnique({ where: { email } });
+          }
+        }
+        if (!user) throw createErr;
+      }
     }
 
     const jwtToken = generateToken({ userId: user.id, email: user.email });
