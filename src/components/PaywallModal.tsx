@@ -67,6 +67,7 @@ export default function PaywallModal({ visible, onClose, trigger }: PaywallModal
     restore,
     loadPackages,
     trialDaysLeft,
+    hasUsedTrial,
     plan,
   } = useSubscriptionStore();
 
@@ -79,7 +80,8 @@ export default function PaywallModal({ visible, onClose, trigger }: PaywallModal
   }, [visible]);
 
   const priceText = monthlyPackage?.price || SubscriptionConfig.MONTHLY_PRICE_DISPLAY;
-  const hasFreeTrial = plan === 'free' && trialDaysLeft === 0;
+  // 체험 시작 가능: free 상태이고 아직 한 번도 체험을 사용하지 않은 경우
+  const hasFreeTrial = plan === 'free' && !hasUsedTrial;
 
   const handlePurchase = async () => {
     const result = await purchase();
@@ -214,9 +216,14 @@ export default function PaywallModal({ visible, onClose, trigger }: PaywallModal
         <View style={styles.ctaFooter}>
           {/* 가격 행 */}
           <View style={styles.priceRow}>
-            <Text style={styles.priceCaption}>
-              {hasFreeTrial ? SubscriptionConfig.trialPriceCaption : '월간 구독'}
-            </Text>
+            <View>
+              <Text style={styles.priceCaption}>
+                {hasFreeTrial ? SubscriptionConfig.trialPriceCaption : '무제한 작문'}
+              </Text>
+              <Text style={styles.priceCaptionSub}>
+                {'하루 167원'}
+              </Text>
+            </View>
             <Text style={styles.priceAmount}>
               {'월 '}{priceText.replace('/월', '').replace('월', '')}
             </Text>
@@ -491,6 +498,12 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '500',
     color: colors.text.secondary,
+  },
+  priceCaptionSub: {
+    fontSize: 12,
+    fontWeight: '700',
+    color: colors.primary,
+    marginTop: 2,
   },
   priceAmount: {
     fontSize: 22,

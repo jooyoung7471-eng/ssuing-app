@@ -39,7 +39,7 @@ export default function RootLayout() {
       setOnboardingDone(obVal === 'true');
       setTermsAgreed(taVal === 'true');
 
-      // 구독 상태 ��기화
+      // 구독 상태 초기화
       initializeSubscription();
     })();
   }, []);

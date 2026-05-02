@@ -59,6 +59,8 @@ interface SubscriptionState {
   isLoading: boolean;
   trialEndsAt: Date | null;
   trialDaysLeft: number;
+  /** 한 번이라도 무료 체험을 시작한 적이 있는가 (Apple 정책상 1회만 가능) */
+  hasUsedTrial: boolean;
   expirationDate: string | null;
   willRenew: boolean;
 
@@ -102,6 +104,7 @@ export const useSubscriptionStore = create<SubscriptionState>((set, get) => ({
   isLoading: false,
   trialEndsAt: null,
   trialDaysLeft: 0,
+  hasUsedTrial: false,
   expirationDate: null,
   willRenew: false,
   dailyUsageCount: 0,
@@ -180,6 +183,7 @@ export const useSubscriptionStore = create<SubscriptionState>((set, get) => ({
         isPremium: isPrem,
         trialEndsAt,
         trialDaysLeft,
+        hasUsedTrial: !!trialStartStr,
         dailyUsageCount,
         canWriteMore,
         isLoading: false,
@@ -315,6 +319,7 @@ export const useSubscriptionStore = create<SubscriptionState>((set, get) => ({
       isPremium: true,
       trialEndsAt,
       trialDaysLeft: TRIAL_DAYS,
+      hasUsedTrial: true,
       canWriteMore: true,
     });
   },
