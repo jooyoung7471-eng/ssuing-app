@@ -285,14 +285,19 @@ export default function HomeScreen() {
           </View>
         </View>
 
-        {/* Trial / Premium banner */}
+        {/* Trial / Premium banner — 누르면 paywall로 이동 (체험 중 미리 결제 가능) */}
         {plan === 'trial' && trialDaysLeft > 0 && (
-          <View style={styles.trialBanner}>
+          <TouchableOpacity
+            style={styles.trialBanner}
+            onPress={() => { setPaywallTrigger('trial_banner'); setShowPaywall(true); }}
+            activeOpacity={0.8}
+          >
             <Text style={styles.trialBannerEmoji}>{'\u{23F3}'}</Text>
             <Text style={styles.trialBannerText}>
               {'무료 체험 '}{trialDaysLeft}{'일 남음'}
             </Text>
-          </View>
+            <Text style={styles.trialBannerChevron}>{'›'}</Text>
+          </TouchableOpacity>
         )}
         {plan === 'free' && (
           <TouchableOpacity
@@ -706,6 +711,14 @@ const styles = StyleSheet.create({
     fontSize: 13,
     fontWeight: '700',
     color: '#92400E',
+    flex: 1,
+    textAlign: 'center',
+  },
+  trialBannerChevron: {
+    fontSize: 18,
+    fontWeight: '700',
+    color: '#92400E',
+    marginLeft: 4,
   },
   upgradeBanner: {
     flexDirection: 'row',

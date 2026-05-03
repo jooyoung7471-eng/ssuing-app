@@ -262,8 +262,9 @@ export default function SettingsScreen() {
               </View>
             )}
 
-            {/* Premium으로 업그레이드 (Free/Trial만) */}
-            {!isPremium && (
+            {/* Premium으로 업그레이드 (Free + Trial 모두 노출 — 체험 중 미리 결제 가능)
+              isPremium은 trial까지 true로 잡혀 trial 사용자가 진입 못하던 문제 해결. */}
+            {plan !== 'premium' && (
               <>
                 <View style={styles.rowDivider} />
                 <TouchableOpacity
