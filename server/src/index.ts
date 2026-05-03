@@ -99,8 +99,16 @@ table{border-collapse:collapse;width:100%}td,th{border:1px solid #ddd;padding:8p
 </body></html>`);
 });
 
-// Health check
+// Health check (Railway healthcheck를 위해 / 와 /api/health 둘 다 응답)
+// BUG FIX: Railway healthcheckPath가 null이면 default 경로로 health check를 시도하는데
+// 우리는 /api/health만 등록해서 deploy가 unhealthy로 판정 → start 후 즉시 kill되던 문제.
+app.get("/", (_req, res) => {
+  res.json({ data: { status: "ok", service: "ssuing-app" } });
+});
 app.get("/api/health", (_req, res) => {
+  res.json({ data: { status: "ok" } });
+});
+app.get("/health", (_req, res) => {
   res.json({ data: { status: "ok" } });
 });
 
@@ -116,4 +124,3 @@ app.listen(PORT, "0.0.0.0", () => {
 });
 
 export default app;
-// trigger redeploy 1777791110
