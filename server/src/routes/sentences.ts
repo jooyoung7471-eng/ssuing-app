@@ -58,12 +58,15 @@ router.get("/daily", optionalAuthMiddleware, async (req: Request, res: Response,
 
 /**
  * 클라이언트 로컬 선정 결과를 받아 서버 측 완료(corrections) 상태와 병합 응답.
- * - DB에 저장된 corrections (오늘 작성된 것)을 조회하여 isCompleted 매핑
- * - 미존재 sentenceId는 건너뜀 (DB에 시드되지 않은 로컬 문장)
+ * - 클라이언트는 로컬 sentenceId(sent_xxxx)와 koreanText를 함께 전송
+ * - DB의 Sentence.id는 UUID이므로, koreanText로 DB UUID를 조회해 corrections 매칭
+ *   (BUG FIX: 이전 구현은 sent_xxxx로 corrections.sentence_id를 검색했는데
+ *    DB는 UUID로 저장돼 있어 영원히 isCompleted=false를 반환했음)
+ * - DB에 없는 koreanText는 미완료로 처리 (클라가 새 작성 시 corrections POST에서 자동 시딩됨)
  */
 router.post("/daily/sync", optionalAuthMiddleware, async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { sentenceIds } = syncSchema.parse(req.body);
+    const { sentenceIds, sentenceTexts } = syncSchema.parse(req.body);
     const userId = req.user!.userId;
     const today = new Date().toISOString().split("T")[0];
 
@@ -72,10 +75,41 @@ router.post("/daily/sync", optionalAuthMiddleware, async (req: Request, res: Res
       return;
     }
 
-    const corrections = await prisma.correction.findMany({
+    // 1) 클라가 koreanText를 보낸 경우: koreanText → DB UUID 매핑 후 corrections 조회 (정확)
+    // 2) koreanText 미수신: 레거시 동작 (sentenceId 자체로 검색 — DB sentence가 UUID면 매칭 안 됨)
+    // BUG FIX: 같은 koreanText로 DB에 여러 row가 있을 수 있어(unique 제약 부재 + race로 중복 생성)
+    //   1:N 매핑(string -> string[])로 모든 row id를 검사. 다중 디바이스에서 회귀 방지.
+    const externalToDbIds = new Map<string, string[]>();
+    if (sentenceTexts && sentenceTexts.length === sentenceIds.length) {
+      const dbSentences = await prisma.sentence.findMany({
+        where: { korean_text: { in: sentenceTexts } },
+        select: { id: true, korean_text: true },
+      });
+      const textToDbIds = new Map<string, string[]>();
+      for (const s of dbSentences) {
+        const arr = textToDbIds.get(s.korean_text) || [];
+        arr.push(s.id);
+        textToDbIds.set(s.korean_text, arr);
+      }
+      sentenceIds.forEach((extId, i) => {
+        const text = sentenceTexts[i];
+        const dbIds = text ? textToDbIds.get(text) : undefined;
+        if (dbIds && dbIds.length > 0) externalToDbIds.set(extId, dbIds);
+      });
+    }
+
+    // sentenceId가 이미 UUID 형태이면 그대로 사용 (legacy 호환)
+    sentenceIds.forEach((id) => {
+      if (!externalToDbIds.has(id) && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id)) {
+        externalToDbIds.set(id, [id]);
+      }
+    });
+
+    const dbIdsToQuery = Array.from(new Set(Array.from(externalToDbIds.values()).flat()));
+    const corrections = dbIdsToQuery.length === 0 ? [] : await prisma.correction.findMany({
       where: {
         user_id: userId,
-        sentence_id: { in: sentenceIds },
+        sentence_id: { in: dbIdsToQuery },
         created_at: {
           gte: new Date(today),
           lt: new Date(new Date(today).getTime() + 86400000),
@@ -83,15 +117,19 @@ router.post("/daily/sync", optionalAuthMiddleware, async (req: Request, res: Res
       },
       select: { sentence_id: true },
     });
-    const completedIds = new Set(corrections.map((c) => c.sentence_id));
+    const completedDbIds = new Set(corrections.map((c) => c.sentence_id));
 
-    // 클라이언트가 보낸 순서를 유지한 응답 (isCompleted 만 채움)
-    // 다른 필드는 클라이언트가 로컬 데이터를 그대로 사용하도록 비워서 반환
-    const data = sentenceIds.map((id, i) => ({
-      id,
-      order: i + 1,
-      isCompleted: completedIds.has(id),
-    }));
+    // 클라이언트가 보낸 순서 유지하여 isCompleted 매핑.
+    // 매핑된 dbIds 중 하나라도 corrections에 있으면 isCompleted=true (1:N 안전)
+    const data = sentenceIds.map((id, i) => {
+      const dbIds = externalToDbIds.get(id) || [];
+      const isCompleted = dbIds.some((dbId) => completedDbIds.has(dbId));
+      return {
+        id,
+        order: i + 1,
+        isCompleted,
+      };
+    });
 
     res.json({ data });
   } catch (err) {

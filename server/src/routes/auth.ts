@@ -140,26 +140,50 @@ router.post("/social", authRateLimit, async (req: Request, res: Response, next: 
 
     // 3) 신규 사용자 생성
     if (!user) {
-      const userEmail = email || `${provider}_${socialId.substring(0, 8)}@social.ssuing.app`;
-      // 매우 드물게 동일 socialId/email 충돌 시 race condition 방지
-      try {
-        user = await prisma.user.create({
+      // placeholder email은 socialId 전체 + 랜덤 suffix를 사용해 충돌을 회피한다.
+      // 기존 코드: `${provider}_${socialId.substring(0, 8)}@social.ssuing.app` 형태였는데,
+      // Apple sub는 `001234.<hex>` 패턴이라 첫 8자가 자주 겹쳐서 email unique 충돌이 발생했다.
+      // (BUG: 이로 인해 두 번째 신규 가입자부터 500 에러가 발생)
+      const buildPlaceholderEmail = () => {
+        const safeSocial = socialId.replace(/[^a-zA-Z0-9]/g, "").slice(0, 24) || "user";
+        const rand = Math.random().toString(36).slice(2, 10);
+        return `${provider}_${safeSocial}_${rand}@social.ssuing.app`;
+      };
+      const userEmail = email || buildPlaceholderEmail();
+
+      // 동일 socialId/email 충돌 시 race condition 및 누적 데이터 충돌 방지
+      const tryCreate = async (emailToUse: string) =>
+        prisma.user.create({
           data: {
-            email: userEmail,
+            email: emailToUse,
             password: "social-login-no-password",
             provider,
             social_id: socialId,
             name: name || null,
           },
         });
+
+      try {
+        user = await tryCreate(userEmail);
       } catch (createErr: any) {
-        // unique 제약 충돌(P2002): 동시 요청으로 이미 생성됨 → 다시 조회
+        // unique 제약 충돌(P2002): 동시 요청 또는 placeholder email 충돌
         if (createErr?.code === "P2002") {
-          user = await prisma.user.findFirst({
-            where: { provider, social_id: socialId },
-          });
+          // 1) provider+social_id 기준 재조회 (race로 같은 사용자가 이미 생성된 경우)
+          user = await prisma.user.findFirst({ where: { provider, social_id: socialId } });
+          // 2) email 기준 재조회 (클라이언트가 email을 줬는데 동시에 가입된 경우)
           if (!user && email) {
             user = await prisma.user.findUnique({ where: { email } });
+          }
+          // 3) 그래도 없으면 placeholder email 충돌이므로 새 placeholder로 1회 재시도
+          if (!user && !email) {
+            try {
+              user = await tryCreate(buildPlaceholderEmail());
+            } catch (retryErr: any) {
+              if (retryErr?.code === "P2002") {
+                user = await prisma.user.findFirst({ where: { provider, social_id: socialId } });
+              }
+              if (!user) throw retryErr;
+            }
           }
         }
         if (!user) throw createErr;
