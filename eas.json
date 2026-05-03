@@ -14,10 +14,7 @@
     "production": {
       "distribution": "store",
       "autoIncrement": true,
-      "credentialsSource": "remote",
-      "ios": {
-        "image": "latest"
-      }
+      "credentialsSource": "remote"
     }
   },
   "submit": {
