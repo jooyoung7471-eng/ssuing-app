@@ -76,9 +76,19 @@ api.interceptors.request.use(async (config) => {
 
 api.interceptors.response.use(
   (response) => response,
-  (error) => {
+  async (error) => {
     if (error.response?.status === 401) {
-      tokenStorage.remove();
+      // BUG FIX: 토큰만 silently 지우면 authStore 메모리는 그대로라 사용자가
+      // 자기도 모르게 게스트로 떨어져 진행률이 손실되는 문제가 있었다.
+      // authStore도 함께 초기화하여 다음 라우팅에서 /auth로 리다이렉트되도록 한다.
+      try {
+        await tokenStorage.remove();
+        const mod = await import('../stores/authStore');
+        const setState = mod.useAuthStore.setState;
+        setState({ token: null, user: null, isGuest: false });
+      } catch {
+        // best-effort: 실패해도 reject는 진행
+      }
     }
     const message =
       error.response?.data?.error?.message || '네트워크 오류가 발생했습니다.';

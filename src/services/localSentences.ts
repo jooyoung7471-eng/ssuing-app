@@ -45,16 +45,33 @@ function getTodayString(): string {
  * - 날짜 기반 시드로 결정적 셔플
  */
 /**
+ * 작문 결과(corrections)를 영속 저장.
+ * 학습 화면 재진입 시 이전 작성 내역을 복원하기 위해 사용.
+ * 키: corrections_${theme}_${difficulty}_${today}
+ */
+function correctionsKey(theme: Theme, difficulty: Difficulty): string {
+  const today = getTodayString();
+  return `corrections_${theme}_${difficulty}_${today}`;
+}
+
+function dailyKey(theme: Theme, difficulty: Difficulty): string {
+  const today = getTodayString();
+  return `daily_${theme}_${difficulty}_${today}`;
+}
+
+/**
  * 특정 문장의 완료 상태를 캐시에 반영한다.
  * 작문 완료 시 호출하여 홈 화면 진행률을 유지.
+ *
+ * BUG FIX: 캐시가 없는 경우 early return하지 않고 호출자가 보장하도록 함
+ * (기존엔 캐시 미존재 시 silently 누락되어 진행률 영속성이 깨졌음)
  */
 export async function markSentenceCompleted(
   theme: Theme,
   difficulty: Difficulty,
   sentenceId: string,
 ): Promise<void> {
-  const today = getTodayString();
-  const cacheKey = `daily_${theme}_${difficulty}_${today}`;
+  const cacheKey = dailyKey(theme, difficulty);
   const cached = await AsyncStorage.getItem(cacheKey);
   if (!cached) return;
 
@@ -63,16 +80,6 @@ export async function markSentenceCompleted(
     s.id === sentenceId ? { ...s, isCompleted: true } : s,
   );
   await AsyncStorage.setItem(cacheKey, JSON.stringify(updated));
-}
-
-/**
- * 작문 결과(corrections)를 영속 저장.
- * 학습 화면 재진입 시 이전 작성 내역을 복원하기 위해 사용.
- * 키: corrections_${theme}_${difficulty}_${today}
- */
-function correctionsKey(theme: Theme, difficulty: Difficulty): string {
-  const today = getTodayString();
-  return `corrections_${theme}_${difficulty}_${today}`;
 }
 
 export async function saveCorrection(
@@ -86,6 +93,27 @@ export async function saveCorrection(
   const map: Record<string, CorrectionResult> = raw ? JSON.parse(raw) : {};
   map[sentenceId] = result;
   await AsyncStorage.setItem(key, JSON.stringify(map));
+}
+
+/**
+ * 작문 완료를 단일 트랜잭션으로 영속화한다.
+ * - daily_* 캐시(isCompleted 플래그) + corrections_* 캐시(작문 내용) 동시 갱신
+ * - 호출자는 이 함수를 await하여, 홈 화면이 새로고침되기 전에 두 캐시가 모두 갱신됨을 보장해야 한다.
+ *
+ * BUG FIX: 기존엔 markSentenceCompleted + saveCorrection을 fire-and-forget으로 호출해
+ *  - 두 캐시 중 한쪽만 갱신되어 홈/practice 진행률 불일치 발생
+ *  - router.back() 직후 홈 useFocusEffect가 stale 캐시를 읽음
+ */
+export async function recordCompletion(
+  theme: Theme,
+  difficulty: Difficulty,
+  sentenceId: string,
+  result: CorrectionResult,
+): Promise<void> {
+  await Promise.all([
+    markSentenceCompleted(theme, difficulty, sentenceId),
+    saveCorrection(theme, difficulty, sentenceId, result),
+  ]);
 }
 
 export async function loadCorrections(
@@ -102,6 +130,26 @@ export async function loadCorrections(
   }
 }
 
+/**
+ * 캐시된 sentences 배열의 구조 유효성을 검증.
+ * 빈 koreanText, 누락된 hintWords 등 손상된 데이터를 걸러낸다.
+ *
+ * BUG FIX: 이전 버전에서 빈 객체가 캐싱돼 한글 문장/힌트가 화면에 표시 안 되는
+ * 사용자가 발생. 캐시 hit 시 무조건 반환하던 로직에 검증을 추가.
+ */
+function isValidCachedSentences(parsed: unknown): parsed is Sentence[] {
+  if (!Array.isArray(parsed) || parsed.length === 0) return false;
+  return parsed.every(
+    (s) =>
+      s &&
+      typeof s === 'object' &&
+      typeof (s as Sentence).id === 'string' &&
+      typeof (s as Sentence).koreanText === 'string' &&
+      (s as Sentence).koreanText.length > 0 &&
+      Array.isArray((s as Sentence).hintWords),
+  );
+}
+
 export async function getDailySentences(
   theme: Theme,
   difficulty: Difficulty = 'beginner',
@@ -109,10 +157,19 @@ export async function getDailySentences(
   const today = getTodayString();
   const cacheKey = `daily_${theme}_${difficulty}_${today}`;
 
-  // 1. 오늘 이미 선정된 문장이 있으면 반환
+  // 1. 오늘 이미 선정된 문장이 있으면 반환 (단, 데이터 유효성 검증 후)
   const cached = await AsyncStorage.getItem(cacheKey);
   if (cached) {
-    return JSON.parse(cached) as Sentence[];
+    try {
+      const parsed = JSON.parse(cached);
+      if (isValidCachedSentences(parsed)) {
+        return parsed;
+      }
+      // 손상된 캐시: 제거 후 새로 생성
+      await AsyncStorage.removeItem(cacheKey);
+    } catch {
+      await AsyncStorage.removeItem(cacheKey);
+    }
   }
 
   // 2. 테마/난이도 필터링

@@ -153,11 +153,6 @@ export default function HomeScreen() {
     .sort((a, b) => new Date(b.unlockedAt!).getTime() - new Date(a.unlockedAt!).getTime())
     .slice(0, 3);
 
-  const totalThemes = 3;
-  const completedThemes = [dailyCompleted, bizCompleted, travelCompleted].filter(
-    (c, i) => c >= ((i === 0 ? dailySentences : i === 1 ? bizSentences : travelSentences) || []).length && ((i === 0 ? dailySentences : i === 1 ? bizSentences : travelSentences) || []).length > 0
-  ).length;
-  const remainingThemes = totalThemes - completedThemes;
 
   // Date formatting
   const now = new Date();
@@ -288,9 +283,6 @@ export default function HomeScreen() {
               </Text>
             </TouchableOpacity>
           </View>
-          <Text style={styles.completionInfo}>
-            {completedThemes}개 완료 {'\u00B7'} {remainingThemes}개 남음
-          </Text>
         </View>
 
         {/* Trial / Premium banner */}
@@ -623,11 +615,6 @@ const styles = StyleSheet.create({
   difficultyTextActive: {
     color: colors.primary,
     fontWeight: '800',
-  },
-  completionInfo: {
-    fontSize: 12,
-    fontWeight: '600',
-    color: colors.text.secondary,
   },
 
   // Theme Cards

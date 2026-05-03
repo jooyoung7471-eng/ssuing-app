@@ -16,11 +16,11 @@ import { useDailySentences } from '../../hooks/useDailySentences';
 import { useCorrection } from '../../hooks/useCorrection';
 import { usePracticeStore } from '../../stores/practiceStore';
 import { useSubscriptionStore } from '../../stores/subscriptionStore';
-import { markSentenceCompleted, saveCorrection, loadCorrections } from '../../services/localSentences';
+import { recordCompletion, loadCorrections } from '../../services/localSentences';
 import { colors } from '../../constants/colors';
 import { typography } from '../../constants/typography';
 import { spacing, radius, shadows } from '../../constants/spacing';
-import type { Theme } from '../../types';
+import type { Theme, Difficulty } from '../../types';
 
 const THEME_GRADIENTS: Record<string, [string, string]> = {
   daily: [colors.primary, colors.primaryDark],
@@ -68,23 +68,32 @@ export default function PracticeScreen() {
   const themeEmoji = theme === 'daily' ? '\u2615' : theme === 'travel' ? '\u{2708}\u{FE0F}' : '\u{1F4BC}';
   const gradientColors = THEME_GRADIENTS[theme || 'daily'] || THEME_GRADIENTS.daily;
 
-  // [Fix 1] Only reset store when switching themes, preserve on re-entry
+  // [Fix 1] Only reset store when switching themes, preserve on re-entry.
+  // BUG FIX: hydrateCorrections를 fetchSentences보다 먼저 실행하여 캐시 복원 race를 제거.
+  // 빈 캐시여도 hydrateCorrections({})를 호출해 correctionsHydrated=true로 표시 → 홈 진행률과 동기화 보장.
   useEffect(() => {
     navigation.setOptions({ headerShown: false });
-    if (theme) {
+    if (!theme) return;
+    let cancelled = false;
+    (async () => {
       resetForTheme(theme);
-      AsyncStorage.getItem('engwrite_difficulty').then(async (saved) => {
-        const diff = saved === 'intermediate' ? 'intermediate' : 'beginner';
-        // 캐시된 corrections를 먼저 메모리로 복원 (홈에서 본 진행률과 동기화)
-        try {
-          const cached = await loadCorrections(theme, diff as any);
-          if (cached && Object.keys(cached).length > 0) {
-            hydrateCorrections(cached);
-          }
-        } catch {}
-        fetchSentences(theme, diff as any);
-      });
-    }
+      const saved = await AsyncStorage.getItem('engwrite_difficulty');
+      const diff = (saved === 'intermediate' ? 'intermediate' : 'beginner') as Difficulty;
+      try {
+        const cached = await loadCorrections(theme, diff);
+        if (!cancelled) {
+          hydrateCorrections(cached || {});
+        }
+      } catch {
+        if (!cancelled) hydrateCorrections({});
+      }
+      if (!cancelled) {
+        fetchSentences(theme, diff);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
   }, [theme]);
 
   useEffect(() => {
@@ -166,12 +175,17 @@ export default function PracticeScreen() {
       // 사용량 기록 (무료 사용자 제한용)
       recordUsage();
 
-      // 캐시에 완료 상태 + correction 결과 저장 (홈 진행률 + 학습 재진입 동기화)
-      AsyncStorage.getItem('engwrite_difficulty').then((saved) => {
-        const diff = saved === 'intermediate' ? 'intermediate' : 'beginner';
-        markSentenceCompleted(theme as Theme, diff as any, currentSentence.id);
-        saveCorrection(theme as Theme, diff as any, currentSentence.id, correctionResult);
-      });
+      // 캐시에 완료 상태 + correction 결과를 단일 트랜잭션으로 저장.
+      // BUG FIX: 사용자가 즉시 router.back()으로 홈에 복귀하면 useFocusEffect가
+      // 캐시 갱신 전에 fetchDaily를 호출해 stale 데이터를 읽었다.
+      // 이제 await으로 두 캐시 갱신 완료를 보장.
+      const saved = await AsyncStorage.getItem('engwrite_difficulty');
+      const diff = saved === 'intermediate' ? 'intermediate' : 'beginner';
+      try {
+        await recordCompletion(theme as Theme, diff as Difficulty, currentSentence.id, correctionResult);
+      } catch {
+        // 캐시 저장 실패해도 메모리 store는 이미 갱신됐으므로 학습 진행은 유지
+      }
 
       if (correctionResult.xpEarned) {
         setXpEarned(correctionResult.xpEarned);
@@ -199,12 +213,12 @@ export default function PracticeScreen() {
       if (correctionResult) {
         setCorrection(currentSentence.id, correctionResult);
 
-        // 캐시 동기화 (재시도 시에도 홈 진행률 유지)
-        AsyncStorage.getItem('engwrite_difficulty').then((saved) => {
-          const diff = saved === 'intermediate' ? 'intermediate' : 'beginner';
-          markSentenceCompleted(theme as Theme, diff as any, currentSentence.id);
-          saveCorrection(theme as Theme, diff as any, currentSentence.id, correctionResult);
-        });
+        // 캐시 동기화 (재시도 시에도 홈 진행률 유지) — handleSubmit과 동일하게 await 보장
+        const saved = await AsyncStorage.getItem('engwrite_difficulty');
+        const diff = saved === 'intermediate' ? 'intermediate' : 'beginner';
+        try {
+          await recordCompletion(theme as Theme, diff as Difficulty, currentSentence.id, correctionResult);
+        } catch {}
 
         if (correctionResult.xpEarned) {
           setXpEarned(correctionResult.xpEarned);

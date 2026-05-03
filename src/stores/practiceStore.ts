@@ -8,6 +8,8 @@ interface PracticeState {
   corrections: Record<string, CorrectionResult>;
   drafts: Record<string, string>;
   completionShown: boolean;
+  /** corrections를 캐시에서 불러왔는지 여부 — practice 화면이 fetch 전에 hydrate를 강제하기 위함 */
+  correctionsHydrated: boolean;
 
   setTheme: (theme: Theme) => void;
   setSentences: (sentences: Sentence[]) => void;
@@ -27,6 +29,7 @@ export const usePracticeStore = create<PracticeState>((set, get) => ({
   corrections: {},
   drafts: {},
   completionShown: false,
+  correctionsHydrated: false,
 
   setTheme: (theme) => set({ theme }),
   setSentences: (sentences) => set({ sentences }),
@@ -51,6 +54,7 @@ export const usePracticeStore = create<PracticeState>((set, get) => ({
         corrections: {},
         drafts: {},
         completionShown: false,
+        correctionsHydrated: false,
       });
     }
   },
@@ -58,5 +62,6 @@ export const usePracticeStore = create<PracticeState>((set, get) => ({
     set((state) => ({
       // 메모리에 이미 있는 항목은 우선 (최신 작성 보존), 없으면 캐시값 사용
       corrections: { ...loaded, ...state.corrections },
+      correctionsHydrated: true,
     })),
 }));

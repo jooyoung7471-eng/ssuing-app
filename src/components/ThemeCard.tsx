@@ -65,10 +65,14 @@ function deriveStatus(completedCount: number, totalCount: number, explicitStatus
 
 export default function ThemeCard({ theme, completedCount, totalCount, onPress, difficulty = 'beginner', status: explicitStatus }: ThemeCardProps) {
   const config = THEME_INFO[theme];
-  const status = deriveStatus(completedCount, totalCount, explicitStatus);
+  // BUG FIX: totalCount가 0이면 dots도 0개 → "0/0" 표시되어 사용자 혼란
+  // 분모가 0이거나 음수면 기본 3으로 강제 (일일 학습 기본 문장 수)
+  const safeTotal = totalCount > 0 ? totalCount : 3;
+  const safeCompleted = Math.max(0, Math.min(completedCount, safeTotal));
+  const status = deriveStatus(safeCompleted, safeTotal, explicitStatus);
   const isDone = status === 'done';
 
-  const dots = Array.from({ length: totalCount }, (_, i) => i < completedCount);
+  const dots = Array.from({ length: safeTotal }, (_, i) => i < safeCompleted);
   const gradientColors = GRADIENT_COLORS[difficulty][theme];
 
   return (
@@ -118,7 +122,7 @@ export default function ThemeCard({ theme, completedCount, totalCount, onPress, 
               />
             ))}
             <Text style={[styles.progressText, !isDone && styles.progressTextLight]}>
-              {completedCount}/{totalCount}
+              {safeCompleted}/{safeTotal}
             </Text>
           </View>
         </View>
