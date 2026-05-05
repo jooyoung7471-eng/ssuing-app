@@ -14,6 +14,7 @@ import {
   ScrollView,
   Platform,
   Dimensions,
+  Linking,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -270,6 +271,23 @@ export default function PaywallModal({ visible, onClose, trigger }: PaywallModal
           <Text style={styles.legalText}>
             구독은 iTunes 계정을 통해 청구되며, 현재 결제 기간 종료 24시간 이전에 해지하지 않으면 자동 갱신됩니다. 결제 후에는 iTunes 계정 설정에서 구독을 관리하거나 해지할 수 있습니다.
           </Text>
+
+          {/* Apple Guideline 3.1.2(c): paywall 내 EULA + Privacy Policy 링크 필수 */}
+          <View style={styles.legalLinksRow}>
+            <TouchableOpacity
+              onPress={() => Linking.openURL('https://www.apple.com/legal/internet-services/itunes/dev/stdeula/')}
+              activeOpacity={0.7}
+            >
+              <Text style={styles.legalLink}>이용약관 (EULA)</Text>
+            </TouchableOpacity>
+            <Text style={styles.legalLinkSeparator}>·</Text>
+            <TouchableOpacity
+              onPress={() => Linking.openURL('https://github.com/jooyoung7471-eng/ssuing-app/blob/main/PRIVACY.md')}
+              activeOpacity={0.7}
+            >
+              <Text style={styles.legalLink}>개인정보 처리방침</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
     </Modal>
@@ -547,5 +565,22 @@ const styles = StyleSheet.create({
     lineHeight: 15,
     marginTop: 8,
     paddingHorizontal: 4,
+  },
+  legalLinksRow: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 6,
+    gap: 6,
+  },
+  legalLink: {
+    fontSize: 11,
+    fontWeight: '600',
+    color: colors.primary,
+    textDecorationLine: 'underline',
+  },
+  legalLinkSeparator: {
+    fontSize: 11,
+    color: colors.text.hint,
   },
 });
