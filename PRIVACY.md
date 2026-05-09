@@ -1,4 +1,10 @@
-# EngWrite 개인정보 처리방침
+---
+layout: default
+title: 쓰잉 개인정보 처리방침
+permalink: /PRIVACY/
+---
+
+# 쓰잉 (Ssuing) 개인정보 처리방침
 
 **시행일**: 2026년 4월 11일
 **최종 수정일**: 2026년 4월 11일
