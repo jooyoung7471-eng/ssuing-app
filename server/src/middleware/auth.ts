@@ -55,7 +55,7 @@ export function authMiddleware(req: Request, _res: Response, next: NextFunction)
   }
 }
 
-export function optionalAuthMiddleware(req: Request, _res: Response, next: NextFunction) {
+export async function optionalAuthMiddleware(req: Request, _res: Response, next: NextFunction) {
   const header = req.headers.authorization;
   if (header?.startsWith("Bearer ")) {
     const token = header.slice(7);
@@ -68,9 +68,9 @@ export function optionalAuthMiddleware(req: Request, _res: Response, next: NextF
     }
   }
   const deviceId = req.headers["x-device-id"] as string | undefined;
-  const userId = deviceId ? `guest-${deviceId}` : GUEST_USER_ID;
+  // CRITICAL: User row를 await로 확보해야 자식 row(UserStats 등)의 FK upsert가 안전.
+  // 이전엔 fire-and-forget이라 첫 요청 race로 P2003 발생 → 컨테이너 crash → Railway 정지.
+  const userId = await ensureGuestUser(deviceId);
   req.user = { userId, email: `guest-${deviceId || "default"}@engwrite.local` };
-  // 게스트 유저 DB 생성은 백그라운드로 (미들웨어 블로킹 방지)
-  ensureGuestUser(deviceId).catch(() => {});
   next();
 }

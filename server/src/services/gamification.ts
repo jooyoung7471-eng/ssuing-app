@@ -293,11 +293,32 @@ export async function tryUnlockReviewFirst(
 }
 
 export async function getStats(userId: string) {
-  let stats = await prisma.userStats.upsert({
-    where: { user_id: userId },
-    update: {},
-    create: { user_id: userId },
-  });
+  // Defense: User row가 없으면 P2003. auth middleware가 await로 ensure하지만
+  // 회귀 대비 안전망. 이전 장애 (2026-05-12) 재발 방지.
+  let stats;
+  try {
+    stats = await prisma.userStats.upsert({
+      where: { user_id: userId },
+      update: {},
+      create: { user_id: userId },
+    });
+  } catch (err: any) {
+    if (err?.code === "P2003") {
+      // User row 누락 — 빈 stats 반환 (호출자가 graceful degradation 가능)
+      return {
+        totalXP: 0,
+        level: 1,
+        streakDays: 0,
+        longestStreak: 0,
+        streakFreezeCount: 0,
+        lastPracticeDate: null,
+        totalSentences: 0,
+        totalPerfect: 0,
+        nextLevelXP: 50,
+      };
+    }
+    throw err;
+  }
   return {
     totalXP: stats.total_xp,
     level: stats.level,

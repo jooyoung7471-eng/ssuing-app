@@ -115,6 +115,15 @@ app.get("/health", (_req, res) => {
 // Global error handler
 app.use(errorHandler);
 
+// Defense: 단일 핸들러 버그가 process를 죽이지 않도록 process-level 핸들러 설치.
+// Node 22+의 기본 `--unhandled-rejections=throw` 동작으로 컨테이너가 통째로 죽던 문제 방지.
+process.on("unhandledRejection", (reason) => {
+  console.error("unhandledRejection:", reason);
+});
+process.on("uncaughtException", (err) => {
+  console.error("uncaughtException:", err);
+});
+
 app.listen(PORT, "0.0.0.0", () => {
   console.log(`Server running on port ${PORT}`);
   console.log(`Environment: ${process.env.NODE_ENV || "development"}`);
